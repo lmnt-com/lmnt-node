@@ -1,0 +1,27 @@
+{
+  "name": "lmnt-speech",
+  "version": "0.0.1",
+  "description": "LMNT AI speech synthesis providing text-to-speech and custom voices.",
+  "main": "speech.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "ai",
+    "speech",
+    "voice",
+    "audio",
+    "synthesis"
+  ],
+  "author": "Walter Korman <shaper@lmnt.com>",
+  "license": "Apache 2.0",
+  "type": "module",
+  "dependencies": {
+    "form-data": "^4.0.0",
+    "isomorphic-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nock": "^13.3.2"
+  }
+}
