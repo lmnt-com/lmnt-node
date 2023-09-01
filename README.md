@@ -1,8 +1,8 @@
-# `lmnt-speech` Node module
+# LMNT Node module
 
 ## Overview
 
-A simple Node.js module to provide AI speech synthesis services via [LMNT](https://www.lmnt.com).
+A Node.js module to provide convenient access to the [LMNT](https://www.lmnt.com) API from applications written in Javascript.
 
 For more on the LMNT API, see the [documentation](https://www.lmnt.com/docs/).
 
