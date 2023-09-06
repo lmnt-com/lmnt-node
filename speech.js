@@ -1,5 +1,58 @@
 import fetch from 'isomorphic-fetch';
 import FormData from 'form-data';
+import WebSocket from 'ws';
+
+class StreamingSynthesisConnection {
+  constructor(apiKey, voice, audioCallback) {
+    this._audioCallback = audioCallback;
+
+    this._socket = new WebSocket('wss://api.lmnt.com/speech/beta/synthesize_streaming');
+    this._socket.on('error', console.error);
+    this._socket.on('message', this._onMessage.bind(this));
+    this._messages = [];
+
+    this._sendMessage({
+      'X-API-Key': apiKey,
+      'voice': voice
+    });
+    this._socket.on('open', () => {
+      console.debug(`Socket opened.`);
+      this._flushMessages();
+    });
+    this._socket.on('close', () => {
+      console.debug(`Socket closed.`);
+      // TODO(shaper): Consider retrying on reconnect, or clearing queued messages.
+    });
+  }
+
+  appendText(text) {
+    this._sendMessage({"text": text});
+  }
+
+  finish() {
+    this._sendMessage({"eof": "true"});
+  }
+
+  _sendMessage(message) {
+    this._messages.push(message);
+    this._flushMessages();
+  }
+
+  _flushMessages() {
+    if (this._socket.readyState === WebSocket.OPEN) {
+      while (this._messages.length) {
+        const message = this._messages.shift();
+        console.debug(`Sending message:`, message);
+        this._socket.send(JSON.stringify(message));
+      }
+    }
+  }
+
+  _onMessage(message) {
+    console.debug(`Received message:`, message);
+    this._audioCallback(message);
+  }
+};
 
 class Speech {
   constructor(apiKey) {
@@ -32,6 +85,10 @@ class Speech {
       method: 'POST',
       body: formData
     }).then(response => response.blob());
+  }
+
+  async synthesizeStreaming(voice, audioCallback) {
+    return new StreamingSynthesisConnection(this.apiKey, voice, audioCallback);
   }
 
   createVoice(metadata, files) {

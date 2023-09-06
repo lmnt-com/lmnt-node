@@ -14,11 +14,12 @@
     "synthesis"
   ],
   "author": "Walter Korman <shaper@lmnt.com>",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "type": "module",
   "dependencies": {
     "form-data": "^4.0.0",
-    "isomorphic-fetch": "^3.0.0"
+    "isomorphic-fetch": "^3.0.0",
+    "ws": "^8.14.0"
   },
   "devDependencies": {
     "mocha": "^10.2.0",

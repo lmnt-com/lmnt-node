@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import Speech from 'lmnt';
 
-console.log(`Launching alpaca rocketry [key=${process.env.LMNT_API_KEY}].`);
+console.log(`Creating speech client [key=${process.env.LMNT_API_KEY}].`);
 const speech = new Speech(process.env.LMNT_API_KEY);
 
 // Fetch the list of available voices.
