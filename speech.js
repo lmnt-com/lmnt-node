@@ -20,7 +20,12 @@ class Speech {
     const formData = new FormData();
     formData.append('text', text);
     formData.append('voice', voice);
-    formData.append('seed', options.seed || 0);
+    const fields = ['seed', 'format', 'speed'];
+    fields.forEach(field => {
+      if (field in options) {
+        formData.append(field, options[field]);
+      }
+    });
 
     return fetch('https://api.lmnt.com/speech/beta/synthesize', {
       headers: this._getHeaders(),

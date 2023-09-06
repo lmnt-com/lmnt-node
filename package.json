@@ -1,5 +1,5 @@
 {
-  "name": "lmnt-speech",
+  "name": "lmnt",
   "version": "0.0.1",
   "description": "LMNT AI speech synthesis providing text-to-speech and custom voices.",
   "main": "speech.js",

@@ -14,7 +14,7 @@ To obtain an API key, visit the [LMNT Account page](https://app.lmnt.com/account
 
 Sample code:
 ```js
-import Speech from 'lmnt-speech';
+import Speech from 'lmnt';
 
 const speech = new Speech('your-api-key-here');
 
@@ -30,4 +30,7 @@ console.log(audioResponse);
 
 ## Release History
 
-0.0.1 / July 15, 2023 / Initial release.
+0.0.2 / Sep 6, 2023
+- Add synthesize options for `format` and `speed`.
+- Add simple Node demo app.
+- Initial release.
