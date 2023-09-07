@@ -2,11 +2,19 @@ import fetch from 'isomorphic-fetch';
 import FormData from 'form-data';
 import WebSocket from 'ws';
 
+const DEBUG = false;
+const logDebug = (message) => {
+  if (DEBUG) {
+    console.debug(message);
+  }
+};
+
 class StreamingSynthesisConnection {
   constructor(apiKey, voice, audioCallback) {
     this._audioCallback = audioCallback;
 
     this._socket = new WebSocket('wss://api.lmnt.com/speech/beta/synthesize_streaming');
+    // TODO(shaper): We probably want a way for the user to specify an error handler.
     this._socket.on('error', console.error);
     this._socket.on('message', this._onMessage.bind(this));
     this._messages = [];
@@ -16,11 +24,11 @@ class StreamingSynthesisConnection {
       'voice': voice
     });
     this._socket.on('open', () => {
-      console.debug(`Socket opened.`);
+      logDebug(`Socket opened.`);
       this._flushMessages();
     });
     this._socket.on('close', () => {
-      console.debug(`Socket closed.`);
+      logDebug(`Socket closed.`);
       // TODO(shaper): Consider retrying on reconnect, or clearing queued messages.
     });
   }
@@ -42,14 +50,14 @@ class StreamingSynthesisConnection {
     if (this._socket.readyState === WebSocket.OPEN) {
       while (this._messages.length) {
         const message = this._messages.shift();
-        console.debug(`Sending message:`, message);
+        logDebug(`Sending message:`, message);
         this._socket.send(JSON.stringify(message));
       }
     }
   }
 
   _onMessage(message) {
-    console.debug(`Received message:`, message);
+    logDebug(`Received message:`, message);
     this._audioCallback(message);
   }
 };
