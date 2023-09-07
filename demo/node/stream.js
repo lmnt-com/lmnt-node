@@ -23,20 +23,17 @@ const args = yargs(hideBin(process.argv))
 
 // Construct the LMNT speech client instance.
 const speech = new Speech(process.env.LMNT_API_KEY);
+
 // Prepare an output file to which we write streamed audio. This
 // could alternatively be piped to a media player or another remote client.
 const audioFile = createWriteStream(args.outputFile);
+
 // Construct the streaming connection with our desired voice
 // and the callback to process incoming audio data.
-const speechConnection = await speech.synthesizeStreaming(
-    'mara-wilson', (audioData) => {
-      const audioBytes = Buffer.byteLength(audioData);
-      process.stdout.write(` ** LMNT -- ${audioBytes} bytes ** `);
-      audioFile.write(audioData);
-    });
+const speechConnection = speech.synthesizeStreaming('mara-wilson');
 
 // Construct the OpenAI client instance.
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KE});
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // Send a message to the OpenAI chatbot and stream the response.
 const chatConnection = await openai.chat.completions.create({
@@ -45,13 +42,24 @@ const chatConnection = await openai.chat.completions.create({
   stream: true,
 });
 
-for await (const part of chatConnection) {
-  const message = part.choices[0]?.delta?.content || '';
-  process.stdout.write(message);
-  speechConnection.appendText(message);
-}
+const writeTask = async () => {
+  for await (const part of chatConnection) {
+    const message = part.choices[0]?.delta?.content || '';
+    process.stdout.write(message);
+    speechConnection.appendText(message);
+  }
 
-speechConnection.finish();
-// For now we rely on the socket close to conclude processing.
-// We may want to explicitly add a way to observe the end of LMNT
-// speech processing.
+  // After `finish` is called, the server will close the connection
+  // when it has finished synthesizing.
+  speechConnection.finish();
+};
+
+const readTask = async () => {
+  for await (const message of speechConnection) {
+    const audioBytes = Buffer.byteLength(message);
+    process.stdout.write(` ** LMNT -- ${audioBytes} bytes ** `);
+    audioFile.write(message);
+  }
+};
+
+await Promise.all([writeTask(), readTask()]);

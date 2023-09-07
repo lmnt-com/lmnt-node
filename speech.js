@@ -3,21 +3,50 @@ import FormData from 'form-data';
 import WebSocket from 'ws';
 
 const DEBUG = false;
-const logDebug = (message) => {
+const logDebug = (...args) => {
   if (DEBUG) {
-    console.debug(message);
+    console.debug(...args);
   }
 };
 
-class StreamingSynthesisConnection {
-  constructor(apiKey, voice, audioCallback) {
-    this._audioCallback = audioCallback;
+const URL_STREAMING = 'wss://api.lmnt.com/speech/beta/synthesize_streaming';
+const URL_VOICES = 'https://api.lmnt.com/speech/beta/voices';
+const URL_SYNTHESIZE = 'https://api.lmnt.com/speech/beta/synthesize';
 
-    this._socket = new WebSocket('wss://api.lmnt.com/speech/beta/synthesize_streaming');
-    // TODO(shaper): We probably want a way for the user to specify an error handler.
+const MESSAGE_EOF = {"eof": "true"};
+
+class MessageQueue {
+  constructor() {
+    this._messages = [];
+    this._resolvers = [];
+  }
+
+  push(message) {
+    if (this._resolvers.length) {
+      const resolve = this._resolvers.shift();
+      resolve(message);
+    } else {
+      this._messages.push(message);
+    }
+  }
+
+  async next() {
+    if (this._messages.length) {
+      return this._messages.shift();
+    } else {
+      return new Promise(resolve => this._resolvers.push(resolve));
+    }
+  }
+}
+
+class StreamingSynthesisConnection {
+  constructor(apiKey, voice) {
+    this._socket = new WebSocket(URL_STREAMING);
+    // TODO(shaper): Provide some way for users to handle/be informed of errors.
     this._socket.on('error', console.error);
     this._socket.on('message', this._onMessage.bind(this));
-    this._messages = [];
+    this._outMessages = [];
+    this._inMessages = new MessageQueue();
 
     this._sendMessage({
       'X-API-Key': apiKey,
@@ -38,18 +67,19 @@ class StreamingSynthesisConnection {
   }
 
   finish() {
-    this._sendMessage({"eof": "true"});
+    this._sendMessage(MESSAGE_EOF);
   }
 
   _sendMessage(message) {
-    this._messages.push(message);
+    logDebug(`Queuing message:`, message);
+    this._outMessages.push(message);
     this._flushMessages();
   }
 
   _flushMessages() {
     if (this._socket.readyState === WebSocket.OPEN) {
-      while (this._messages.length) {
-        const message = this._messages.shift();
+      while (this._outMessages.length) {
+        const message = this._outMessages.shift();
         logDebug(`Sending message:`, message);
         this._socket.send(JSON.stringify(message));
       }
@@ -58,7 +88,14 @@ class StreamingSynthesisConnection {
 
   _onMessage(message) {
     logDebug(`Received message:`, message);
-    this._audioCallback(message);
+    this._inMessages.push(message);
+  }
+
+  async *[Symbol.asyncIterator]() {
+    while (true) {
+      const message = await this._inMessages.next();
+      yield message;
+    }
   }
 };
 
@@ -71,7 +108,7 @@ class Speech {
   }
 
   async fetchVoices() {
-    return fetch('https://api.lmnt.com/speech/beta/voices', {
+    return fetch(URL_VOICES, {
       headers: this._getHeaders(),
       method: 'GET'
     }).then(response => response.json());
@@ -88,7 +125,7 @@ class Speech {
       }
     });
 
-    return fetch('https://api.lmnt.com/speech/beta/synthesize', {
+    return fetch(URL_SYNTHESIZE, {
       headers: this._getHeaders(),
       method: 'POST',
       body: formData
@@ -96,16 +133,8 @@ class Speech {
     .then(arrayBuffer => Buffer.from(arrayBuffer));
   }
 
-  async synthesizeStreaming(voice, audioCallback) {
-    return new StreamingSynthesisConnection(this.apiKey, voice, audioCallback);
-  }
-
-  createVoice(metadata, files) {
-    // TODO(shaper): Finish this.
-  }
-
-  cancelVoice(voiceId) {
-    // TODO(shaper): Finish this.
+  synthesizeStreaming(voice) {
+    return new StreamingSynthesisConnection(this.apiKey, voice);
   }
 
   _getHeaders() {

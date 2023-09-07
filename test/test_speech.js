@@ -5,6 +5,9 @@ import nock from 'nock';
 import Speech from '../speech.js';
 
 describe('Speech', function () {
+  beforeEach(() => nock.disableNetConnect());
+  afterEach(() => nock.cleanAll());
+
   describe('#constructor()', function () {
     it('should throw without an api key', function () {
       assert.throws(() => new Speech(), Error);
@@ -56,11 +59,5 @@ describe('Speech', function () {
 
       scope.done();
     });
-  });
-
-  describe('#createVoice()', function () {
-  });
-
-  describe('#cancelVoice()', function () {
   });
 });
