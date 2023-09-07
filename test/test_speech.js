@@ -44,15 +44,15 @@ describe('Speech', function () {
       const scope = nock('https://api.lmnt.com')
         .post('/speech/beta/synthesize', body => formData)
         .reply(200, {
-          blob: 'imagine-binary-data-here'
+          blob: 'foo'
         });
 
       let speech = new Speech('1337');
       const response = await speech.synthesize('Foo Text', 'foo-voice');
 
-      const expected = new Blob([JSON.stringify({blob: 'imagine-binary-data-here'})], {type: "application/json"})
-      assert.equal(response.buffer, expected.buffer);
-      assert.equal(response.type, expected.type);
+      const str = '{"blob":"foo"}';
+      const expected = Buffer.from(str, 'utf8');
+      assert.deepStrictEqual(response, expected);
 
       scope.done();
     });

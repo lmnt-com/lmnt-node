@@ -92,7 +92,8 @@ class Speech {
       headers: this._getHeaders(),
       method: 'POST',
       body: formData
-    }).then(response => response.blob());
+    }).then(response => response.arrayBuffer())
+    .then(arrayBuffer => Buffer.from(arrayBuffer));
   }
 
   async synthesizeStreaming(voice, audioCallback) {
