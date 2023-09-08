@@ -22,15 +22,14 @@ const speech = new Speech('your-api-key-here');
 const voiceResponse = await speech.fetchVoices();
 console.log(voiceResponse);
 
-// Synthesize text to an audio WAV file.
+// Synthesize text to audio.
 const firstVoiceId = Object.keys(voiceResponse.voices)[0];
-const audioResponse = await speech.synthesize('Hello World.', firstVoiceId);
+const audioResponse = await speech.synthesize('Hello World.', firstVoiceId, { format: 'mp3' });
 console.log(audioResponse);
 ```
 
+See the simple [demo apps](./demo/node/README.md) under `./demo/node` for more examples.
 ## Release History
 
-0.0.2 / Sep 6, 2023
-- Add synthesize options for `format` and `speed`.
-- Add simple Node demo app.
+0.0.1 / Sep 6, 2023
 - Initial release.
