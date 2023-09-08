@@ -19,9 +19,9 @@ Install an audio player, e.g. `play`, via for example:
 
 If you'd like to run the streaming demo, you'll also need to visit https://platform.openai.com/, create an API key, and paste it into the top-level `.env` file as `OPENAI_API_KEY=<your key here>`.
 
-Note that the streaming demo code allows playing audio within seconds (the whole point of streaming!), but -- in order to make the demo apps simpler, we just write each audio chunk to disk and below we show playing the final audio file in its entirety. The `stdout` demo app logging will show as speech audio data arrives mid-stream.
+Note that the streaming demo code allows playing audio within seconds. In order to make the demo apps simpler, we write each audio chunk to disk and below we show playing the final audio file. The `stdout` demo app logging will show as speech audio data arrives mid-stream.
 
-For typical use cases one would likely want to write the audio data ongoing incrementally as it becomes available to another client and, eventually, a media playing device.
+For typical use cases you'll likely write the audio data incrementally as it becomes available to another client and/or a media playing device.
 
 ## Running
 
@@ -29,7 +29,7 @@ Run the basic speech synthesis demo:
 
 ```
 % node synthesize.js
-% play /tmp/output.wav
+% play /tmp/output.mp3
 ```
 
 Run the streaming speech synthesis demo:
