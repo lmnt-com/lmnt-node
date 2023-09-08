@@ -188,7 +188,7 @@ isomorphic-fetch@^3.0.0:
     node-fetch "^2.6.1"
     whatwg-fetch "^3.4.1"
 
-"lmnt@file:../..":
+"lmnt-node@file:../..":
   version "0.0.1"
   dependencies:
     form-data "^4.0.0"

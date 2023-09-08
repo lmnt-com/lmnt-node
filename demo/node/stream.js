@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import Speech from 'lmnt';
+import Speech from 'lmnt-node';
 
 const args = yargs(hideBin(process.argv))
   .option('prompt', {
