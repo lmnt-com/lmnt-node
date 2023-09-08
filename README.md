@@ -14,7 +14,7 @@ To obtain an API key, visit the [LMNT Account page](https://app.lmnt.com/account
 
 Sample code:
 ```js
-import Speech from 'lmnt';
+import Speech from 'lmnt-node';
 
 const speech = new Speech('your-api-key-here');
 

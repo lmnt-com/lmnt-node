@@ -1,7 +1,7 @@
 {
-  "name": "lmnt",
+  "name": "lmnt-node",
   "version": "0.0.1",
-  "description": "LMNT AI speech synthesis providing text-to-speech and custom voices.",
+  "description": "Node.js client library for the LMNT API",
   "main": "speech.js",
   "scripts": {
     "test": "mocha"
@@ -13,7 +13,7 @@
     "audio",
     "synthesis"
   ],
-  "author": "Walter Korman <shaper@lmnt.com>",
+  "author": "LMNT, Inc. <feedback@lmnt.com>",
   "license": "Apache-2.0",
   "type": "module",
   "dependencies": {
