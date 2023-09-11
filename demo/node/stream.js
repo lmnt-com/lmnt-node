@@ -60,6 +60,8 @@ const readTask = async () => {
     process.stdout.write(` ** LMNT -- ${audioBytes} bytes ** `);
     audioFile.write(message);
   }
+
+  speechConnection.close();
 };
 
 await Promise.all([writeTask(), readTask()]);
