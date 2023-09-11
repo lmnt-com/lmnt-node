@@ -28,7 +28,7 @@ const audioResponse = await speech.synthesize('Hello World.', firstVoiceId, { fo
 console.log(audioResponse);
 ```
 
-See the simple [demo apps](./demo/node/README.md) under `./demo/node` for more examples.
+See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/demo/node) for more examples.
 ## Release History
 
 0.0.1 / Sep 6, 2023
