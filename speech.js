@@ -66,6 +66,11 @@ class StreamingSynthesisConnection {
     this._sendMessage({"text": text});
   }
 
+  close() {
+    this._socket.close();
+    this._socket = null;
+  }
+
   finish() {
     this._sendMessage(MESSAGE_EOF);
   }
@@ -77,7 +82,7 @@ class StreamingSynthesisConnection {
   }
 
   _flushMessages() {
-    if (this._socket.readyState === WebSocket.OPEN) {
+    if (this._socket?.readyState === WebSocket.OPEN) {
       while (this._outMessages.length) {
         const message = this._outMessages.shift();
         logDebug(`Sending message:`, message);
