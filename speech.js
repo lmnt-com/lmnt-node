@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import FormData from 'form-data';
-import WebSocket from 'ws';
+import WebSocket from 'isomorphic-ws';
 
 const DEBUG = false;
 const logDebug = (...args) => {
@@ -43,8 +43,8 @@ class StreamingSynthesisConnection {
   constructor(apiKey, voice) {
     this._socket = new WebSocket(URL_STREAMING);
     // TODO(shaper): Provide some way for users to handle/be informed of errors.
-    this._socket.on('error', console.error);
-    this._socket.on('message', this._onMessage.bind(this));
+    this._socket.onerror = console.error;
+    this._socket.onmessage = this._onMessage.bind(this);
     this._outMessages = [];
     this._inMessages = new MessageQueue();
 
@@ -52,14 +52,14 @@ class StreamingSynthesisConnection {
       'X-API-Key': apiKey,
       'voice': voice
     });
-    this._socket.on('open', () => {
+    this._socket.onopen = () => {
       logDebug(`Socket opened.`);
       this._flushMessages();
-    });
-    this._socket.on('close', () => {
+    };
+    this._socket.onclose = () => {
       logDebug(`Socket closed.`);
       // TODO(shaper): Consider retrying on reconnect, or clearing queued messages.
-    });
+    };
   }
 
   appendText(text) {
@@ -99,7 +99,11 @@ class StreamingSynthesisConnection {
   async *[Symbol.asyncIterator]() {
     while (true) {
       const message = await this._inMessages.next();
-      yield message;
+      if (message.data instanceof Blob) {
+        yield Buffer.from(await message.data.arrayBuffer());
+      } else {
+        yield message.data;
+      }
     }
   }
 };

@@ -20,6 +20,7 @@
   "dependencies": {
     "form-data": "^4.0.0",
     "isomorphic-fetch": "^3.0.0",
+    "isomorphic-ws": "^5.0.0",
     "ws": "^8.14.0"
   },
   "devDependencies": {
