@@ -40,6 +40,11 @@ declare module 'lmnt-node' {
     appendText(text: string): void;
 
     /**
+     * Releases resources associated with this instance.
+     */
+    close(): void;
+
+    /**
      * Call this when you've written all the text you're expecting to submit. It will
      * flush any remaining data to the server to ensure you receive any additional
      * synthesized speech audio via the async iterator.
