@@ -21,6 +21,13 @@ class MessageQueue {
     this._resolvers = [];
   }
 
+  finish() {
+    while (this._resolvers.length) {
+      const resolve = this._resolvers.shift();
+      resolve(MESSAGE_EOF);
+    }
+  }
+
   push(message) {
     if (this._resolvers.length) {
       const resolve = this._resolvers.shift();
@@ -59,6 +66,8 @@ class StreamingSynthesisConnection {
     this._socket.onclose = () => {
       logDebug(`Socket closed.`);
       // TODO(shaper): Consider retrying on reconnect, or clearing queued messages.
+      this._socket = null;
+      this._inMessages.finish();
     };
   }
 
@@ -67,8 +76,10 @@ class StreamingSynthesisConnection {
   }
 
   close() {
-    this._socket.close();
-    this._socket = null;
+    if (this._socket) {
+      this._socket.close();
+      this._socket = null;
+    }
   }
 
   finish() {
@@ -99,6 +110,13 @@ class StreamingSynthesisConnection {
   async *[Symbol.asyncIterator]() {
     while (true) {
       const message = await this._inMessages.next();
+      // When the socket is closed for whatever reason, we push a
+      // special message on the incoming message queue to signal
+      // that the stream is complete.
+      if (message === MESSAGE_EOF) {
+        return;
+      }
+
       if (message.data instanceof Blob) {
         yield Buffer.from(await message.data.arrayBuffer());
       } else {

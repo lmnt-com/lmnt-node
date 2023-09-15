@@ -65,3 +65,4 @@ const readTask = async () => {
 };
 
 await Promise.all([writeTask(), readTask()]);
+audioFile.close();
