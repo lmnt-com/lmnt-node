@@ -18,6 +18,9 @@ declare module 'lmnt-node' {
 
     /** The desired speed of the synthesized speech. */
     speed?: number;
+
+    /** The desired target length of the output speech in seconds. */
+    length?: number;
   }
 
   /**

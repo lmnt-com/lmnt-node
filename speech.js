@@ -145,7 +145,7 @@ class Speech {
     const formData = new FormData();
     formData.append('text', text);
     formData.append('voice', voice);
-    const fields = ['seed', 'format', 'speed'];
+    const fields = ['seed', 'format', 'speed', 'length'];
     fields.forEach(field => {
       if (field in options) {
         formData.append(field, options[field]);
