@@ -4,7 +4,7 @@
 
 A Node.js module to provide convenient access to the [LMNT](https://www.lmnt.com) API from applications written in Javascript.
 
-For more on the LMNT API, see the [documentation](https://www.lmnt.com/docs/).
+For more on the LMNT API, see the [documentation](https://www.lmnt.com/docs/node).
 
 ## Usage
 
@@ -30,6 +30,16 @@ console.log(audioResponse);
 
 See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/demo/node) for more examples.
 ## Release History
+
+0.0.2 / Sep 20, 2023
+- Features:
+  - Add optional `length` parameter specifying target speech duration.
+  - Make streaming work with the [Edge runtime](https://vercel.com/docs/functions/edge-functions/edge-runtime).
+  - Add TypeScript type definitions.
+  - Add `close` method to `StreamingSynthesisConnection` class allowing explicit cleanup if desired.
+- Bug fixes:
+  - End the streaming async iterator when the synthesis is finished.
+  - Fix demo link in README.
 
 0.0.1 / Sep 6, 2023
 - Initial release.
