@@ -11,7 +11,7 @@ const args = yargs(hideBin(process.argv))
     alias: 'p',
     type: 'string',
     describe: 'The prompt text to send to the chatbot.',
-    default: 'Read me the text of a short sci-fi story in the public domain.',
+    default: 'Read me the text of a very short sci-fi story in the public domain. If the story is longer than 300 words, only read the first 300 words.',
   })
   .option('output-file', {
     alias: 'o',
@@ -56,9 +56,9 @@ const writeTask = async () => {
 
 const readTask = async () => {
   for await (const message of speechConnection) {
-    const audioBytes = Buffer.byteLength(message);
+    const audioBytes = Buffer.byteLength(message.audio);
     process.stdout.write(` ** LMNT -- ${audioBytes} bytes ** `);
-    audioFile.write(message);
+    audioFile.write(message.audio);
   }
 
   speechConnection.close();

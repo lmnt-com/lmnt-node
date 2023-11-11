@@ -10,7 +10,7 @@ const args = yargs(hideBin(process.argv))
     alias: 'p',
     type: 'string',
     describe: 'The text to synthesize.',
-    default: 'Hello, world!',
+    default: 'Hello, world! This is a test of the LMNT speech synthesis API.',
   })
   .option('output-file', {
     alias: 'o',
@@ -32,8 +32,13 @@ const speech = new Speech(process.env.LMNT_API_KEY);
 const voiceResponse = await speech.fetchVoices();
 console.log("Sample results from `fetchVoices`:", voiceResponse);
 
+// Fetch the account information.
+const accountResponse = await speech.fetchAccount();
+console.log("Sample results from `fetchAccount`:", accountResponse);
+
 // Synthesize text to an audio file.
 console.log(`Synthesizing speech [voice=${args.voice}, prompt=${args.prompt}, output-file=${args.outputFile}].`);
-const audioBuffer = await speech.synthesize(args.prompt, args.voice, { format: 'mp3' });
+const synthesis = await speech.synthesize(args.prompt, args.voice, { format: 'mp3' });
+const audioBuffer = synthesis.audio;
 writeFileSync(args.outputFile, audioBuffer);
 console.log(`Done.`);
