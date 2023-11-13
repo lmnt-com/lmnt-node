@@ -1,9 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import FormData from 'form-data';
 import WebSocket from 'isomorphic-ws';
-import axios from 'axios';
 import fs from 'fs';
-import path from 'path';
 
 const DEBUG = false;
 const logDebug = (...args) => {
@@ -12,7 +10,7 @@ const logDebug = (...args) => {
   }
 };
 
-const URL_STREAMING = 'wss://api.staging.lmnt.com/v1/ai/speech/stream';
+const URL_STREAMING = 'wss://api.lmnt.com/v1/ai/speech/stream';
 const _BASE_URL = 'https://api.lmnt.com'
 const _LIST_VOICES_ENDPOINT = '/v1/ai/voice/list'
 const _VOICE_ENDPOINT = '/v1/ai/voice/{id}'
@@ -83,11 +81,10 @@ class StreamingSynthesisConnection {
     this._outMessages = [];
     this._inMessages = new MessageQueue();
     this._return_extras = options.return_extras || false;
-
     this._sendMessage({
       'X-API-Key': apiKey,
       'voice': voice,
-      'return_extras': options.return_extras || undefined,
+      'send_extras': options.return_extras || undefined,
       'speed': options.speed || undefined,
       'expressive': options.expressive || undefined,
     });
@@ -160,14 +157,11 @@ class StreamingSynthesisConnection {
       }
       let data = {};
       if (this._return_extras) {
-        if (!(message.data instanceof string)) {
-          throw new Error(`Unexpected message type: ${message}`);
-        }
         const message2 = await this._inMessages.next();
         if (!(message2.data instanceof Buffer)) {
           throw new Error(`Unexpected message type: ${message2}`);
         }
-        const audio = Buffer.from(await message2.data.arrayBuffer());
+        const audio = message2.data;
         const msg1_json = JSON.parse(message.data);
         data = {'audio': audio, 'durations': msg1_json['durations']};
         if ('warning' in msg1_json) {
@@ -200,9 +194,9 @@ class Speech {
       headers: this._getHeaders(),
       method: "GET",
     })
-      .then(async (response) => {
-        await this._handle_response_errors(response);
-        return response.json();
+      .then(response => {
+        return this._handle_response_errors(response)
+          .then(() => response.json());
       })
       .catch((error) => {
         throw new Error(`[fetchVoices] ${error.message}`);
@@ -215,9 +209,9 @@ class Speech {
       headers: this._getHeaders(),
       method: "GET",
     })
-      .then(async (response) => {
-        await this._handle_response_errors(response);
-        return response.json();
+      .then(response => {
+        return this._handle_response_errors(response)
+          .then(() => response.json());
       })
       .catch((error) => {
         throw new Error(`[fetchVoice] ${error.message}`);
@@ -242,30 +236,23 @@ class Speech {
 
     const formData = new FormData();
     formData.append('metadata', metadata, {
-        headers: {
-          'Content-Type': 'application/json', 'Content-Disposition': 'form-data; name="metadata"'
-        }
+      contentType: 'application/json',
     });
     filenames.forEach((filename) => {
-        formData.append('file_field', fs.createReadStream(filename), {
-            filename: path.basename(filename),
-            headers: {
-                'Content-Type': 'application/octet-stream', 'Content-Disposition': 'form-data; name="file_field"'
-            }
-        });
-    });
-
-    return axios.post(`${_BASE_URL}${_CREATE_VOICE_ENDPOINT}`, formData, {
-        headers: {
-            ...formData.getHeaders(),
-            ...this._getHeaders(),
-        },
+      formData.append('file_field', fs.createReadStream(filename));
+    }
+    );
+    return fetch(`${_BASE_URL}${_CREATE_VOICE_ENDPOINT}`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        ...formData.getHeaders(),
+        ...this._getHeaders(),
+      },
     })
-    .then((response) => {
-      if (response.status !== 200) {
-        throw new SpeechError(response.status, response.data);
-      }
-      return response.data;
+    .then(response => {
+      return this._handle_response_errors(response)
+        .then(() => response.json());
     })
     .catch((error) => {
       throw new Error(`[createVoice] ${error.message}`);
@@ -273,21 +260,15 @@ class Speech {
   }
 
   async updateVoice(voice, options = {}) {
-    const requestOptions = {
-      name: options.name || undefined,
-      starred: options.starred !== undefined ? options.starred : undefined,
-      gender: options.gender || undefined,
-      description: options.description || undefined,
-    };
     const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return fetch(url, {
       method: 'PUT',
       headers: this._getHeaders(),
-      body: JSON.stringify(requestOptions),
+      body: JSON.stringify(options),
     })
-    .then(async (response) => {
-      await this._handle_response_errors(response);
-      return response.json();
+    .then(response => {
+      return this._handle_response_errors(response)
+        .then(() => response.json());
     })
     .catch(error => {
       throw new Error(`[updateVoice] ${error.message}`);
@@ -300,9 +281,9 @@ class Speech {
       method: 'DELETE',
       headers: this._getHeaders(),
     })
-      .then(async (response) => {
-        await this._handle_response_errors(response);
-        return response.json();
+      .then(response => {
+        return this._handle_response_errors(response)
+          .then(() => response.json());
       })
       .catch(error => {
         throw new Error(`[deleteVoice] ${error.message}`);
@@ -313,41 +294,42 @@ class Speech {
     const formData = new FormData();
     formData.append('text', text);
     formData.append('voice', voice);
-    const fields = ['seed', 'format', 'speed', 'length', 'return_durations', 'return_seed'];
-    fields.forEach(field => {
-      if (field in options) {
-        if (typeof options[field] === 'boolean') {
-          formData.append(field, options[field] ? 'true' : 'false');
-        } else {
-          formData.append(field, options[field]);
+
+    const fields = ['format', 'length', 'return_durations', 'return_seed', 'seed', 'speed'];
+      fields.forEach(field => {
+        if (field in options) {
+          if (typeof options[field] === 'boolean') {
+            formData.append(field, options[field] ? 'true' : 'false');
+          } else {
+            formData.append(field, options[field]);
+          }
         }
-      }
-    });
-    const url = `${_BASE_URL}${_SPEECH_ENDPOINT}`;
-    return fetch(url, {
-      headers: this._getHeaders(),
-      method: "POST",
-      body: formData,
-    })
-      .then(async (response) => {
-        await this._handle_response_errors(response);
-        return response.json();
-      })
-      .then((responseData) => {
-        let synthesisResult = {};
-        synthesisResult.audio = Buffer.from(responseData.audio, 'base64');
-        if (options.return_durations) {
-          synthesisResult.durations = responseData.durations;
-        }
-        if (options.return_seed) {
-          synthesisResult.seed = responseData.seed;
-        }
-        return synthesisResult;
-      })
-      .catch((error) => {
-        throw new Error(`[synthesize] ${error.message}`);
       });
-  }
+      const url = `${_BASE_URL}${_SPEECH_ENDPOINT}`;
+      return fetch(url, {
+        headers: this._getHeaders(),
+        method: "POST",
+        body: formData,
+      })
+        .then(response => {
+          return this._handle_response_errors(response)
+            .then(() => response.json());
+        })
+        .then((responseData) => {
+          let synthesisResult = {};
+          synthesisResult.audio = Buffer.from(responseData.audio, 'base64');
+          if (options.return_durations) {
+            synthesisResult.durations = responseData.durations;
+          }
+          if (options.return_seed) {
+            synthesisResult.seed = responseData.seed;
+          }
+          return synthesisResult;
+        })
+        .catch((error) => {
+          throw new Error(`[synthesize] ${error.message}`);
+        });
+    }
 
   synthesizeStreaming(voice, options={}) {
     return new StreamingSynthesisConnection(this.apiKey, voice, options);
@@ -359,19 +341,21 @@ class Speech {
       headers: this._getHeaders(),
       method: "GET",
     })
-      .then(async (response) => {
-        await this._handle_response_errors(response);
-        return response.json();
+      .then(response => {
+        return this._handle_response_errors(response)
+          .then(() => response.json());
       })
       .catch((error) => {
         throw new Error(`[fetchAccount] ${error.message}`);
       });
   }
 
-  _getHeaders() {
-    return {
-      'X-API-Key': this.apiKey
-    };
+  _getHeaders(contentType = null) {
+    const headers = {'X-API-Key': this.apiKey};
+    if (contentType) {
+      headers['Content-Type'] = contentType;
+    }
+    return headers;
   }
 
   async _handle_response_errors(response) {

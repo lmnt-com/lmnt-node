@@ -70,10 +70,10 @@ declare module 'lmnt-node' {
     /** The type of voice to create. Must be one of `instant` or `professional`. Defaults to `instant`. */
     type?: string;
 
-    /** The gender of the voice, e.g. `male`, `female`, `nonbinary`. For categorization purposes. Defaults to `null`. */
+    /** The gender of the voice, e.g. `male`, `female`, `nonbinary`, `other`. For categorization purposes.*/
     gender?: string;
 
-    /** A description of the voice. Defaults to `null`. */
+    /** A description of the voice.*/
     description?: string;
   }
 
@@ -218,8 +218,9 @@ declare module 'lmnt-node' {
      * from the server.
      *
      * @param voice The voice id to use when synthesizing speech. Voice ids can be retrieved from `fetchVoices()`.
+     * @param options Optional configuration options.
      */
-    synthesizeStreaming(voice: string): StreamingSynthesisConnection;
+    synthesizeStreaming(voice: string, options: StreamingSynthesisOptions): StreamingSynthesisConnection;
 
     /**
      * Returns details about your account.

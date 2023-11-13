@@ -32,7 +32,7 @@ const speech = new Speech(process.env.LMNT_API_KEY);
 const voiceResponse = await speech.fetchVoices();
 console.log("Sample results from `fetchVoices`:", voiceResponse);
 
-// Fetch the account information.
+// Fetch your account information.
 const accountResponse = await speech.fetchAccount();
 console.log("Sample results from `fetchAccount`:", accountResponse);
 
