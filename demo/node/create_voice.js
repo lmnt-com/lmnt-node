@@ -18,3 +18,8 @@ const speech = new Speech(process.env.LMNT_API_KEY);
 // Create a demo voice. Once completed, it will be available in your lsit of voices.
 const createVoiceResponse = await speech.createVoice('demo-voice', true, [args.inputFile]);
 console.log("Results from `createVoice`:", createVoiceResponse);
+
+// Fetch the list of your voices.
+const options = {owner:'me'}
+const resp = await speech.fetchVoices(options);
+console.log("Results from `fetchVoices`:", resp);

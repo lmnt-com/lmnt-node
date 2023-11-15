@@ -41,6 +41,7 @@ declare module 'lmnt-node' {
     /** The desired speed of the synthesized speech. */
     speed?: number;
 
+    /** The amount of variation in speech (e.g. pitch). */
     expressive?: number;
   }
 
@@ -68,12 +69,12 @@ declare module 'lmnt-node' {
 
   interface CreateVoiceOptions {
     /** The type of voice to create. Must be one of `instant` or `professional`. Defaults to `instant`. */
-    type?: string;
+    type?: 'instant' | 'professional';
 
-    /** The gender of the voice, e.g. `male`, `female`, `nonbinary`, `other`. For categorization purposes.*/
+    /** The gender of the voice, e.g. `male`, `female`, `nonbinary`, `other`. For categorization purposes. */
     gender?: string;
 
-    /** A description of the voice.*/
+    /** A description of the voice. */
     description?: string;
   }
 

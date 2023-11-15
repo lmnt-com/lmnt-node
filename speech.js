@@ -186,36 +186,30 @@ class Speech {
     this.apiKey = apiKey;
   }
 
+  async _fetchAndHandleResponse(method, url, caller, body = undefined, headers = this._getHeaders()) {
+    try {
+      const response = await fetch(url, {
+        headers,
+        method,
+        body,
+      })
+      await this._handle_response_errors(response);
+      return response.json();
+    } catch (error) {
+      throw new Error(`[${caller}] ${error.message}`);
+    }
+  }
+    
   async fetchVoices(options = {}) {
     const starred = options.starred || false;
     const owner = options.owner || 'all';
     let url = `${_BASE_URL}${_LIST_VOICES_ENDPOINT}?starred=${starred}&owner=${owner}`;
-    return fetch(url, {
-      headers: this._getHeaders(),
-      method: "GET",
-    })
-      .then(response => {
-        return this._handle_response_errors(response)
-          .then(() => response.json());
-      })
-      .catch((error) => {
-        throw new Error(`[fetchVoices] ${error.message}`);
-      });
+    return this._fetchAndHandleResponse('GET', url, 'fetchVoices'); 
   }
 
   async fetchVoice(voice) {
     const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
-    return fetch(url, {
-      headers: this._getHeaders(),
-      method: "GET",
-    })
-      .then(response => {
-        return this._handle_response_errors(response)
-          .then(() => response.json());
-      })
-      .catch((error) => {
-        throw new Error(`[fetchVoice] ${error.message}`);
-      });
+    return this._fetchAndHandleResponse('GET', url, 'fetchVoice');
   }
 
   async createVoice(name, enhance, filenames, type = 'instant', gender = null, description = null) {
@@ -242,52 +236,22 @@ class Speech {
       formData.append('file_field', fs.createReadStream(filename));
     }
     );
-    return fetch(`${_BASE_URL}${_CREATE_VOICE_ENDPOINT}`, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        ...formData.getHeaders(),
-        ...this._getHeaders(),
-      },
-    })
-    .then(response => {
-      return this._handle_response_errors(response)
-        .then(() => response.json());
-    })
-    .catch((error) => {
-      throw new Error(`[createVoice] ${error.message}`);
-    });
+    const url = `${_BASE_URL}${_CREATE_VOICE_ENDPOINT}`;
+    const headers = {
+      ...formData.getHeaders(),
+      ...this._getHeaders(),
+    } 
+    return this._fetchAndHandleResponse('POST', url, 'createVoice', formData, headers);
   }
 
   async updateVoice(voice, options = {}) {
     const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
-    return fetch(url, {
-      method: 'PUT',
-      headers: this._getHeaders(),
-      body: JSON.stringify(options),
-    })
-    .then(response => {
-      return this._handle_response_errors(response)
-        .then(() => response.json());
-    })
-    .catch(error => {
-      throw new Error(`[updateVoice] ${error.message}`);
-    });
+    return this._fetchAndHandleResponse('PUT', url, 'updateVoice', JSON.stringify(options));
   }
 
   async deleteVoice(voice) {
     const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
-    return fetch(url, {
-      method: 'DELETE',
-      headers: this._getHeaders(),
-    })
-      .then(response => {
-        return this._handle_response_errors(response)
-          .then(() => response.json());
-      })
-      .catch(error => {
-        throw new Error(`[deleteVoice] ${error.message}`);
-      });
+    return this._fetchAndHandleResponse('DELETE', url, 'deleteVoice');
   }
   
   async synthesize(text, voice, options={}) {
@@ -296,40 +260,27 @@ class Speech {
     formData.append('voice', voice);
 
     const fields = ['format', 'length', 'return_durations', 'return_seed', 'seed', 'speed'];
-      fields.forEach(field => {
-        if (field in options) {
-          if (typeof options[field] === 'boolean') {
-            formData.append(field, options[field] ? 'true' : 'false');
-          } else {
-            formData.append(field, options[field]);
-          }
+    fields.forEach(field => {
+      if (field in options) {
+        if (typeof options[field] === 'boolean') {
+          formData.append(field, options[field] ? 'true' : 'false');
+        } else {
+          formData.append(field, options[field]);
         }
-      });
-      const url = `${_BASE_URL}${_SPEECH_ENDPOINT}`;
-      return fetch(url, {
-        headers: this._getHeaders(),
-        method: "POST",
-        body: formData,
-      })
-        .then(response => {
-          return this._handle_response_errors(response)
-            .then(() => response.json());
-        })
-        .then((responseData) => {
-          let synthesisResult = {};
-          synthesisResult.audio = Buffer.from(responseData.audio, 'base64');
-          if (options.return_durations) {
-            synthesisResult.durations = responseData.durations;
-          }
-          if (options.return_seed) {
-            synthesisResult.seed = responseData.seed;
-          }
-          return synthesisResult;
-        })
-        .catch((error) => {
-          throw new Error(`[synthesize] ${error.message}`);
-        });
+      }
+    });
+    const url = `${_BASE_URL}${_SPEECH_ENDPOINT}`;
+    const responseData = await this._fetchAndHandleResponse('POST', url, 'synthesize', formData);
+    let synthesisResult = {};
+    synthesisResult.audio = Buffer.from(responseData.audio, 'base64');
+    if (options.return_durations) {
+      synthesisResult.durations = responseData.durations;
     }
+    if (options.return_seed) {
+      synthesisResult.seed = responseData.seed;
+    }
+    return synthesisResult;
+  }
 
   synthesizeStreaming(voice, options={}) {
     return new StreamingSynthesisConnection(this.apiKey, voice, options);
@@ -337,17 +288,7 @@ class Speech {
 
   async fetchAccount() {
     const url = `${_BASE_URL}${_ACCOUNT_ENDPOINT}`;
-    return fetch(url, {
-      headers: this._getHeaders(),
-      method: "GET",
-    })
-      .then(response => {
-        return this._handle_response_errors(response)
-          .then(() => response.json());
-      })
-      .catch((error) => {
-        throw new Error(`[fetchAccount] ${error.message}`);
-      });
+    return this._fetchAndHandleResponse('GET', url, 'fetchAccount');
   }
 
   _getHeaders(contentType = null) {
