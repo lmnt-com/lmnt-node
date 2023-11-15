@@ -47,4 +47,11 @@ Try a few more fun streaming demos:
 % play /tmp/output.mp3
 ```
 
+Run the create voice demo:
+```
+% node create-voice.js -i <inputFile>
+```
+Replace `<inputFile>` with the path to a `.wav` or `.mp3` file containing a single utterance of a single speaker. The demo will create a new voice from this audio and print the voice ID to the console.
+You can then use the voice for synthesis with the API and at app.lmnt.com.
+
 For more, see the [LMNT API Documentation](https://www.lmnt.com/docs).

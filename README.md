@@ -31,6 +31,21 @@ console.log(audioResponse);
 See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/demo/node) for more examples.
 ## Release History
 
+0.1.0 / Nov 14, 2023
+- Breaking changes - Please update your code to use the new behavior or pin to a previous version if preferred:
+  - Default audio encoding format in `synthesize` is now `mp3` (previously `wav`). Format can be specified by adding the `format='wav'` or `format='mp3'` option to the `synthesize` call.
+  - `fetchVoices` now returns a list of voice dictionaries for simplicity of return values and ease of use. Previously it returned a dictionary with key `voices` which contained a dictionary of voice dictionaries keyed by their voice id.
+  - `synthesize` no longer returns just the binary audio data. It instead always returns a dictionary with keys `audio`, `durations` (optional), and `seed` (optional).
+- Features:
+  - Add ability to filter by `starred` and `owner` in `fetchVoices`.
+  - Add ability to return `durations` and `seed` from `synthesize`.
+  - Add `fetchVoice` method to fetch a single voice.
+  - Add `createVoice` method to create a new voice.
+  - Add `updateVoice` method to update an existing voice, including starring voices.
+  - Add `deleteVoice` method to delete an existing voice.
+  - Add `synthesizeStreaming` method to support full-duplex synthesis streaming.
+  - Add `fetchAccount` method to fetch account information.
+
 0.0.2 / Sep 20, 2023
 - Features:
   - Add optional `length` parameter specifying target speech duration.
