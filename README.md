@@ -19,19 +19,20 @@ import Speech from 'lmnt-node';
 const speech = new Speech('your-api-key-here');
 
 // Fetch the list of available voices.
-const voiceResponse = await speech.fetchVoices();
-console.log(voiceResponse);
+const voices = await speech.fetchVoices();
+console.log(voices);
 
 // Synthesize text to audio.
-const firstVoiceId = Object.keys(voiceResponse.voices)[0];
-const audioResponse = await speech.synthesize('Hello World.', firstVoiceId, { format: 'mp3' });
-console.log(audioResponse);
+const firstVoiceId = voices[0].id;
+const synthesis = await speech.synthesize('Hello World.', firstVoiceId, { format: 'mp3' });
+console.log(synthesis.audio);
 ```
 
 See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/demo/node) for more examples.
+
 ## Release History
 
-0.1.0 / Nov 14, 2023
+1.0.0 / Nov 16, 2023
 - Breaking changes - Please update your code to use the new behavior or pin to a previous version if preferred:
   - Default audio encoding format in `synthesize` is now `mp3` (previously `wav`). Format can be specified by adding the `format='wav'` or `format='mp3'` option to the `synthesize` call.
   - `fetchVoices` now returns a list of voice dictionaries for simplicity of return values and ease of use. Previously it returned a dictionary with key `voices` which contained a dictionary of voice dictionaries keyed by their voice id.

@@ -116,7 +116,7 @@ declare module 'lmnt-node' {
     /**
      * Call this when you've written all the text you're expecting to submit. It will
      * flush any remaining data to the server to ensure you receive any additional
-     * synthesized speech audio via the async iterator.
+     * synthesized speech audio via the async iterator. The connection will be closed.
      *
      * @param text The additional text.
      */
