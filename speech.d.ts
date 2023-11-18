@@ -49,8 +49,8 @@ declare module 'lmnt-node' {
     /** If true, only returns voices that you have starred. Defaults to false. */
     starred?: boolean;
 
-    /** Specify which voices to return. Choose from `lmnt`, `me`, or `all`. Defaults to `all`. */
-    owner?: 'lmnt' | 'me' | 'all';
+    /** Specify which voices to return. Choose from `system`, `me`, or `all`. Defaults to `all`. */
+    owner?: 'system' | 'me' | 'all';
   }
 
   interface UpdateVoiceOptions {

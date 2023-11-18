@@ -105,14 +105,14 @@ describe('Speech', function () {
     });
 
     it('should call the correct URL when owner is lmnt', async () => {
-      const path = '/v1/ai/voice/list?starred=false&owner=lmnt';
+      const path = '/v1/ai/voice/list?starred=false&owner=system';
     
       const scope = nock(_BASE_URL)
         .get(path)
         .reply(200, []);
     
       const speech = new Speech('apiKey');
-      const options = { owner: 'lmnt' };
+      const options = { owner: 'system' };
       await speech.fetchVoices(options);
     
       assert(scope.isDone(), 'Expected URL was not called');
