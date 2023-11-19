@@ -59,3 +59,30 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
 0.0.1 / Sep 6, 2023
 - Initial release.
+
+## Publish Process
+
+Publishing a new release of the `lmnt-node` module:
+
+```
+# TODO(shaper): Use a GitHub Workflow and set up secrets as needed to auto-publish
+# to npmjs whenever we tag a new release.
+
+% cd lmnt-node
+% git fetch && git checkout origin/master
+% git tag -a v1.0.0 -m "Version 1.0.0 release."
+
+# Make sure you're authed as your signed-in NPM user.
+% npm adduser
+
+# Make sure you don't have any modified files sitting around.
+% git status
+
+# Will show you what publish *will* do, to let you sanity check before publishing live.
+% npm publish --dry-run
+
+# Below may prompt you to authenticate again via a browser, do so again despite
+# the 'adduser' above. You can viewe who you're logged in as currently with
+# 'npm whoami'. Command reference is here: https://docs.npmjs.com/cli/v9/commands
+% npm publish
+```
