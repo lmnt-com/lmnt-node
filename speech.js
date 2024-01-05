@@ -167,6 +167,9 @@ class StreamingSynthesisConnection {
         if ('warning' in msg1_json) {
           data['warning'] = msg1_json['warning'];
         }
+        if ('buffer_empty' in msg1_json) {
+          data['buffer_empty'] = msg1_json['buffer_empty'];
+        }
       } else {
         if (!(message.data instanceof Buffer)) {
           throw new Error(`Unexpected message type: ${message}`);
