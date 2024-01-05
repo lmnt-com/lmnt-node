@@ -32,6 +32,8 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
 ## Release History
 
+1.1.0 / Jan 5, 2023
+- `synthesizeStreaming` will now return a `buffer_empty` boolean when extras are requested. This can be used to determine when the server has no more audio to send after the client has sent a `flush` message.
 1.0.0 / Nov 16, 2023
 - Breaking changes - Please update your code to use the new behavior or pin to a previous version if preferred:
   - Default audio encoding format in `synthesize` is now `mp3` (previously `wav`). Format can be specified by adding the `format='wav'` or `format='mp3'` option to the `synthesize` call.
