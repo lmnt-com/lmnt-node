@@ -39,6 +39,16 @@ class SpeechError extends Error {
   }
 }
 
+class StreamError extends Error {
+  constructor(message) {
+    super(message);
+  }
+
+  toString() {
+    return `StreamError: ${this.message}`;
+  }
+}
+
 class MessageQueue {
   constructor() {
     this._messages = [];
@@ -157,12 +167,12 @@ class StreamingSynthesisConnection {
       }
       let data = {};
       if (this._return_extras) {
-        const message2 = await this._inMessages.next();
-        if (!(message2.data instanceof Buffer)) {
-          throw new Error(`Unexpected message type: ${message2}`);
+        const msg1_json = this._parseAndCheckForError(message, false);
+        const msg2 = await this._inMessages.next();
+        if (!(msg2.data instanceof Buffer)) {
+          this._parseAndCheckForError(msg2);
         }
-        const audio = message2.data;
-        const msg1_json = JSON.parse(message.data);
+        const audio = msg2.data;
         data = {'audio': audio, 'durations': msg1_json['durations']};
         if ('warning' in msg1_json) {
           data['warning'] = msg1_json['warning'];
@@ -172,12 +182,28 @@ class StreamingSynthesisConnection {
         }
       } else {
         if (!(message.data instanceof Buffer)) {
-          throw new Error(`Unexpected message type: ${message}`);
+          this._parseAndCheckForError(message);
         }
         data = {'audio': message.data};
       }
       yield data;
     }
+  }
+
+  _parseAndCheckForError(message, requireError = true) {
+    let message_json;
+    try {
+      message_json = JSON.parse(message.data);
+    } catch {
+      throw new Error(`Unexpected message type received from server: ${message}`);
+    }
+    if ('error' in message_json) {
+      throw new StreamError(message_json['error']);
+    }
+    if (requireError) {
+      throw new Error (`Unexpected message type received from server: ${message}`);
+    }
+    return message_json;
   }
 };
 
