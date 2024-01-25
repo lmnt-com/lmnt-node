@@ -1,7 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import FormData from 'form-data';
-import WebSocket from 'isomorphic-ws';
-import fs from 'fs';
+import { createSimpleWebSocket } from './simpleWebSocket.js';
+import * as Runtime from "./detectRuntime.js";
+
+let fs;
+async function loadFs() {
+  if (Runtime.detectRuntime() === 'node') {
+    fs = await import('fs');
+  }
+}
+
 
 const DEBUG = false;
 const logDebug = (...args) => {
@@ -20,6 +28,11 @@ const _ACCOUNT_ENDPOINT = '/v1/account'
 
 const MESSAGE_EOF = {"eof": true};
 const MESSAGE_FLUSH = {"flush": true};
+
+// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/readyState
+const WEBSOCKET_OPEN_STATE = 1;
+// https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+const WEBSOCKET_NORMAL_CLOSE = 1000;
 
 class SpeechError extends Error {
   constructor(status, error) {
@@ -82,15 +95,10 @@ class MessageQueue {
 
 class StreamingSynthesisConnection {
   constructor(apiKey, voice, options={}) {
-    this._socket = new WebSocket(URL_STREAMING);
-    this._socket.onerror = (event) => {
-      console.error("WebSocket error:", event);
-      this._inMessages.finish();
-    };
-    this._socket.onmessage = this._onMessage.bind(this);
     this._outMessages = [];
     this._inMessages = new MessageQueue();
     this._return_extras = options.return_extras || false;
+    this._setupWebSocket();
     this._sendMessage({
       'X-API-Key': apiKey,
       'voice': voice,
@@ -98,22 +106,40 @@ class StreamingSynthesisConnection {
       'speed': options.speed || undefined,
       'expressive': options.expressive || undefined,
     });
-    this._socket.onopen = () => {
-      logDebug(`Socket opened.`);
-      this._flushMessages();
-    };
-    this._socket.onclose = (event) => {
-      logDebug(`Socket closed.`);
-      if (event.code !== 1000) {
-        // 1000 is normal closure
-        console.warn(
-          `WebSocket closed unexpectedly with code: ${event.code}, reason: ${event.reason}`
-        );
-      }
-      // TODO(shaper): Consider retrying on reconnect, or clearing queued messages.
-      this._socket = null;
-      this._inMessages.finish();
-    };
+  }
+
+  async _setupWebSocket() {
+    this._socket = await createSimpleWebSocket(URL_STREAMING);
+    this._socket.onerror = this._onError.bind(this);
+    this._socket.onmessage = this._onMessage.bind(this);
+    this._socket.onopen = this._onOpen.bind(this);
+    this._socket.onclose = this._onClose.bind(this);
+  }
+
+  _onError(event) {
+    console.error("WebSocket error:", event);
+    this._inMessages.finish();
+  }
+
+  _onOpen() {
+    logDebug(`Socket opened.`);
+    this._flushMessages();
+  }
+
+  _onClose(event) {
+    logDebug(`Socket closed.`);
+    if (event.code !== WEBSOCKET_NORMAL_CLOSE) {
+      console.warn(
+        `WebSocket closed unexpectedly with code: ${event.code}, reason: ${event.reason}`
+      );
+    }
+    this._socket = null;
+    this._inMessages.finish();
+  }
+
+  _onMessage(message) {
+    logDebug(`Received message:`, message);
+    this._inMessages.push(message);
   }
 
   appendText(text) {
@@ -142,18 +168,13 @@ class StreamingSynthesisConnection {
   }
 
   _flushMessages() {
-    if (this._socket?.readyState === WebSocket.OPEN) {
+    if (this._socket?.readyState === WEBSOCKET_OPEN_STATE) {
       while (this._outMessages.length) {
         const message = this._outMessages.shift();
         logDebug(`Sending message:`, message);
         this._socket.send(JSON.stringify(message));
       }
     }
-  }
-
-  _onMessage(message) {
-    logDebug(`Received message:`, message);
-    this._inMessages.push(message);
   }
 
   async *[Symbol.asyncIterator]() {
@@ -169,10 +190,7 @@ class StreamingSynthesisConnection {
       if (this._return_extras) {
         const msg1_json = this._parseAndCheckForError(message, false);
         const msg2 = await this._inMessages.next();
-        if (!(msg2.data instanceof Buffer)) {
-          this._parseAndCheckForError(msg2);
-        }
-        const audio = msg2.data;
+        const audio = await this._processAudioData(msg2.data);
         data = {'audio': audio, 'durations': msg1_json['durations']};
         if ('warning' in msg1_json) {
           data['warning'] = msg1_json['warning'];
@@ -181,13 +199,23 @@ class StreamingSynthesisConnection {
           data['buffer_empty'] = msg1_json['buffer_empty'];
         }
       } else {
-        if (!(message.data instanceof Buffer)) {
-          this._parseAndCheckForError(message);
-        }
-        data = {'audio': message.data};
+        const audio = await this._processAudioData(message.data);
+        data = {'audio': audio};
       }
       yield data;
     }
+  }
+
+  async _processAudioData(audioData) {
+    let processedAudio = {};
+    if (audioData instanceof Blob) {
+      processedAudio = await audioData.arrayBuffer();
+    } else if (audioData instanceof Buffer) {
+      processedAudio = audioData;
+    } else {
+      this._parseAndCheckForError(msg2);
+    } 
+    return processedAudio;
   }
 
   _parseAndCheckForError(message, requireError = true) {
@@ -242,6 +270,12 @@ class Speech {
   }
 
   async createVoice(name, enhance, filenames, type = 'instant', gender = null, description = null) {
+    if (Runtime.detectRuntime() !== 'node') {
+      throw new Error('[Speech.createVoice] This method is currently only available in Node.js.');
+    }
+    if (!fs) {
+      await loadFs();
+    }
     if (name.length === 0) {
       throw new Error('[Speech.createVoice] Name must be non-empty.');
     }
