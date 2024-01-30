@@ -26,8 +26,8 @@ const _CREATE_VOICE_ENDPOINT = '/v1/ai/voice'
 const _SPEECH_ENDPOINT = '/v1/ai/speech'
 const _ACCOUNT_ENDPOINT = '/v1/account'
 
-const MESSAGE_EOF = {"eof": true};
-const MESSAGE_FLUSH = {"flush": true};
+const MESSAGE_EOF = { "eof": true };
+const MESSAGE_FLUSH = { "flush": true };
 
 // https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/readyState
 const WEBSOCKET_OPEN_STATE = 1;
@@ -36,19 +36,19 @@ const WEBSOCKET_NORMAL_CLOSE = 1000;
 
 class SpeechError extends Error {
   constructor(status, error) {
-      super();
-      this.status = status;
-      if ('error' in error) {
-          this.message = error['error'];
-      } else if ('message' in error) {
-          this.message = error['message'];
-      } else {
-          this.message = 'Unknown error; see status code for hints on what went wrong.';
-      }
+    super();
+    this.status = status;
+    if ('error' in error) {
+      this.message = error['error'];
+    } else if ('message' in error) {
+      this.message = error['message'];
+    } else {
+      this.message = 'Unknown error; see status code for hints on what went wrong.';
+    }
   }
 
   toString() {
-      return `SpeechError [status=${this.status}] ${this.message}`;
+    return `SpeechError [status=${this.status}] ${this.message}`;
   }
 }
 
@@ -94,7 +94,7 @@ class MessageQueue {
 }
 
 class StreamingSynthesisConnection {
-  constructor(apiKey, voice, options={}) {
+  constructor(apiKey, voice, options = {}) {
     this._outMessages = [];
     this._inMessages = new MessageQueue();
     this._return_extras = options.return_extras || false;
@@ -143,7 +143,7 @@ class StreamingSynthesisConnection {
   }
 
   appendText(text) {
-    this._sendMessage({"text": text});
+    this._sendMessage({ "text": text });
   }
 
   close() {
@@ -191,7 +191,7 @@ class StreamingSynthesisConnection {
         const msg1_json = this._parseAndCheckForError(message, false);
         const msg2 = await this._inMessages.next();
         const audio = await this._processAudioData(msg2.data);
-        data = {'audio': audio, 'durations': msg1_json['durations']};
+        data = { 'audio': audio, 'durations': msg1_json['durations'] };
         if ('warning' in msg1_json) {
           data['warning'] = msg1_json['warning'];
         }
@@ -200,7 +200,7 @@ class StreamingSynthesisConnection {
         }
       } else {
         const audio = await this._processAudioData(message.data);
-        data = {'audio': audio};
+        data = { 'audio': audio };
       }
       yield data;
     }
@@ -214,7 +214,7 @@ class StreamingSynthesisConnection {
       processedAudio = audioData;
     } else {
       this._parseAndCheckForError(msg2);
-    } 
+    }
     return processedAudio;
   }
 
@@ -229,7 +229,7 @@ class StreamingSynthesisConnection {
       throw new StreamError(message_json['error']);
     }
     if (requireError) {
-      throw new Error (`Unexpected message type received from server: ${message}`);
+      throw new Error(`Unexpected message type received from server: ${message}`);
     }
     return message_json;
   }
@@ -256,12 +256,12 @@ class Speech {
       throw new Error(`[${caller}] ${error.message}`);
     }
   }
-    
+
   async fetchVoices(options = {}) {
     const starred = options.starred || false;
     const owner = options.owner || 'all';
     let url = `${_BASE_URL}${_LIST_VOICES_ENDPOINT}?starred=${starred}&owner=${owner}`;
-    return this._fetchAndHandleResponse('GET', url, 'fetchVoices'); 
+    return this._fetchAndHandleResponse('GET', url, 'fetchVoices');
   }
 
   async fetchVoice(voice) {
@@ -303,7 +303,7 @@ class Speech {
     const headers = {
       ...formData.getHeaders(),
       ...this._getHeaders(),
-    } 
+    }
     return this._fetchAndHandleResponse('POST', url, 'createVoice', formData, headers);
   }
 
@@ -312,12 +312,17 @@ class Speech {
     return this._fetchAndHandleResponse('PUT', url, 'updateVoice', JSON.stringify(options));
   }
 
+  async unfreezeVoice(voice) {
+    const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
+    return this._fetchAndHandleResponse('PUT', url, 'updateVoice', JSON.stringify({ 'unfreeze': true }));
+  }
+
   async deleteVoice(voice) {
     const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return this._fetchAndHandleResponse('DELETE', url, 'deleteVoice');
   }
-  
-  async synthesize(text, voice, options={}) {
+
+  async synthesize(text, voice, options = {}) {
     const formData = new FormData();
     formData.append('text', text);
     formData.append('voice', voice);
@@ -345,7 +350,7 @@ class Speech {
     return synthesisResult;
   }
 
-  synthesizeStreaming(voice, options={}) {
+  synthesizeStreaming(voice, options = {}) {
     return new StreamingSynthesisConnection(this.apiKey, voice, options);
   }
 
@@ -355,7 +360,7 @@ class Speech {
   }
 
   _getHeaders(contentType = null) {
-    const headers = {'X-API-Key': this.apiKey};
+    const headers = { 'X-API-Key': this.apiKey };
     if (contentType) {
       headers['Content-Type'] = contentType;
     }
