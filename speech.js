@@ -188,7 +188,7 @@ class StreamingSynthesisConnection {
       }
       let data = {};
       if (this._return_extras) {
-        const msg1_json = this._parseAndCheckForError(message, false);
+        const msg1_json = this._parseAndCheckForError(message.data, false);
         const msg2 = await this._inMessages.next();
         const audio = await this._processAudioData(msg2.data);
         data = { 'audio': audio, 'durations': msg1_json['durations'] };
@@ -213,7 +213,7 @@ class StreamingSynthesisConnection {
     } else if (audioData instanceof Buffer) {
       processedAudio = audioData;
     } else {
-      this._parseAndCheckForError(msg2);
+      this._parseAndCheckForError(audioData);
     }
     return processedAudio;
   }
@@ -221,7 +221,7 @@ class StreamingSynthesisConnection {
   _parseAndCheckForError(message, requireError = true) {
     let message_json;
     try {
-      message_json = JSON.parse(message.data);
+      message_json = JSON.parse(message);
     } catch {
       throw new Error(`Unexpected message type received from server: ${message}`);
     }
