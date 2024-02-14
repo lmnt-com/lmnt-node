@@ -235,7 +235,7 @@ class StreamingSynthesisConnection {
   }
 };
 
-class Speech {
+export class Speech {
   constructor(apiKey) {
     if (!apiKey) {
       throw new Error('No API key set. Visit https://app.lmnt.com/account to get one.');

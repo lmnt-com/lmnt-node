@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = exports.Speech = void 0;
 var _isomorphicFetch = _interopRequireDefault(require("isomorphic-fetch"));
 var _formData = _interopRequireDefault(require("form-data"));
 var _simpleWebSocket = require("./simpleWebSocket.js");
@@ -352,5 +352,6 @@ class Speech {
     }
   }
 }
+exports.Speech = Speech;
 ;
 var _default = exports.default = Speech;

@@ -2,14 +2,14 @@ declare module 'lmnt-node' {
   import { Buffer } from 'buffer';
 
   /** The binary audio data provided by the server. */
-  type AudioData = Buffer;
+  export type AudioData = Buffer;
 
   /**
    * Options available to pass with synthesize requests. See the
    * [SDK documentation](https://lmnt.com/docs/node/) for available values
    * and defaults.
    */
-  interface SynthesizeOptions {
+  export interface SynthesizeOptions {
     /** An optional seed for random number generation. */
     seed?: number;
 
@@ -34,7 +34,7 @@ declare module 'lmnt-node' {
    * [SDK documentation](https://lmnt.com/docs/node/) for available values
    * and defaults.
    */
-  interface StreamingSynthesisOptions {
+  export interface StreamingSynthesisOptions {
     /** Whether to return extra data (durations data and warnings) with each audio chunk. */
     return_extras?: boolean;
 
@@ -45,7 +45,7 @@ declare module 'lmnt-node' {
     expressive?: number;
   }
 
-  interface FetchVoicesOptions {
+  export interface FetchVoicesOptions {
     /** If true, only returns voices that you have starred. Defaults to false. */
     starred?: boolean;
 
@@ -53,7 +53,7 @@ declare module 'lmnt-node' {
     owner?: 'system' | 'me' | 'all';
   }
 
-  interface UpdateVoiceOptions {
+  export interface UpdateVoiceOptions {
     /** The name of the voice */
     name?: string;
 
@@ -67,7 +67,7 @@ declare module 'lmnt-node' {
     description?: string;
   }
 
-  interface CreateVoiceOptions {
+  export interface CreateVoiceOptions {
     /** The type of voice to create. Must be one of `instant` or `professional`. Defaults to `instant`. */
     type?: 'instant' | 'professional';
 
@@ -81,7 +81,7 @@ declare module 'lmnt-node' {
   /**
    * Represents a full-duplex streaming connection with the LMNT server.
    */
-  class StreamingSynthesisConnection {
+  export class StreamingSynthesisConnection {
     /**
      * @param apiKey The API key to use for the connection. Obtain a key
      *     from the [LMNT account page](https://app.lmnt.com/account).
@@ -129,7 +129,7 @@ declare module 'lmnt-node' {
     [Symbol.asyncIterator](): AsyncIterableIterator<Object>;
   }
 
-  type Voice = {
+  export type Voice = {
     id: string;
     name: string;
     owner: string;
@@ -141,21 +141,21 @@ declare module 'lmnt-node' {
     description?: string;
   };
 
-  type CreateVoiceResponse = {
+  export type CreateVoiceResponse = {
     id: string;
     voice: Voice;
   }
 
-  type VoicesResponse = [Voice];
+  export type VoicesResponse = [Voice];
 
-  type VoiceResponse = {
+  export type VoiceResponse = {
     voice: Voice;
   }
 
   /**
    * The Speech class is your primary touch-point with the LMNT API.
    */
-  class Speech {
+  export class Speech {
     /**
      * @param apiKey The API key to use for the connection. Obtain a key
      *     from the [LMNT account page](https://app.lmnt.com/account).
