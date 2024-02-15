@@ -32,11 +32,17 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
 ## Release History
 
+1.1.2 / Feb 15, 2024
+- enable client-specified `format` and `sample_rate` in streaming connection
+- read `LMNT_API_KEY` from environment if not explicitly specified
+
 1.1.1 / Feb 14, 2024
 - support CommonJS modules in addition to ES modules
 - expose more types to TypeScript for better tooling support
+
 1.1.0 / Jan 5, 2024
 - `synthesizeStreaming` will now return a `buffer_empty` boolean when extras are requested. This can be used to determine when the server has no more audio to send after the client has sent a `flush` message.
+
 1.0.0 / Nov 16, 2023
 - Breaking changes - Please update your code to use the new behavior or pin to a previous version if preferred:
   - Default audio encoding format in `synthesize` is now `mp3` (previously `wav`). Format can be specified by adding the `format='wav'` or `format='mp3'` option to the `synthesize` call.
