@@ -24,18 +24,18 @@ describe('Speech', function () {
         .get('/v1/ai/voice/list?starred=false&owner=all')
         .reply(200, [
           {
-            id: 'shanti',
-            name: 'Shanti',
+            id: 'lily',
+            name: 'Lily',
             gender: 'F',
-            tags: ['female', 'indian-accent', 'older'],
-            imageUrl: 'https://api.lmnt.com/img/voice/shanti.webp',
+            tags: ['female'],
+            imageUrl: 'https://api.lmnt.com/img/voice/lily.webp',
             state: 'ready'
           }
         ]);
 
       let speech = new Speech('1337');
       let response = await speech.fetchVoices();
-      assert.equal(response[0].id, 'shanti');
+      assert.equal(response[0].id, 'lily');
 
       scope.done();
     });

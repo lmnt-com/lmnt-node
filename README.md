@@ -16,6 +16,7 @@ Sample code:
 ```js
 import Speech from 'lmnt-node';
 
+// You can set the `LMNT_API_KEY` environment variable instead of passing in a string below.
 const speech = new Speech('your-api-key-here');
 
 // Fetch the list of available voices.
@@ -23,8 +24,7 @@ const voices = await speech.fetchVoices();
 console.log(voices);
 
 // Synthesize text to audio.
-const firstVoiceId = voices[0].id;
-const synthesis = await speech.synthesize('Hello World.', firstVoiceId, { format: 'mp3' });
+const synthesis = await speech.synthesize('Hello World.', 'lily', { format: 'mp3' });
 console.log(synthesis.audio);
 ```
 
