@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import FormData from 'form-data';
 import nock from 'nock';
 
-import Speech from '../speech.js';
+import Speech from '../src/esm/speech.js';
 
 const _BASE_URL = 'https://api.lmnt.com';
 const _VOICE_ENDPOINT = '/v1/ai/voice/{id}';
