@@ -229,6 +229,7 @@ class StreamingSynthesisConnection {
 ;
 class Speech {
   constructor(apiKey) {
+    apiKey = apiKey || (typeof process !== 'undefined' ? process.env['LMNT_API_KEY'] : null);
     if (!apiKey) {
       throw new Error('No API key set. Visit https://app.lmnt.com/account to get one.');
     }
