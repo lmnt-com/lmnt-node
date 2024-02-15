@@ -35,6 +35,12 @@ declare module 'lmnt-node' {
    * and defaults.
    */
   export interface StreamingSynthesisOptions {
+    /** The desired output audio format. */
+    format?: 'mp3' | 'raw' | 'ulaw';
+
+    /** The desired output audio sample rate. */
+    sample_rate?: 8000 | 16000 | 24000;
+
     /** Whether to return extra data (durations data and warnings) with each audio chunk. */
     return_extras?: boolean;
 
@@ -62,7 +68,7 @@ declare module 'lmnt-node' {
 
     /** The gender of the voice, e.g. `male`, `female`, `nonbinary`. For categorization purposes. */
     gender?: string;
-    
+
     /** A description of the voice */
     description?: string;
   }
@@ -105,8 +111,8 @@ declare module 'lmnt-node' {
 
     /**
      * Call this when you want to trigger the server to synthesize all the text it
-     * currently has and return the audio data. You can access the audio via the 
-     * async iterator. This is recommended to be used only sparingly, if at all, 
+     * currently has and return the audio data. You can access the audio via the
+     * async iterator. This is recommended to be used only sparingly, if at all,
      * as it can result in a less natural sounding speech. This could be useful if
      * you are sure you have sent text that comes at a natural stop and want all the
      * audio returned without closing the connection.
@@ -123,7 +129,7 @@ declare module 'lmnt-node' {
     finish(): void;
 
     /**
-     * Returns an async iterator that yields an object containing synthesized speech 
+     * Returns an async iterator that yields an object containing synthesized speech
      * audio data as a 96kbps mono MP3 stream with a sampling rate of 24kHz.
      */
     [Symbol.asyncIterator](): AsyncIterableIterator<Object>;
@@ -164,21 +170,21 @@ declare module 'lmnt-node' {
 
     /**
      * Returns a list of voices available to you.
-     * 
+     *
      * @param options Optional configuration options (starred and owner).
      */
     fetchVoices(options?: FetchVoicesOptions): Promise<VoicesResponse>;
 
     /**
      * Returns details of a specific voice
-     * 
+     *
      * @param voice The id of the voice to update. Voice ids can be retrieved from `fetchVoices()`.
      */
     fetchVoice(voice: string): Promise<Voice>;
 
     /**
      * Create a new voice from a set of audio files. Returns the voice metadata object.
-     * 
+     *
      * @param name The name of the voice.
      * @param enhance For unclean audio with background noise, applies processing to attempt to improve quality. This may degrade quality in some circumstances.
      * @param filenames A list of filenames to use for the voice
@@ -187,9 +193,9 @@ declare module 'lmnt-node' {
     createVoice(name: string, enhance: boolean, filenames: string[], options?: CreateVoiceOptions): Promise<CreateVoiceResponse>;
 
     /**
-     * Updates metadata for a specific voice. A voice that is not owned by you can only have its `starred` field updated. 
+     * Updates metadata for a specific voice. A voice that is not owned by you can only have its `starred` field updated.
      * Only provided fields will be changed.
-     * 
+     *
      * @param voice The id of the voice to update. Voice ids can be retrieved from `fetchVoices()`.
      * @param options Optional configuration options.
      */
@@ -197,7 +203,7 @@ declare module 'lmnt-node' {
 
     /**
      * Deletes a voice and cancels any pending operations on it. The voice must be owned by you. Cannot be undone.
-     * 
+     *
      * @param voice The id of the voice to delete. Voice ids can be retrieved from `fetchVoices()`.
      */
     deleteVoice(voice: string): Promise<Object>;
