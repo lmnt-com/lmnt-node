@@ -30,6 +30,26 @@ console.log(synthesis.audio);
 
 See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/demo/node) for more examples.
 
+
+## Next.js and Edge Runtime
+ This SDK is compatible with Next.js and the Edge Runtime. To use it in a Next.js project, you will need to add the following to your `next.config.js` file:
+ ```javascript
+ webpack: (config, { isServer }) => {
+     // Only run this on the server
+     if (isServer) {
+       config.resolve.fallback = config.resolve.fallback || {};
+       config.resolve.fallback.fs = false;
+     }
+
+     return config;
+   },
+ ```
+ The `createVoice()` method uses the `fs` module, which is not available in the Edge Runtime. While the SDK automatically disables this method in non-Node.js environments,
+ this code snippet will prevent the build from failing when the `fs` module is not available.
+
+ Learn more about custom webpack configuration in Next.js [here](https://nextjs.org/docs/api-reference/next.config.js/custom-webpack-config).
+
+ 
 ## Release History
 
 1.1.2 / Feb 15, 2024
