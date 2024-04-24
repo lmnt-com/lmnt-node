@@ -16,6 +16,9 @@ declare module 'lmnt-node' {
     /** The desired output audio format. */
     format?: string;
 
+    /** The desired output audio sample rate. */
+    sample_rate?: 8000 | 16000 | 24000;
+
     /** The desired speed of the synthesized speech. */
     speed?: number;
 
