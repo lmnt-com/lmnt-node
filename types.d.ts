@@ -187,8 +187,10 @@ declare module 'lmnt-node' {
     /**
      * @param apiKey The API key to use for the connection. Obtain a key
      *     from the [LMNT account page](https://app.lmnt.com/account).
+     * @param baseUrl The base URL for the LMNT API. Defaults to the standard 
+     *     production LMNT base url.
      */
-    constructor(apiKey: string);
+    constructor(apiKey: string, baseUrl?: string);
 
     /**
      * Returns a list of voices available to you.

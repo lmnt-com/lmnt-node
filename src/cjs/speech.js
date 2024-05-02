@@ -228,12 +228,13 @@ class StreamingSynthesisConnection {
 }
 ;
 class Speech {
-  constructor(apiKey) {
+  constructor(apiKey, baseUrl = null) {
     apiKey = apiKey || (typeof process !== 'undefined' ? process.env['LMNT_API_KEY'] : null);
     if (!apiKey) {
       throw new Error('No API key set. Visit https://app.lmnt.com/account to get one.');
     }
     this.apiKey = apiKey;
+    this.baseUrl = baseUrl || _BASE_URL;
   }
   async _fetchAndHandleResponse(method, url, caller, body = undefined, headers = this._getHeaders()) {
     try {
@@ -251,11 +252,11 @@ class Speech {
   async fetchVoices(options = {}) {
     const starred = options.starred || false;
     const owner = options.owner || 'all';
-    let url = `${_BASE_URL}${_LIST_VOICES_ENDPOINT}?starred=${starred}&owner=${owner}`;
+    let url = `${this.baseUrl}${_LIST_VOICES_ENDPOINT}?starred=${starred}&owner=${owner}`;
     return this._fetchAndHandleResponse('GET', url, 'fetchVoices');
   }
   async fetchVoice(voice) {
-    const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
+    const url = `${this.baseUrl}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return this._fetchAndHandleResponse('GET', url, 'fetchVoice');
   }
   async createVoice(name, enhance, filenames, type = 'instant', gender = null, description = null) {
@@ -285,7 +286,7 @@ class Speech {
     filenames.forEach(filename => {
       formData.append('file_field', fs.createReadStream(filename));
     });
-    const url = `${_BASE_URL}${_CREATE_VOICE_ENDPOINT}`;
+    const url = `${this.baseUrl}${_CREATE_VOICE_ENDPOINT}`;
     const headers = {
       ...formData.getHeaders(),
       ...this._getHeaders()
@@ -293,17 +294,17 @@ class Speech {
     return this._fetchAndHandleResponse('POST', url, 'createVoice', formData, headers);
   }
   async updateVoice(voice, options = {}) {
-    const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
+    const url = `${this.baseUrl}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return this._fetchAndHandleResponse('PUT', url, 'updateVoice', JSON.stringify(options));
   }
   async unfreezeVoice(voice) {
-    const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
+    const url = `${this.baseUrl}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return this._fetchAndHandleResponse('PUT', url, 'updateVoice', JSON.stringify({
       'unfreeze': true
     }));
   }
   async deleteVoice(voice) {
-    const url = `${_BASE_URL}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
+    const url = `${this.baseUrl}${_VOICE_ENDPOINT.replace('{id}', voice)}`;
     return this._fetchAndHandleResponse('DELETE', url, 'deleteVoice');
   }
   async synthesize(text, voice, options = {}) {
@@ -320,7 +321,7 @@ class Speech {
         }
       }
     });
-    const url = `${_BASE_URL}${_SPEECH_ENDPOINT}`;
+    const url = `${this.baseUrl}${_SPEECH_ENDPOINT}`;
     const responseData = await this._fetchAndHandleResponse('POST', url, 'synthesize', formData);
     let synthesisResult = {};
     synthesisResult.audio = Buffer.from(responseData.audio, 'base64');
@@ -336,7 +337,7 @@ class Speech {
     return new StreamingSynthesisConnection(this.apiKey, voice, options);
   }
   async fetchAccount() {
-    const url = `${_BASE_URL}${_ACCOUNT_ENDPOINT}`;
+    const url = `${this.baseUrl}${_ACCOUNT_ENDPOINT}`;
     return this._fetchAndHandleResponse('GET', url, 'fetchAccount');
   }
   _getHeaders(contentType = null) {

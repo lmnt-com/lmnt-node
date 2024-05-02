@@ -5,6 +5,7 @@ import nock from 'nock';
 import Speech from '../src/esm/speech.js';
 
 const _BASE_URL = 'https://api.lmnt.com';
+const _STAGING_BASE_URL = 'https://api.staging.lmnt.com';
 const _VOICE_ENDPOINT = '/v1/ai/voice/{id}';
 const _SPEECH_ENDPOINT = '/v1/ai/speech';
 
@@ -15,6 +16,25 @@ describe('Speech', function () {
   describe('#constructor()', function () {
     it('should throw without an api key', function () {
       assert.throws(() => new Speech(), Error);
+    });
+
+    it('should allow alternate base url', async () => {
+      const formData = new FormData();
+      formData.append('text', 'Foo Text');
+      formData.append('voice', 'foo-voice');
+
+      const scope = nock(_STAGING_BASE_URL)
+        .post(_SPEECH_ENDPOINT)
+        .reply(200, {
+          audio: 'foo'
+        })
+
+      let speech = new Speech('1337', _STAGING_BASE_URL);
+      const response = await speech.synthesize('Foo Text', 'foo-voice');
+      const expected = {'audio': Buffer.from('foo', 'base64')};
+      assert.deepStrictEqual(response, expected);
+
+      scope.done();
     });
   });
 
@@ -352,7 +372,7 @@ describe('Speech', function () {
       formData.append('text', 'Foo Text');
       formData.append('voice', 'foo-voice');
 
-      const scope = nock('https://api.lmnt.com')
+      const scope = nock(_BASE_URL)
         .post(_SPEECH_ENDPOINT)
         .reply(200, {
           audio: 'foo'
@@ -367,7 +387,7 @@ describe('Speech', function () {
     });
 
     it ('should return synthesized audio with durations', async () => {
-      const scope = nock('https://api.lmnt.com')
+      const scope = nock(_BASE_URL)
         .post(_SPEECH_ENDPOINT)
         .reply(200, {
           audio: 'foo',
@@ -383,7 +403,7 @@ describe('Speech', function () {
     });
 
     it ('should return synthesized audio with seed', async () => {
-      const scope = nock('https://api.lmnt.com')
+      const scope = nock(_BASE_URL)
         .post(_SPEECH_ENDPOINT)
         .reply(200, {
           audio: 'foo',
@@ -399,7 +419,7 @@ describe('Speech', function () {
     });
 
     it ('should return synthesized audio with seed and durations', async () => {
-      const scope = nock('https://api.lmnt.com')
+      const scope = nock(_BASE_URL)
         .post(_SPEECH_ENDPOINT)
         .reply(200, {
           audio: 'foo',
