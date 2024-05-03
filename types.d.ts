@@ -4,6 +4,25 @@ declare module 'lmnt-node' {
   /** The binary audio data provided by the server. */
   export type AudioData = Buffer;
 
+  /** The spoken duration of a synthesized input element. */
+  export type Duration = {
+    /** The synthesized input element */
+    text: string,
+
+    /** The spoken duration of each synthesized input element, in seconds. */
+    duration: number,
+
+    /** The start time of each synthsized input element, in seconds. */
+    start: number
+  }
+
+  /** The response from the server after synthesizing text. */
+  export type SynthesisResponse = {
+    audio: AudioData;
+    seed?: number;
+    durations?: Array<Duration>;
+  }
+
   /**
    * Options available to pass with synthesize requests. See the
    * [SDK documentation](https://lmnt.com/docs/node/) for available values
@@ -220,7 +239,7 @@ declare module 'lmnt-node' {
      * @param options Optional configuration options. See the
      *     [documentation](https://lmnt.com/docs/node/#synthesize) for more.
      */
-    synthesize(text: string, voice: string, options?: SynthesizeOptions): Promise<AudioData>;
+    synthesize(text: string, voice: string, options?: SynthesizeOptions): Promise<SynthesisResponse>;
 
     /**
      * Creates a new, full-duplex streaming session. You can use the returned connection
