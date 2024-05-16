@@ -49,6 +49,12 @@ declare module 'lmnt-node' {
 
     /** If `True`, the response will include the seed used for synthesis. */
     return_seed?: boolean;
+
+    /** 
+     * The desired language of the synthesized speech. Two letter ISO 639-1
+     * code. Defaults to `en`.
+     */
+    language?: string;
   }
 
   /**
