@@ -51,6 +51,10 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
  
 ## Release History
+1.2.0 / May 15, 2024
+- add optional `sample_rate` and `language` parameters in `synthesize`
+- add optional `baseUrl` parameter to `Speech` constructor
+- fix incorrect type definitions for synthesis response
 
 1.1.2 / Feb 15, 2024
 - enable client-specified `format` and `sample_rate` in streaming connection
