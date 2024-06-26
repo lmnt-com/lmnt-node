@@ -29,32 +29,32 @@ declare module 'lmnt-node' {
    * and defaults.
    */
   export interface SynthesizeOptions {
-    /** An optional seed for random number generation. */
-    seed?: number;
-
     /** The desired output audio format. */
     format?: string;
-
-    /** The desired output audio sample rate. */
-    sample_rate?: 8000 | 16000 | 24000;
-
-    /** The desired speed of the synthesized speech. */
-    speed?: number;
-
-    /** The desired target length of the output speech in seconds. */
-    length?: number;
-
-    /** If `True`, the response will include word durations detail. */
-    return_durations?: boolean;
-
-    /** If `True`, the response will include the seed used for synthesis. */
-    return_seed?: boolean;
 
     /** 
      * The desired language of the synthesized speech. Two letter ISO 639-1
      * code. Defaults to `en`.
      */
     language?: string;
+
+    /** The desired target length of the output speech in seconds. */
+    length?: number;
+
+    /** The desired output audio sample rate. */
+    sample_rate?: 8000 | 16000 | 24000;
+
+    /** An optional seed for random number generation. */
+    seed?: number;
+
+    /** The desired speed of the synthesized speech. */
+    speed?: number;
+
+    /** If `True`, the response will include word durations detail. */
+    return_durations?: boolean;
+
+    /** If `True`, the response will include the seed used for synthesis. */
+    return_seed?: boolean;
   }
 
   /**
@@ -63,20 +63,26 @@ declare module 'lmnt-node' {
    * and defaults.
    */
   export interface StreamingSynthesisOptions {
+    /** The amount of variation in speech (e.g. pitch). */
+    expressive?: number;
+
     /** The desired output audio format. */
     format?: 'mp3' | 'raw' | 'ulaw';
 
-    /** The desired output audio sample rate. */
-    sample_rate?: 8000 | 16000 | 24000;
+    /** 
+     * The desired language of the synthesized speech. Two letter ISO 639-1
+     * code. Defaults to `en`.
+     */
+    language?: string;
 
     /** Whether to return extra data (durations data and warnings) with each audio chunk. */
     return_extras?: boolean;
 
+    /** The desired output audio sample rate. */
+    sample_rate?: 8000 | 16000 | 24000;
+
     /** The desired speed of the synthesized speech. */
     speed?: number;
-
-    /** The amount of variation in speech (e.g. pitch). */
-    expressive?: number;
   }
 
   export interface FetchVoicesOptions {
