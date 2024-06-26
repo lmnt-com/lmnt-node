@@ -102,6 +102,7 @@ class StreamingSynthesisConnection {
       'X-API-Key': apiKey,
       'voice': voice,
       'format': options.format || undefined,
+      'language': options.language || undefined,
       'sample_rate': options.sample_rate || undefined,
       'send_extras': options.return_extras || undefined,
       'speed': options.speed || undefined,
