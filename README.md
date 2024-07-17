@@ -51,6 +51,9 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
  
 ## Release History
+1.2.1 / July 16, 2024
+- add `language` option to streaming synthesis
+
 1.2.0 / May 15, 2024
 - add optional `sample_rate` and `language` parameters in `synthesize`
 - add optional `baseUrl` parameter to `Speech` constructor
