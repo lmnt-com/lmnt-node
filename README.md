@@ -51,6 +51,9 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
  
 ## Release History
+1.2.3 / Aug 1, 2024
+- add `conversational` option to streaming and non-streaming synthesis
+
 1.2.1 / July 16, 2024
 - add `language` option to streaming synthesis
 
