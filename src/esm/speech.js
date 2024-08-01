@@ -104,6 +104,7 @@ class StreamingSynthesisConnection {
       'voice': voice,
       'format': options.format || undefined,
       'language': options.language || undefined,
+      'conversational': options.conversational || undefined,
       'sample_rate': options.sample_rate || undefined,
       'send_extras': options.return_extras || undefined,
       'speed': options.speed || undefined,
@@ -332,7 +333,7 @@ export class Speech {
     formData.append('text', text);
     formData.append('voice', voice);
 
-    const fields = ['format', 'language', 'length', 'return_durations', 'return_seed', 'sample_rate', 'seed', 'speed'];
+    const fields = ['format', 'language', 'conversational', 'length', 'return_durations', 'return_seed', 'sample_rate', 'seed', 'speed'];
     fields.forEach(field => {
       if (field in options) {
         if (typeof options[field] === 'boolean') {

@@ -38,6 +38,9 @@ declare module 'lmnt-node' {
      */
     language?: string;
 
+    /** Set to `true` to synthesize speech in a conversational style. */
+    conversational?: boolean;
+
     /** The desired target length of the output speech in seconds. */
     length?: number;
 
@@ -74,6 +77,9 @@ declare module 'lmnt-node' {
      * code. Defaults to `en`.
      */
     language?: string;
+
+    /** Set to `true` to synthesize speech in a conversational style. */
+    conversational?: boolean;
 
     /** Whether to return extra data (durations data and warnings) with each audio chunk. */
     return_extras?: boolean;
