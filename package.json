@@ -1,6 +1,6 @@
 {
   "name": "lmnt-node",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Node.js client library for the LMNT API",
   "main": "src/cjs/speech.js",
   "module": "src/esm/speech.js",
