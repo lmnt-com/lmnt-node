@@ -22,7 +22,7 @@ const args = yargs(hideBin(process.argv))
     alias: 'v',
     type: 'string',
     describe: 'The voice id to use when synthesizing speech.',
-    default: 'mara-wilson'
+    default: 'morgan'
   })
   .parse();
 
