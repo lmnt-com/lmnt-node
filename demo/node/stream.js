@@ -30,7 +30,7 @@ const audioFile = createWriteStream(args.outputFile);
 
 // Construct the streaming connection with our desired voice
 // and the callback to process incoming audio data.
-const speechConnection = speech.synthesizeStreaming('mara-wilson');
+const speechConnection = speech.synthesizeStreaming('morgan');
 
 // Construct the OpenAI client instance.
 const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
