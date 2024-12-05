@@ -333,7 +333,7 @@ export class Speech {
     formData.append('text', text);
     formData.append('voice', voice);
 
-    const fields = ['format', 'language', 'conversational', 'length', 'return_durations', 'return_seed', 'sample_rate', 'seed', 'speed'];
+    const fields = ['format', 'language', 'model', 'conversational', 'length', 'return_durations', 'return_seed', 'sample_rate', 'seed', 'speed'];
     fields.forEach(field => {
       if (field in options) {
         if (typeof options[field] === 'boolean') {

@@ -38,6 +38,9 @@ declare module 'lmnt-node' {
      */
     language?: string;
 
+    /** The name of the model to use. Defaults to `aurora`. */
+    model?: 'aurora' | 'blizzard';
+
     /** Set to `true` to synthesize speech in a conversational style. */
     conversational?: boolean;
 
