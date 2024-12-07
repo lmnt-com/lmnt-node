@@ -51,6 +51,9 @@ See the simple [demo apps](https://github.com/lmnt-com/lmnt-node/tree/master/dem
 
  
 ## Release History
+1.3.0 / Dec 7, 2024
+- add `model` option to `synthesize` following release of new experimental model `blizzard`
+
 1.2.3 / Aug 1, 2024
 - add `conversational` option to streaming and non-streaming synthesis
 
