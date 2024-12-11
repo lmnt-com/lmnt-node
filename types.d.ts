@@ -23,38 +23,33 @@ declare module 'lmnt-node' {
     durations?: Array<Duration>;
   }
 
+  export namespace SynthesizeOptions {
+    /** The model to use for speech synthesis. 'aurora' (default) and 'blizzard' (experimental) */
+    export type Model = 'aurora' | 'blizzard';
+
+    /** The format of the output audio */
+    export type Format = 'aac' | 'mp3' | 'raw' | 'mulaw' | 'wav';
+
+    /** The format of the output audio for streaming synthesis */
+    export type StreamingFormat = 'mp3' | 'raw' | 'ulaw';
+
+    /** Sample rate in Hz of the output audio. Higher rates provide better quality but larger files. Defaults to 24000 */
+    export type SampleRate = 8000 | 16000 | 24000;
+
+    /** The desired language of the synthesized speech. Two letter ISO 639-1 code. Defaults to `en` */
+    export type Language = 'de' | 'en' | 'es' | 'fr' | 'ko' | 'pt' | 'hi' | 'zh';
+  }
+
   /**
-   * Options available to pass with synthesize requests. See the
-   * [SDK documentation](https://lmnt.com/docs/node/) for available values
-   * and defaults.
+   * Base options available to pass with synthesize requests.
    */
-  export interface SynthesizeOptions {
-    /** The desired output audio format. */
-    format?: string;
-
-    /** 
-     * The desired language of the synthesized speech. Two letter ISO 639-1
-     * code. Defaults to `en`.
-     */
-    language?: string;
-
-    /** The name of the model to use. Defaults to `aurora`. */
-    model?: 'aurora' | 'blizzard';
-
-    /** Set to `true` to synthesize speech in a conversational style. */
-    conversational?: boolean;
-
-    /** The desired target length of the output speech in seconds. */
-    length?: number;
-
-    /** The desired output audio sample rate. */
-    sample_rate?: 8000 | 16000 | 24000;
-
+  export interface BaseSynthesizeOptions {
+    language?: SynthesizeOptions.Language;
+    sample_rate?: SynthesizeOptions.SampleRate;
+    format?: SynthesizeOptions.Format;
+  
     /** An optional seed for random number generation. */
     seed?: number;
-
-    /** The desired speed of the synthesized speech. */
-    speed?: number;
 
     /** If `True`, the response will include word durations detail. */
     return_durations?: boolean;
@@ -64,22 +59,47 @@ declare module 'lmnt-node' {
   }
 
   /**
+   * Additional options available to pass with synthesize requests for the Aurora model.
+   */
+  export interface AuroraSynthesizeOptions extends BaseSynthesizeOptions {
+    model?: 'aurora';
+
+    /** Set to `true` to synthesize speech in a conversational style. */
+    conversational?: boolean;
+
+    /** The desired target length of the output speech in seconds. */
+    length?: number;
+
+    /** The desired speed of the synthesized speech, a floating point value between 0.25 (slow) and 2.0 (fast). Defaults to 1.0. */
+    speed?: number;
+  }
+
+  /**
+   * Additional options available to pass with synthesize requests for the Blizzard model.
+   */
+  export interface BlizzardSynthesizeOptions extends BaseSynthesizeOptions {
+    model: 'blizzard';
+  }
+
+  /**
+   * Options available to pass with synthesize requests. See the
+   * [SDK documentation](https://lmnt.com/docs/node/) for available values
+   * and defaults.
+   */
+  export type SynthesizeOptions = AuroraSynthesizeOptions | BlizzardSynthesizeOptions;
+
+  /**
    * Options available to pass with streaming synthesis requests. See the
    * [SDK documentation](https://lmnt.com/docs/node/) for available values
    * and defaults.
    */
   export interface StreamingSynthesisOptions {
+    language?: SynthesizeOptions.Language;
+    sample_rate?: SynthesizeOptions.SampleRate;
+    format?: SynthesizeOptions.StreamingFormat;
+
     /** The amount of variation in speech (e.g. pitch). */
     expressive?: number;
-
-    /** The desired output audio format. */
-    format?: 'mp3' | 'raw' | 'ulaw';
-
-    /** 
-     * The desired language of the synthesized speech. Two letter ISO 639-1
-     * code. Defaults to `en`.
-     */
-    language?: string;
 
     /** Set to `true` to synthesize speech in a conversational style. */
     conversational?: boolean;
@@ -87,10 +107,7 @@ declare module 'lmnt-node' {
     /** Whether to return extra data (durations data and warnings) with each audio chunk. */
     return_extras?: boolean;
 
-    /** The desired output audio sample rate. */
-    sample_rate?: 8000 | 16000 | 24000;
-
-    /** The desired speed of the synthesized speech. */
+    /** The desired speed of the synthesized speech, a floating point value between 0.25 (slow) and 2.0 (fast). Defaults to 1.0. */
     speed?: number;
   }
 
