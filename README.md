@@ -28,11 +28,7 @@ import Lmnt from 'lmnt-node';
 const client = new Lmnt();
 
 async function main() {
-  const response = await client.synthesize({
-    text: 'This is a test of LMNT, hello world!',
-    voice: 'daniel',
-    'X-API-Key': '{{X-API-Key}}',
-  });
+  const response = await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' });
 
   console.log(response.audio);
 }
@@ -51,11 +47,7 @@ import Lmnt from 'lmnt-node';
 const client = new Lmnt();
 
 async function main() {
-  const params: Lmnt.SynthesizeParams = {
-    text: 'This is a test of LMNT, hello world!',
-    voice: 'daniel',
-    'X-API-Key': '{{X-API-Key}}',
-  };
+  const params: Lmnt.SynthesizeParams = { text: 'This is a test of LMNT, hello world!', voice: 'daniel' };
   const response: Lmnt.SynthesizeResponse = await client.synthesize(params);
 }
 
@@ -74,11 +66,7 @@ a subclass of `APIError` will be thrown:
 ```ts
 async function main() {
   const response = await client
-    .synthesize({
-      text: 'This is a test of LMNT, hello world!',
-      voice: 'daniel',
-      'X-API-Key': '{{X-API-Key}}',
-    })
+    .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
     .catch(async (err) => {
       if (err instanceof Lmnt.APIError) {
         console.log(err.status); // 400
@@ -108,7 +96,7 @@ Error codes are as followed:
 
 ### Retries
 
-Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
+Certain errors will be automatically retried 3 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors will all be retried by default.
 
@@ -119,10 +107,11 @@ You can use the `maxRetries` option to configure or disable this:
 // Configure the default for all requests:
 const client = new Lmnt({
   maxRetries: 0, // default is 2
+  apiKey: 'My API Key',
 });
 
 // Or, configure per-request:
-await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' }, {
+await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' }, {
   maxRetries: 5,
 });
 ```
@@ -136,10 +125,11 @@ Requests time out after 1 minute by default. You can configure this with a `time
 // Configure the default for all requests:
 const client = new Lmnt({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
+  apiKey: 'My API Key',
 });
 
 // Override per-request:
-await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' }, {
+await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -147,6 +137,23 @@ await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: '
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Default Headers
+
+We automatically send the `X-API-Key` header set to `{apiKey}`.
+
+If you need to, you can override it by setting default headers on a per-request basis.
+
+```ts
+import Lmnt from 'lmnt-node';
+
+const client = new Lmnt();
+
+const response = await client.synthesize(
+  { text: 'This is a test of LMNT, hello world!', voice: 'daniel' },
+  { headers: { 'X-API-Key': 'My-Custom-Value' } },
+);
+```
 
 ## Advanced Usage
 
@@ -161,13 +168,13 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 const client = new Lmnt();
 
 const response = await client
-  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' })
+  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: response, response: raw } = await client
-  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' })
+  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.audio);
@@ -271,11 +278,12 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 // Configure the default for all requests:
 const client = new Lmnt({
   httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),
+  apiKey: 'My API Key',
 });
 
 // Override per-request:
 await client.synthesize(
-  { text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' },
+  { text: 'This is a test of LMNT, hello world!', voice: 'daniel' },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },

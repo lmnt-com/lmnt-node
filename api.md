@@ -11,8 +11,8 @@ Types:
 
 Methods:
 
-- <code title="get /v1/account">client.<a href="./src/index.ts">account</a>({ ...params }) -> AccountResponse</code>
-- <code title="delete /v1/ai/voice/{id}">client.<a href="./src/index.ts">deleteVoice</a>(id, { ...params }) -> unknown</code>
+- <code title="get /v1/account">client.<a href="./src/index.ts">account</a>() -> AccountResponse</code>
+- <code title="delete /v1/ai/voice/{id}">client.<a href="./src/index.ts">deleteVoice</a>(id) -> unknown</code>
 - <code title="get /v1/ai/voice/list">client.<a href="./src/index.ts">listVoices</a>({ ...params }) -> ListVoicesResponse</code>
 - <code title="post /v1/ai/speech">client.<a href="./src/index.ts">synthesize</a>({ ...params }) -> SynthesizeResponse</code>
 - <code title="put /v1/ai/voice/{id}">client.<a href="./src/index.ts">updateVoice</a>(id, { ...params }) -> UpdateVoiceResponse</code>
