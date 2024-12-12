@@ -1,0 +1,244 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../../resource';
+import * as Core from '../../core';
+
+export class Voices extends APIResource {
+  /**
+   * Submits a request to create a voice with a supplied voice configuration and a
+   * batch of input audio data.
+   */
+  create(params: VoiceCreateParams, options?: Core.RequestOptions): Core.APIPromise<Voice> {
+    const { 'X-API-Key': xAPIKey, ...body } = params;
+    return this._client.post(
+      '/v1/ai/voice',
+      Core.multipartFormRequestOptions({
+        body,
+        ...options,
+        headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+      }),
+    );
+  }
+
+  /**
+   * Returns details of a specific voice.
+   */
+  retrieve(id: string, params: VoiceRetrieveParams, options?: Core.RequestOptions): Core.APIPromise<Voice> {
+    const { 'X-API-Key': xAPIKey } = params;
+    return this._client.get(`/v1/ai/voice/${id}`, {
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+
+  /**
+   * Updates metadata for a specific voice. Only provided fields will be changed.
+   */
+  update(
+    id: string,
+    params: VoiceUpdateParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<VoiceUpdateResponse> {
+    const { 'X-API-Key': xAPIKey, ...body } = params;
+    return this._client.put(`/v1/ai/voice/${id}`, {
+      body,
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+
+  /**
+   * Returns a list of voices available to you.
+   */
+  list(params: VoiceListParams, options?: Core.RequestOptions): Core.APIPromise<VoiceListResponse> {
+    const { 'X-API-Key': xAPIKey, ...query } = params;
+    return this._client.get('/v1/ai/voice/list', {
+      query,
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+
+  /**
+   * Deletes a voice and cancels any pending operations on it. Cannot be undone.
+   */
+  delete(id: string, params: VoiceDeleteParams, options?: Core.RequestOptions): Core.APIPromise<unknown> {
+    const { 'X-API-Key': xAPIKey } = params;
+    return this._client.delete(`/v1/ai/voice/${id}`, {
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+}
+
+/**
+ * Voice details
+ */
+export interface Voice {
+  /**
+   * The unique identifier of this voice.
+   */
+  id: string;
+
+  /**
+   * The display name of this voice.
+   */
+  name: string;
+
+  /**
+   * The owner of this voice.
+   */
+  owner: 'system' | 'me' | 'other';
+
+  /**
+   * The state of this voice in the training pipeline (e.g., `ready`, `training`).
+   */
+  state: string;
+
+  /**
+   * A text description of this voice.
+   */
+  description?: string | null;
+
+  /**
+   * A tag describing the gender of this voice, e.g. `male`, `female`, `nonbinary`.
+   */
+  gender?: string;
+
+  /**
+   * Whether this voice has been starred by you or not.
+   */
+  starred?: boolean;
+
+  /**
+   * The method by which this voice was created: `instant` or `professional`.
+   */
+  type?: 'instant' | 'professional';
+}
+
+export interface VoiceUpdateResponse {
+  /**
+   * Voice details
+   */
+  voice: Voice;
+}
+
+export type VoiceListResponse = Array<Voice>;
+
+export type VoiceDeleteResponse = unknown;
+
+export interface VoiceCreateParams {
+  /**
+   * Body param: One or more input audio files to train the voice in the form of
+   * binary `wav`, `mp3`, `mp4`, `m4a`, or `webm` attachments.
+   *
+   * - Max attached files: 20.
+   * - Max total file size: 250 MB.
+   * - Professional voices require at least 5 minutes of source audio to train from.
+   */
+  files: string;
+
+  /**
+   * Body param: Information about the voice you are creating; a stringified JSON
+   * object containing the following fields:
+   *
+   * - `name` **_required_**: string; The display name for this voice
+   * - `enhance` **_required_**: bool; For unclean audio with background noise,
+   *   applies processing to attempt to improve quality. Default is `false` as this
+   *   can also degrade quality in some circumstances.
+   * - `type` _optional_: string; The type of voice to create. Defaults to instant.
+   * - `gender` _optional_: string; A tag describing the gender of this voice. Has no
+   *   effect on voice creation.
+   * - `description` _optional_: string; A text description of this voice.
+   */
+  metadata: string;
+
+  /**
+   * Header param: Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+}
+
+export interface VoiceRetrieveParams {
+  /**
+   * Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+}
+
+export interface VoiceUpdateParams {
+  /**
+   * Header param: Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+
+  /**
+   * Body param: A description of this voice.
+   */
+  description?: string;
+
+  /**
+   * Body param: A tag describing the gender of this voice, e.g. `male`, `female`,
+   * `nonbinary`.
+   */
+  gender?: string;
+
+  /**
+   * Body param: The display name for this voice.
+   */
+  name?: string;
+
+  /**
+   * Body param: If `true`, adds this voice to your starred list.
+   */
+  starred?: boolean;
+
+  /**
+   * Body param: If true, unfreezes this voice and upgrades it to the latest model.
+   */
+  unfreeze?: boolean;
+}
+
+export interface VoiceListParams {
+  /**
+   * Header param: Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+
+  /**
+   * Query param: Which owner's voices to return. Choose from `system`, `me`, or
+   * `all`.
+   */
+  owner?: string;
+
+  /**
+   * Query param: If true, only returns voices that you have starred.
+   */
+  starred?: string;
+}
+
+export interface VoiceDeleteParams {
+  /**
+   * Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+}
+
+export declare namespace Voices {
+  export {
+    type Voice as Voice,
+    type VoiceUpdateResponse as VoiceUpdateResponse,
+    type VoiceListResponse as VoiceListResponse,
+    type VoiceDeleteResponse as VoiceDeleteResponse,
+    type VoiceCreateParams as VoiceCreateParams,
+    type VoiceRetrieveParams as VoiceRetrieveParams,
+    type VoiceUpdateParams as VoiceUpdateParams,
+    type VoiceListParams as VoiceListParams,
+    type VoiceDeleteParams as VoiceDeleteParams,
+  };
+}
