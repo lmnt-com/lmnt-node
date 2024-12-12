@@ -188,7 +188,7 @@ export interface ListVoicesParams {
 
 export interface SynthesizeParams {
   /**
-   * The text to synthesize; max 5000 characters per request (including spaces).
+   * The text to synthesize; max 5000 characters per request (including spaces)
    */
   text: string;
 
@@ -200,26 +200,22 @@ export interface SynthesizeParams {
 
   /**
    * Set this to `true` to generate conversational-style speech rather than
-   * reading-style speech. Does not work with the `blizzard` model.
+   * reading-style speech.
    */
   conversational?: boolean;
 
   /**
-   * The file format of the synthesized audio output, either `aac`, `mp3`, `mulaw`,
-   * `raw`, `wav`.
+   * The file format of the synthesized audio output
    */
-  format?: string;
+  format?: 'aac' | 'mp3' | 'mulaw' | 'raw' | 'wav';
 
   /**
-   * The desired language of the synthesized speech. Two letter ISO 639-1 code. One
-   * of `de`, `en`, `es`, `fr`, `pt`, `zh`, `ko`, `hi`. Does not work with
-   * professional clones and the `blizzard` model.
+   * The desired language of the synthesized speech. Two letter ISO 639-1 code.
    */
-  language?: string;
+  language?: 'de' | 'en' | 'es' | 'fr' | 'pt' | 'zh' | 'ko' | 'hi';
 
   /**
-   * Produce speech of this length in seconds; maximum `300.0` (5 minutes). Does not
-   * work with the `blizzard` model.
+   * Produce speech of this length in seconds; maximum 300.0 (5 minutes).
    */
   length?: number;
 
@@ -227,29 +223,20 @@ export interface SynthesizeParams {
    * The model to use for synthesis. One of `aurora` (default) or `blizzard`. Learn
    * more about models [here](https://docs.lmnt.com/guides/models).
    */
-  model?: string;
+  model?: 'aurora' | 'blizzard';
 
   /**
-   * If set as `true`, response will contain a durations object; see definition in
-   * the response section below.
+   * The desired output sample rate in Hz
    */
-  return_durations?: string;
-
-  /**
-   * The desired output sample rate in Hz, one of: `8000`, `16000`, `24000`; defaults
-   * to `24000` for all formats except `mulaw` which defaults to `8000`.
-   */
-  sample_rate?: number;
+  sample_rate?: 8000 | 16000 | 24000;
 
   /**
    * Seed used to specify a different take; defaults to random
-   * ([see here](http://docs.lmnt.com/speech/seed) for more details).
    */
   seed?: number;
 
   /**
-   * The talking speed of the generated speech, a floating point value between `0.25`
-   * (slow) and `2.0` (fast).
+   * The talking speed of the generated speech
    */
   speed?: number;
 }

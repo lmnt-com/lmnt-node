@@ -21,9 +21,9 @@ import {
 
 export interface ClientOptions {
   /**
-   * Your LMNT API key for authentication
+   * Defaults to process.env['LMNT_API_KEY'].
    */
-  apiKey: string;
+  apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -61,7 +61,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 3
+   * @default 2
    */
   maxRetries?: number;
 
@@ -93,19 +93,23 @@ export class Lmnt extends Core.APIClient {
   /**
    * API Client for interfacing with the Lmnt API.
    *
-   * @param {string} opts.apiKey
+   * @param {string | undefined} [opts.apiKey=process.env['LMNT_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['LMNT_BASE_URL'] ?? https://api.lmnt.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=3] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
    * @param {Core.Headers} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
-  constructor({ baseURL = Core.readEnv('LMNT_BASE_URL'), apiKey, ...opts }: ClientOptions) {
+  constructor({
+    baseURL = Core.readEnv('LMNT_BASE_URL'),
+    apiKey = Core.readEnv('LMNT_API_KEY'),
+    ...opts
+  }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.LmntError(
-        "Missing required client option apiKey; you need to instantiate the Lmnt client with an apiKey option, like new Lmnt({ apiKey: 'My API Key' }).",
+        "The LMNT_API_KEY environment variable is missing or empty; either provide it, or instantiate the Lmnt client with an apiKey option, like new Lmnt({ apiKey: 'My API Key' }).",
       );
     }
 
@@ -218,9 +222,12 @@ export class Lmnt extends Core.APIClient {
   protected override defaultHeaders(opts: Core.FinalRequestOptions): Core.Headers {
     return {
       ...super.defaultHeaders(opts),
-      'X-API-Key': '{apiKey}',
       ...this._options.defaultHeaders,
     };
+  }
+
+  protected override authHeaders(opts: Core.FinalRequestOptions): Core.Headers {
+    return { 'X-API-Key': this.apiKey };
   }
 
   static Lmnt = this;

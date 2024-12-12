@@ -25,10 +25,12 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt();
+const client = new Lmnt({
+  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
+});
 
 async function main() {
-  const response = await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' });
+  const response = await client.synthesize({ text: 'text', voice: 'voice' });
 
   console.log(response.audio);
 }
@@ -44,10 +46,12 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt();
+const client = new Lmnt({
+  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
+});
 
 async function main() {
-  const params: Lmnt.SynthesizeParams = { text: 'This is a test of LMNT, hello world!', voice: 'daniel' };
+  const params: Lmnt.SynthesizeParams = { text: 'text', voice: 'voice' };
   const response: Lmnt.SynthesizeResponse = await client.synthesize(params);
 }
 
@@ -65,17 +69,15 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const response = await client
-    .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
-    .catch(async (err) => {
-      if (err instanceof Lmnt.APIError) {
-        console.log(err.status); // 400
-        console.log(err.name); // BadRequestError
-        console.log(err.headers); // {server: 'nginx', ...}
-      } else {
-        throw err;
-      }
-    });
+  const response = await client.synthesize({ text: 'text', voice: 'voice' }).catch(async (err) => {
+    if (err instanceof Lmnt.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 }
 
 main();
@@ -96,7 +98,7 @@ Error codes are as followed:
 
 ### Retries
 
-Certain errors will be automatically retried 3 times by default, with a short exponential backoff.
+Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors will all be retried by default.
 
@@ -107,11 +109,10 @@ You can use the `maxRetries` option to configure or disable this:
 // Configure the default for all requests:
 const client = new Lmnt({
   maxRetries: 0, // default is 2
-  apiKey: 'My API Key',
 });
 
 // Or, configure per-request:
-await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' }, {
+await client.synthesize({ text: 'text', voice: 'voice' }, {
   maxRetries: 5,
 });
 ```
@@ -125,11 +126,10 @@ Requests time out after 1 minute by default. You can configure this with a `time
 // Configure the default for all requests:
 const client = new Lmnt({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
-  apiKey: 'My API Key',
 });
 
 // Override per-request:
-await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' }, {
+await client.synthesize({ text: 'text', voice: 'voice' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -137,23 +137,6 @@ await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: '
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
-
-## Default Headers
-
-We automatically send the `X-API-Key` header set to `{apiKey}`.
-
-If you need to, you can override it by setting default headers on a per-request basis.
-
-```ts
-import Lmnt from 'lmnt-node';
-
-const client = new Lmnt();
-
-const response = await client.synthesize(
-  { text: 'This is a test of LMNT, hello world!', voice: 'daniel' },
-  { headers: { 'X-API-Key': 'My-Custom-Value' } },
-);
-```
 
 ## Advanced Usage
 
@@ -167,14 +150,12 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Lmnt();
 
-const response = await client
-  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
-  .asResponse();
+const response = await client.synthesize({ text: 'text', voice: 'voice' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: response, response: raw } = await client
-  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel' })
+  .synthesize({ text: 'text', voice: 'voice' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.audio);
@@ -278,12 +259,11 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 // Configure the default for all requests:
 const client = new Lmnt({
   httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),
-  apiKey: 'My API Key',
 });
 
 // Override per-request:
 await client.synthesize(
-  { text: 'This is a test of LMNT, hello world!', voice: 'daniel' },
+  { text: 'text', voice: 'voice' },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },
