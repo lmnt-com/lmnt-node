@@ -1,10 +1,10 @@
-# Lmnt Com Node API Library
+# Lmnt Node API Library
 
-[![NPM version](https://img.shields.io/npm/v/lmnt-com.svg)](https://npmjs.org/package/lmnt-com) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lmnt-com)
+[![NPM version](https://img.shields.io/npm/v/lmnt-node.svg)](https://npmjs.org/package/lmnt-node) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lmnt-node)
 
-This library provides convenient access to the Lmnt Com REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Lmnt REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [docs.lmnt-com.com](https://docs.lmnt-com.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.lmnt.com](https://docs.lmnt.com). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
 
@@ -15,7 +15,7 @@ npm install git+ssh://git@github.com:stainless-sdks/lmnt-com-node.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install lmnt-com`
+> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install lmnt-node`
 
 ## Usage
 
@@ -23,14 +23,18 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import LmntCom from 'lmnt-com';
+import Lmnt from 'lmnt-node';
 
-const client = new LmntCom();
+const client = new Lmnt();
 
 async function main() {
-  const account = await client.accounts.retrieve({ 'X-API-Key': 'X-API-Key' });
+  const response = await client.synthesize({
+    text: 'This is a test of LMNT, hello world!',
+    voice: 'daniel',
+    'X-API-Key': '{{X-API-Key}}',
+  });
 
-  console.log(account.plan);
+  console.log(response.audio);
 }
 
 main();
@@ -42,13 +46,17 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import LmntCom from 'lmnt-com';
+import Lmnt from 'lmnt-node';
 
-const client = new LmntCom();
+const client = new Lmnt();
 
 async function main() {
-  const params: LmntCom.AccountRetrieveParams = { 'X-API-Key': 'X-API-Key' };
-  const account: LmntCom.AccountRetrieveResponse = await client.accounts.retrieve(params);
+  const params: Lmnt.SynthesizeParams = {
+    text: 'This is a test of LMNT, hello world!',
+    voice: 'daniel',
+    'X-API-Key': '{{X-API-Key}}',
+  };
+  const response: Lmnt.SynthesizeResponse = await client.synthesize(params);
 }
 
 main();
@@ -65,15 +73,21 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const account = await client.accounts.retrieve({ 'X-API-Key': 'X-API-Key' }).catch(async (err) => {
-    if (err instanceof LmntCom.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+  const response = await client
+    .synthesize({
+      text: 'This is a test of LMNT, hello world!',
+      voice: 'daniel',
+      'X-API-Key': '{{X-API-Key}}',
+    })
+    .catch(async (err) => {
+      if (err instanceof Lmnt.APIError) {
+        console.log(err.status); // 400
+        console.log(err.name); // BadRequestError
+        console.log(err.headers); // {server: 'nginx', ...}
+      } else {
+        throw err;
+      }
+    });
 }
 
 main();
@@ -103,12 +117,12 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new LmntCom({
+const client = new Lmnt({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.accounts.retrieve({ 'X-API-Key': 'X-API-Key' }, {
+await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' }, {
   maxRetries: 5,
 });
 ```
@@ -120,12 +134,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new LmntCom({
+const client = new Lmnt({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.accounts.retrieve({ 'X-API-Key': 'X-API-Key' }, {
+await client.synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -144,17 +158,19 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 
 <!-- prettier-ignore -->
 ```ts
-const client = new LmntCom();
+const client = new Lmnt();
 
-const response = await client.accounts.retrieve({ 'X-API-Key': 'X-API-Key' }).asResponse();
+const response = await client
+  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: account, response: raw } = await client.accounts
-  .retrieve({ 'X-API-Key': 'X-API-Key' })
+const { data: response, response: raw } = await client
+  .synthesize({ text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(account.plan);
+console.log(response.audio);
 ```
 
 ### Making custom/undocumented requests
@@ -207,16 +223,16 @@ By default, this library uses `node-fetch` in Node, and expects a global `fetch`
 
 If you would prefer to use a global, web-standards-compliant `fetch` function even in a Node environment,
 (for example, if you are running Node with `--experimental-fetch` or using NextJS which polyfills with `undici`),
-add the following import before your first import `from "LmntCom"`:
+add the following import before your first import `from "Lmnt"`:
 
 ```ts
 // Tell TypeScript and the package to use the global web fetch instead of node-fetch.
 // Note, despite the name, this does not add any polyfills, but expects them to be provided if needed.
-import 'lmnt-com/shims/web';
-import LmntCom from 'lmnt-com';
+import 'lmnt-node/shims/web';
+import Lmnt from 'lmnt-node';
 ```
 
-To do the inverse, add `import "lmnt-com/shims/node"` (which does import polyfills).
+To do the inverse, add `import "lmnt-node/shims/node"` (which does import polyfills).
 This can also be useful if you are getting the wrong TypeScript types for `Response` ([more details](https://github.com/stainless-sdks/lmnt-com-node/tree/main/src/_shims#readme)).
 
 ### Logging and middleware
@@ -226,9 +242,9 @@ which can be used to inspect or alter the `Request` or `Response` before/after e
 
 ```ts
 import { fetch } from 'undici'; // as one example
-import LmntCom from 'lmnt-com';
+import Lmnt from 'lmnt-node';
 
-const client = new LmntCom({
+const client = new Lmnt({
   fetch: async (url: RequestInfo, init?: RequestInit): Promise<Response> => {
     console.log('About to make a request', url, init);
     const response = await fetch(url, init);
@@ -253,13 +269,13 @@ import http from 'http';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
 // Configure the default for all requests:
-const client = new LmntCom({
+const client = new Lmnt({
   httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),
 });
 
 // Override per-request:
-await client.accounts.retrieve(
-  { 'X-API-Key': 'X-API-Key' },
+await client.synthesize(
+  { text: 'This is a test of LMNT, hello world!', voice: 'daniel', 'X-API-Key': '{{X-API-Key}}' },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },

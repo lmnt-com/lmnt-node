@@ -55,12 +55,12 @@ $ cd lmnt-com-node
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link lmnt-com
+$ yarn link lmnt-node
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global lmnt-com
+$ pnpm link -—global lmnt-node
 ```
 
 ## Running tests

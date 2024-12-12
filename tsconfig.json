@@ -9,9 +9,9 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "lmnt-com/_shims/auto/*": ["src/_shims/auto/*-node"],
-      "lmnt-com/*": ["src/*"],
-      "lmnt-com": ["src/index.ts"]
+      "lmnt-node/_shims/auto/*": ["src/_shims/auto/*-node"],
+      "lmnt-node/*": ["src/*"],
+      "lmnt-node": ["src/index.ts"]
     },
     "noEmit": true,
 

@@ -42,12 +42,12 @@ export let isFsReadStream: Shims['isFsReadStream'] | undefined = undefined;
 export function setShims(shims: Shims, options: { auto: boolean } = { auto: false }) {
   if (auto) {
     throw new Error(
-      `you must \`import 'lmnt-com/shims/${shims.kind}'\` before importing anything else from lmnt-com`,
+      `you must \`import 'lmnt-node/shims/${shims.kind}'\` before importing anything else from lmnt-node`,
     );
   }
   if (kind) {
     throw new Error(
-      `can't \`import 'lmnt-com/shims/${shims.kind}'\` after \`import 'lmnt-com/shims/${kind}'\``,
+      `can't \`import 'lmnt-node/shims/${shims.kind}'\` after \`import 'lmnt-node/shims/${kind}'\``,
     );
   }
   auto = options.auto;

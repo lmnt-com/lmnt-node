@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { toFile, type ResponseLike } from 'lmnt-com/uploads';
-import { File } from 'lmnt-com/_shims/index';
+import { toFile, type ResponseLike } from 'lmnt-node/uploads';
+import { File } from 'lmnt-node/_shims/index';
 
 class MyClass {
   name: string = 'foo';
