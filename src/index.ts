@@ -1,14 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { isRequestOptions } from './core';
 import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as TopLevelAPI from './resources/top-level';
 import {
-  AccountParams,
   AccountResponse,
-  DeleteVoiceParams,
   DeleteVoiceResponse,
   ListVoicesParams,
   ListVoicesResponse,
@@ -20,6 +19,11 @@ import {
 } from './resources/top-level';
 
 export interface ClientOptions {
+  /**
+   * Your LMNT API key for authentication
+   */
+  apiKey: string;
+
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
@@ -56,7 +60,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 3
    */
   maxRetries?: number;
 
@@ -81,21 +85,31 @@ export interface ClientOptions {
  * API Client for interfacing with the Lmnt API.
  */
 export class Lmnt extends Core.APIClient {
+  apiKey: string;
+
   private _options: ClientOptions;
 
   /**
    * API Client for interfacing with the Lmnt API.
    *
+   * @param {string} opts.apiKey
    * @param {string} [opts.baseURL=process.env['LMNT_BASE_URL'] ?? https://api.lmnt.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=3] - The maximum number of times the client will retry a request.
    * @param {Core.Headers} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
-  constructor({ baseURL = Core.readEnv('LMNT_BASE_URL'), ...opts }: ClientOptions = {}) {
+  constructor({ baseURL = Core.readEnv('LMNT_BASE_URL'), apiKey, ...opts }: ClientOptions) {
+    if (apiKey === undefined) {
+      throw new Errors.LmntError(
+        "Missing required client option apiKey; you need to instantiate the Lmnt client with an apiKey option, like new Lmnt({ apiKey: 'My API Key' }).",
+      );
+    }
+
     const options: ClientOptions = {
+      apiKey,
       ...opts,
       baseURL: baseURL || `https://api.lmnt.com`,
     };
@@ -109,47 +123,40 @@ export class Lmnt extends Core.APIClient {
     });
 
     this._options = options;
+
+    this.apiKey = apiKey;
   }
 
   /**
    * Returns details about your account.
    */
-  account(
-    params: TopLevelAPI.AccountParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.AccountResponse> {
-    const { 'X-API-Key': xAPIKey } = params;
-    return this.get('/v1/account', { ...options, headers: { 'X-API-Key': xAPIKey, ...options?.headers } });
+  account(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.AccountResponse> {
+    return this.get('/v1/account', options);
   }
 
   /**
    * Deletes a voice and cancels any pending operations on it. Cannot be undone.
    */
-  deleteVoice(
-    id: string,
-    params: TopLevelAPI.DeleteVoiceParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<unknown> {
-    const { 'X-API-Key': xAPIKey } = params;
-    return this.delete(`/v1/ai/voice/${id}`, {
-      ...options,
-      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
-    });
+  deleteVoice(id: string, options?: Core.RequestOptions): Core.APIPromise<unknown> {
+    return this.delete(`/v1/ai/voice/${id}`, options);
   }
 
   /**
    * Returns a list of voices available to you.
    */
   listVoices(
-    params: TopLevelAPI.ListVoicesParams,
+    query?: TopLevelAPI.ListVoicesParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.ListVoicesResponse>;
+  listVoices(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.ListVoicesResponse>;
+  listVoices(
+    query: TopLevelAPI.ListVoicesParams | Core.RequestOptions = {},
     options?: Core.RequestOptions,
   ): Core.APIPromise<TopLevelAPI.ListVoicesResponse> {
-    const { 'X-API-Key': xAPIKey, ...query } = params;
-    return this.get('/v1/ai/voice/list', {
-      query,
-      ...options,
-      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
-    });
+    if (isRequestOptions(query)) {
+      return this.listVoices({}, query);
+    }
+    return this.get('/v1/ai/voice/list', { query, ...options });
   }
 
   /**
@@ -159,18 +166,10 @@ export class Lmnt extends Core.APIClient {
    * duration of each word spoken.
    */
   synthesize(
-    params: TopLevelAPI.SynthesizeParams,
+    body: TopLevelAPI.SynthesizeParams,
     options?: Core.RequestOptions,
   ): Core.APIPromise<TopLevelAPI.SynthesizeResponse> {
-    const { 'X-API-Key': xAPIKey, ...body } = params;
-    return this.post(
-      '/v1/ai/speech',
-      Core.multipartFormRequestOptions({
-        body,
-        ...options,
-        headers: { 'X-API-Key': xAPIKey, ...options?.headers },
-      }),
-    );
+    return this.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
   }
 
   /**
@@ -178,15 +177,19 @@ export class Lmnt extends Core.APIClient {
    */
   updateVoice(
     id: string,
-    params: TopLevelAPI.UpdateVoiceParams,
+    body?: TopLevelAPI.UpdateVoiceParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse>;
+  updateVoice(id: string, options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse>;
+  updateVoice(
+    id: string,
+    body: TopLevelAPI.UpdateVoiceParams | Core.RequestOptions = {},
     options?: Core.RequestOptions,
   ): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse> {
-    const { 'X-API-Key': xAPIKey, ...body } = params;
-    return this.put(`/v1/ai/voice/${id}`, {
-      body,
-      ...options,
-      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
-    });
+    if (isRequestOptions(body)) {
+      return this.updateVoice(id, {}, body);
+    }
+    return this.put(`/v1/ai/voice/${id}`, { body, ...options });
   }
 
   protected override defaultQuery(): Core.DefaultQuery | undefined {
@@ -196,6 +199,7 @@ export class Lmnt extends Core.APIClient {
   protected override defaultHeaders(opts: Core.FinalRequestOptions): Core.Headers {
     return {
       ...super.defaultHeaders(opts),
+      'X-API-Key': '{apiKey}',
       ...this._options.defaultHeaders,
     };
   }
@@ -231,8 +235,6 @@ export declare namespace Lmnt {
     type ListVoicesResponse as ListVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
-    type AccountParams as AccountParams,
-    type DeleteVoiceParams as DeleteVoiceParams,
     type ListVoicesParams as ListVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,

@@ -3,11 +3,14 @@
 import Lmnt from 'lmnt-node';
 import { Response } from 'node-fetch';
 
-const client = new Lmnt({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
+const client = new Lmnt({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('top level methods', () => {
-  test('account: only required params', async () => {
-    const responsePromise = client.account({ 'X-API-Key': 'X-API-Key' });
+  test('account', async () => {
+    const responsePromise = client.account();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -17,12 +20,13 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('account: required and optional params', async () => {
-    const response = await client.account({ 'X-API-Key': 'X-API-Key' });
+  test('account: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.account({ path: '/_stainless_unknown_path' })).rejects.toThrow(Lmnt.NotFoundError);
   });
 
-  test('deleteVoice: only required params', async () => {
-    const responsePromise = client.deleteVoice('', { 'X-API-Key': 'X-API-Key' });
+  test('deleteVoice', async () => {
+    const responsePromise = client.deleteVoice('');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -32,12 +36,15 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('deleteVoice: required and optional params', async () => {
-    const response = await client.deleteVoice('', { 'X-API-Key': 'X-API-Key' });
+  test('deleteVoice: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.deleteVoice('', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 
-  test('listVoices: only required params', async () => {
-    const responsePromise = client.listVoices({ 'X-API-Key': 'X-API-Key' });
+  test('listVoices', async () => {
+    const responsePromise = client.listVoices();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -47,19 +54,22 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('listVoices: required and optional params', async () => {
-    const response = await client.listVoices({
-      'X-API-Key': 'X-API-Key',
-      owner: 'owner',
-      starred: 'starred',
-    });
+  test('listVoices: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.listVoices({ path: '/_stainless_unknown_path' })).rejects.toThrow(Lmnt.NotFoundError);
+  });
+
+  test('listVoices: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.listVoices({ owner: 'owner', starred: 'starred' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Lmnt.NotFoundError);
   });
 
   test('synthesize: only required params', async () => {
     const responsePromise = client.synthesize({
       text: 'This is a test of LMNT, hello world!',
       voice: 'daniel',
-      'X-API-Key': '{{X-API-Key}}',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -74,7 +84,6 @@ describe('top level methods', () => {
     const response = await client.synthesize({
       text: 'This is a test of LMNT, hello world!',
       voice: 'daniel',
-      'X-API-Key': '{{X-API-Key}}',
       conversational: true,
       format: 'mp3',
       language: 'en',
@@ -87,8 +96,8 @@ describe('top level methods', () => {
     });
   });
 
-  test('updateVoice: only required params', async () => {
-    const responsePromise = client.updateVoice('', { 'X-API-Key': 'X-API-Key' });
+  test('updateVoice', async () => {
+    const responsePromise = client.updateVoice('');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -98,14 +107,21 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('updateVoice: required and optional params', async () => {
-    const response = await client.updateVoice('', {
-      'X-API-Key': 'X-API-Key',
-      description: 'description',
-      gender: 'gender',
-      name: 'name',
-      starred: true,
-      unfreeze: true,
-    });
+  test('updateVoice: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.updateVoice('', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
+  });
+
+  test('updateVoice: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.updateVoice(
+        '',
+        { description: 'description', gender: 'gender', name: 'name', starred: true, unfreeze: true },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Lmnt.NotFoundError);
   });
 });

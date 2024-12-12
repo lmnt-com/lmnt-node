@@ -147,147 +147,109 @@ export interface UpdateVoiceResponse {
   voice: Voice;
 }
 
-export interface AccountParams {
-  /**
-   * Your API key; get it from your
-   * [LMNT account page](https://app.lmnt.com/account).
-   */
-  'X-API-Key': string;
-}
-
-export interface DeleteVoiceParams {
-  /**
-   * Your API key; get it from your
-   * [LMNT account page](https://app.lmnt.com/account).
-   */
-  'X-API-Key': string;
-}
-
 export interface ListVoicesParams {
   /**
-   * Header param: Your API key; get it from your
-   * [LMNT account page](https://app.lmnt.com/account).
-   */
-  'X-API-Key': string;
-
-  /**
-   * Query param: Which owner's voices to return. Choose from `system`, `me`, or
-   * `all`.
+   * Which owner's voices to return. Choose from `system`, `me`, or `all`.
    */
   owner?: string;
 
   /**
-   * Query param: If true, only returns voices that you have starred.
+   * If true, only returns voices that you have starred.
    */
   starred?: string;
 }
 
 export interface SynthesizeParams {
   /**
-   * Body param: The text to synthesize; max 5000 characters per request (including
-   * spaces).
+   * The text to synthesize; max 5000 characters per request (including spaces).
    */
   text: string;
 
   /**
-   * Body param: The voice id of the voice to use for synthesis; voice ids can be
-   * retrieved by calls to `List voices` or `Voice info`
+   * The voice id of the voice to use for synthesis; voice ids can be retrieved by
+   * calls to `List voices` or `Voice info`
    */
   voice: string;
 
   /**
-   * Header param: Your API key; get it from your
-   * [LMNT account page](https://app.lmnt.com/account).
-   */
-  'X-API-Key': string;
-
-  /**
-   * Body param: Set this to `true` to generate conversational-style speech rather
-   * than reading-style speech. Does not work with the `blizzard` model.
+   * Set this to `true` to generate conversational-style speech rather than
+   * reading-style speech. Does not work with the `blizzard` model.
    */
   conversational?: boolean;
 
   /**
-   * Body param: The file format of the synthesized audio output, either `aac`,
-   * `mp3`, `mulaw`, `raw`, `wav`.
+   * The file format of the synthesized audio output, either `aac`, `mp3`, `mulaw`,
+   * `raw`, `wav`.
    */
   format?: string;
 
   /**
-   * Body param: The desired language of the synthesized speech. Two letter ISO 639-1
-   * code. One of `de`, `en`, `es`, `fr`, `pt`, `zh`, `ko`, `hi`. Does not work with
+   * The desired language of the synthesized speech. Two letter ISO 639-1 code. One
+   * of `de`, `en`, `es`, `fr`, `pt`, `zh`, `ko`, `hi`. Does not work with
    * professional clones and the `blizzard` model.
    */
   language?: string;
 
   /**
-   * Body param: Produce speech of this length in seconds; maximum `300.0` (5
-   * minutes). Does not work with the `blizzard` model.
+   * Produce speech of this length in seconds; maximum `300.0` (5 minutes). Does not
+   * work with the `blizzard` model.
    */
   length?: number;
 
   /**
-   * Body param: The model to use for synthesis. One of `aurora` (default) or
-   * `blizzard`. Learn more about models [here](https://docs.lmnt.com/guides/models).
+   * The model to use for synthesis. One of `aurora` (default) or `blizzard`. Learn
+   * more about models [here](https://docs.lmnt.com/guides/models).
    */
   model?: string;
 
   /**
-   * Body param: If set as `true`, response will contain a durations object; see
-   * definition in the response section below.
+   * If set as `true`, response will contain a durations object; see definition in
+   * the response section below.
    */
   return_durations?: string;
 
   /**
-   * Body param: The desired output sample rate in Hz, one of: `8000`, `16000`,
-   * `24000`; defaults to `24000` for all formats except `mulaw` which defaults to
-   * `8000`.
+   * The desired output sample rate in Hz, one of: `8000`, `16000`, `24000`; defaults
+   * to `24000` for all formats except `mulaw` which defaults to `8000`.
    */
   sample_rate?: number;
 
   /**
-   * Body param: Seed used to specify a different take; defaults to random
+   * Seed used to specify a different take; defaults to random
    * ([see here](http://docs.lmnt.com/speech/seed) for more details).
    */
   seed?: number;
 
   /**
-   * Body param: The talking speed of the generated speech, a floating point value
-   * between `0.25` (slow) and `2.0` (fast).
+   * The talking speed of the generated speech, a floating point value between `0.25`
+   * (slow) and `2.0` (fast).
    */
   speed?: number;
 }
 
 export interface UpdateVoiceParams {
   /**
-   * Header param: Your API key; get it from your
-   * [LMNT account page](https://app.lmnt.com/account).
-   */
-  'X-API-Key': string;
-
-  /**
-   * Body param: A description of this voice.
+   * A description of this voice.
    */
   description?: string;
 
   /**
-   * Body param: A tag describing the gender of this voice, e.g. `male`, `female`,
-   * `nonbinary`.
+   * A tag describing the gender of this voice, e.g. `male`, `female`, `nonbinary`.
    */
   gender?: string;
 
   /**
-   * Body param: The display name for this voice.
+   * The display name for this voice.
    */
   name?: string;
 
   /**
-   * Body param: If `true`, adds this voice to your starred list.
+   * If `true`, adds this voice to your starred list.
    */
   starred?: boolean;
 
   /**
-   * Body param: If true, unfreezes this voice and upgrades it to the latest model.
+   * If true, unfreezes this voice and upgrades it to the latest model.
    */
   unfreeze?: boolean;
 }
@@ -300,8 +262,6 @@ export declare namespace TopLevel {
     type ListVoicesResponse as ListVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
-    type AccountParams as AccountParams,
-    type DeleteVoiceParams as DeleteVoiceParams,
     type ListVoicesParams as ListVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,
