@@ -1,5 +1,5 @@
-import { createResponseHeaders } from 'lmnt-com/core';
-import { Headers } from 'lmnt-com/_shims/index';
+import { createResponseHeaders } from 'lmnt-node/core';
+import { Headers } from 'lmnt-node/_shims/index';
 
 describe('response parsing', () => {
   // TODO: test unicode characters

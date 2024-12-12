@@ -1,6 +1,6 @@
-import { multipartFormRequestOptions, createForm } from 'lmnt-com/core';
-import { Blob } from 'lmnt-com/_shims/index';
-import { toFile } from 'lmnt-com';
+import { multipartFormRequestOptions, createForm } from 'lmnt-node/core';
+import { Blob } from 'lmnt-node/_shims/index';
+import { toFile } from 'lmnt-node';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

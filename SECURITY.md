@@ -16,11 +16,11 @@ before making any information public.
 ## Reporting Non-SDK Related Security Issues
 
 If you encounter security issues that are not directly related to SDKs but pertain to the services
-or products provided by Lmnt Com please follow the respective company's security reporting guidelines.
+or products provided by Lmnt please follow the respective company's security reporting guidelines.
 
-### Lmnt Com Terms and Policies
+### Lmnt Terms and Policies
 
-Please contact dev-feedback@lmnt-com.com for any questions or concerns regarding security of our services.
+Please contact feedback@lmnt.com for any questions or concerns regarding security of our services.
 
 ---
 

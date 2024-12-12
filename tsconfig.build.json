@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "lmnt-com/*": ["dist/src/*"],
-      "lmnt-com": ["dist/src/index.ts"],
+      "lmnt-node/*": ["dist/src/*"],
+      "lmnt-node": ["dist/src/index.ts"],
     },
     "noEmit": false,
     "declaration": true,

@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { LmntCom } from './index';
+import type { Lmnt } from './index';
 
 export class APIResource {
-  protected _client: LmntCom;
+  protected _client: Lmnt;
 
-  constructor(client: LmntCom) {
+  constructor(client: Lmnt) {
     this._client = client;
   }
 }

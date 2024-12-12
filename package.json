@@ -1,8 +1,8 @@
 {
-  "name": "lmnt-com",
+  "name": "lmnt-node",
   "version": "0.0.1-alpha.0",
-  "description": "The official TypeScript library for the Lmnt Com API",
-  "author": "Lmnt Com <dev-feedback@lmnt-com.com>",
+  "description": "The official TypeScript library for the Lmnt API",
+  "author": "Lmnt <feedback@lmnt.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
@@ -59,8 +59,8 @@
     "./shims/web.mjs"
   ],
   "imports": {
-    "lmnt-com": ".",
-    "lmnt-com/*": "./src/*"
+    "lmnt-node": ".",
+    "lmnt-node/*": "./src/*"
   },
   "exports": {
     "./_shims/auto/*": {

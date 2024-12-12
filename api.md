@@ -1,39 +1,18 @@
-# Accounts
+# Lmnt
 
 Types:
 
-- <code><a href="./src/resources/accounts.ts">AccountRetrieveResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">Voice</a></code>
+- <code><a href="./src/resources/top-level.ts">AccountResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">DeleteVoiceResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">ListVoicesResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">SynthesizeResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">UpdateVoiceResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/account">client.accounts.<a href="./src/resources/accounts.ts">retrieve</a>({ ...params }) -> AccountRetrieveResponse</code>
-
-# AI
-
-## Speech
-
-Types:
-
-- <code><a href="./src/resources/ai/speech.ts">SpeechCreateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/ai/speech">client.ai.speech.<a href="./src/resources/ai/speech.ts">create</a>({ ...params }) -> SpeechCreateResponse</code>
-- <code title="get /v1/ai/speech">client.ai.speech.<a href="./src/resources/ai/speech.ts">retrieve</a>({ ...params }) -> Response</code>
-
-## Voices
-
-Types:
-
-- <code><a href="./src/resources/ai/voices.ts">Voice</a></code>
-- <code><a href="./src/resources/ai/voices.ts">VoiceUpdateResponse</a></code>
-- <code><a href="./src/resources/ai/voices.ts">VoiceListResponse</a></code>
-- <code><a href="./src/resources/ai/voices.ts">VoiceDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/ai/voice">client.ai.voices.<a href="./src/resources/ai/voices.ts">create</a>({ ...params }) -> Voice</code>
-- <code title="get /v1/ai/voice/{id}">client.ai.voices.<a href="./src/resources/ai/voices.ts">retrieve</a>(id, { ...params }) -> Voice</code>
-- <code title="put /v1/ai/voice/{id}">client.ai.voices.<a href="./src/resources/ai/voices.ts">update</a>(id, { ...params }) -> VoiceUpdateResponse</code>
-- <code title="get /v1/ai/voice/list">client.ai.voices.<a href="./src/resources/ai/voices.ts">list</a>({ ...params }) -> VoiceListResponse</code>
-- <code title="delete /v1/ai/voice/{id}">client.ai.voices.<a href="./src/resources/ai/voices.ts">delete</a>(id, { ...params }) -> unknown</code>
+- <code title="get /v1/account">client.<a href="./src/index.ts">account</a>({ ...params }) -> AccountResponse</code>
+- <code title="delete /v1/ai/voice/{id}">client.<a href="./src/index.ts">deleteVoice</a>(id, { ...params }) -> unknown</code>
+- <code title="get /v1/ai/voice/list">client.<a href="./src/index.ts">listVoices</a>({ ...params }) -> ListVoicesResponse</code>
+- <code title="post /v1/ai/speech">client.<a href="./src/index.ts">synthesize</a>({ ...params }) -> SynthesizeResponse</code>
+- <code title="put /v1/ai/voice/{id}">client.<a href="./src/index.ts">updateVoice</a>(id, { ...params }) -> UpdateVoiceResponse</code>

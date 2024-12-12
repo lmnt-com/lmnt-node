@@ -4,15 +4,26 @@ import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
-import * as API from './resources/index';
-import { AccountRetrieveParams, AccountRetrieveResponse, Accounts } from './resources/accounts';
-import { AI } from './resources/ai/ai';
+import * as TopLevelAPI from './resources/top-level';
+import {
+  AccountParams,
+  AccountResponse,
+  DeleteVoiceParams,
+  DeleteVoiceResponse,
+  ListVoicesParams,
+  ListVoicesResponse,
+  SynthesizeParams,
+  SynthesizeResponse,
+  UpdateVoiceParams,
+  UpdateVoiceResponse,
+  Voice,
+} from './resources/top-level';
 
 export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['LMNT_COM_BASE_URL'].
+   * Defaults to process.env['LMNT_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -67,15 +78,15 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Lmnt Com API.
+ * API Client for interfacing with the Lmnt API.
  */
-export class LmntCom extends Core.APIClient {
+export class Lmnt extends Core.APIClient {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Lmnt Com API.
+   * API Client for interfacing with the Lmnt API.
    *
-   * @param {string} [opts.baseURL=process.env['LMNT_COM_BASE_URL'] ?? https://api.lmnt.com] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['LMNT_BASE_URL'] ?? https://api.lmnt.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -83,7 +94,7 @@ export class LmntCom extends Core.APIClient {
    * @param {Core.Headers} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
-  constructor({ baseURL = Core.readEnv('LMNT_COM_BASE_URL'), ...opts }: ClientOptions = {}) {
+  constructor({ baseURL = Core.readEnv('LMNT_BASE_URL'), ...opts }: ClientOptions = {}) {
     const options: ClientOptions = {
       ...opts,
       baseURL: baseURL || `https://api.lmnt.com`,
@@ -100,8 +111,83 @@ export class LmntCom extends Core.APIClient {
     this._options = options;
   }
 
-  accounts: API.Accounts = new API.Accounts(this);
-  ai: API.AI = new API.AI(this);
+  /**
+   * Returns details about your account.
+   */
+  account(
+    params: TopLevelAPI.AccountParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.AccountResponse> {
+    const { 'X-API-Key': xAPIKey } = params;
+    return this.get('/v1/account', { ...options, headers: { 'X-API-Key': xAPIKey, ...options?.headers } });
+  }
+
+  /**
+   * Deletes a voice and cancels any pending operations on it. Cannot be undone.
+   */
+  deleteVoice(
+    id: string,
+    params: TopLevelAPI.DeleteVoiceParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<unknown> {
+    const { 'X-API-Key': xAPIKey } = params;
+    return this.delete(`/v1/ai/voice/${id}`, {
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+
+  /**
+   * Returns a list of voices available to you.
+   */
+  listVoices(
+    params: TopLevelAPI.ListVoicesParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.ListVoicesResponse> {
+    const { 'X-API-Key': xAPIKey, ...query } = params;
+    return this.get('/v1/ai/voice/list', {
+      query,
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
+
+  /**
+   * Synthesizes speech from a text string and provides advanced information about
+   * the synthesis. Returns a JSON object that contains a base64-encoded audio file,
+   * the seed used in speech generation, and optionally an object detailing the
+   * duration of each word spoken.
+   */
+  synthesize(
+    params: TopLevelAPI.SynthesizeParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.SynthesizeResponse> {
+    const { 'X-API-Key': xAPIKey, ...body } = params;
+    return this.post(
+      '/v1/ai/speech',
+      Core.multipartFormRequestOptions({
+        body,
+        ...options,
+        headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+      }),
+    );
+  }
+
+  /**
+   * Updates metadata for a specific voice. Only provided fields will be changed.
+   */
+  updateVoice(
+    id: string,
+    params: TopLevelAPI.UpdateVoiceParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse> {
+    const { 'X-API-Key': xAPIKey, ...body } = params;
+    return this.put(`/v1/ai/voice/${id}`, {
+      body,
+      ...options,
+      headers: { 'X-API-Key': xAPIKey, ...options?.headers },
+    });
+  }
 
   protected override defaultQuery(): Core.DefaultQuery | undefined {
     return this._options.defaultQuery;
@@ -114,10 +200,10 @@ export class LmntCom extends Core.APIClient {
     };
   }
 
-  static LmntCom = this;
+  static Lmnt = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static LmntComError = Errors.LmntComError;
+  static LmntError = Errors.LmntError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -135,23 +221,27 @@ export class LmntCom extends Core.APIClient {
   static fileFromPath = Uploads.fileFromPath;
 }
 
-LmntCom.Accounts = Accounts;
-LmntCom.AI = AI;
-export declare namespace LmntCom {
+export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
 
   export {
-    Accounts as Accounts,
-    type AccountRetrieveResponse as AccountRetrieveResponse,
-    type AccountRetrieveParams as AccountRetrieveParams,
+    type Voice as Voice,
+    type AccountResponse as AccountResponse,
+    type DeleteVoiceResponse as DeleteVoiceResponse,
+    type ListVoicesResponse as ListVoicesResponse,
+    type SynthesizeResponse as SynthesizeResponse,
+    type UpdateVoiceResponse as UpdateVoiceResponse,
+    type AccountParams as AccountParams,
+    type DeleteVoiceParams as DeleteVoiceParams,
+    type ListVoicesParams as ListVoicesParams,
+    type SynthesizeParams as SynthesizeParams,
+    type UpdateVoiceParams as UpdateVoiceParams,
   };
-
-  export { AI as AI };
 }
 
 export { toFile, fileFromPath } from './uploads';
 export {
-  LmntComError,
+  LmntError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,
@@ -166,4 +256,4 @@ export {
   UnprocessableEntityError,
 } from './error';
 
-export default LmntCom;
+export default Lmnt;

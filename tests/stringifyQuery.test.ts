@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { LmntCom } from 'lmnt-com';
+import { Lmnt } from 'lmnt-node';
 
-const { stringifyQuery } = LmntCom.prototype as any;
+const { stringifyQuery } = Lmnt.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [
