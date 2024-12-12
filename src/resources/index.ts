@@ -7,6 +7,7 @@ export {
   type ListVoicesResponse,
   type SynthesizeResponse,
   type UpdateVoiceResponse,
+  type CreateVoiceParams,
   type ListVoicesParams,
   type SynthesizeParams,
   type UpdateVoiceParams,
