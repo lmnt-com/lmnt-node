@@ -162,12 +162,26 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Lmnt({ maxRetries: 6, apiKey: 'My API Key' });
-    expect(client.maxRetries).toEqual(6);
+    const client = new Lmnt({ maxRetries: 4, apiKey: 'My API Key' });
+    expect(client.maxRetries).toEqual(4);
 
     // default
     const client2 = new Lmnt({ apiKey: 'My API Key' });
-    expect(client2.maxRetries).toEqual(3);
+    expect(client2.maxRetries).toEqual(2);
+  });
+
+  test('with environment variable arguments', () => {
+    // set options via env var
+    process.env['LMNT_API_KEY'] = 'My API Key';
+    const client = new Lmnt();
+    expect(client.apiKey).toBe('My API Key');
+  });
+
+  test('with overriden environment variable arguments', () => {
+    // set options via env var
+    process.env['LMNT_API_KEY'] = 'another My API Key';
+    const client = new Lmnt({ apiKey: 'My API Key' });
+    expect(client.apiKey).toBe('My API Key');
   });
 });
 

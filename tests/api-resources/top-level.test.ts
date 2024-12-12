@@ -88,10 +88,7 @@ describe('top level methods', () => {
   });
 
   test('synthesize: only required params', async () => {
-    const responsePromise = client.synthesize({
-      text: 'This is a test of LMNT, hello world!',
-      voice: 'daniel',
-    });
+    const responsePromise = client.synthesize({ text: 'text', voice: 'voice' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,17 +100,16 @@ describe('top level methods', () => {
 
   test('synthesize: required and optional params', async () => {
     const response = await client.synthesize({
-      text: 'This is a test of LMNT, hello world!',
-      voice: 'daniel',
+      text: 'text',
+      voice: 'voice',
       conversational: true,
-      format: 'mp3',
-      language: 'en',
-      length: 5,
+      format: 'aac',
+      language: 'de',
+      length: 0,
       model: 'aurora',
-      return_durations: 'true',
-      sample_rate: 24000,
+      sample_rate: 8000,
       seed: 0,
-      speed: 1,
+      speed: 0.25,
     });
   });
 
