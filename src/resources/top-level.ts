@@ -147,6 +147,33 @@ export interface UpdateVoiceResponse {
   voice: Voice;
 }
 
+export interface CreateVoiceParams {
+  /**
+   * One or more input audio files to train the voice in the form of binary `wav`,
+   * `mp3`, `mp4`, `m4a`, or `webm` attachments.
+   *
+   * - Max attached files: 20.
+   * - Max total file size: 250 MB.
+   * - Professional voices require at least 5 minutes of source audio to train from.
+   */
+  files: string;
+
+  /**
+   * Information about the voice you are creating; a stringified JSON object
+   * containing the following fields:
+   *
+   * - `name` **_required_**: string; The display name for this voice
+   * - `enhance` **_required_**: bool; For unclean audio with background noise,
+   *   applies processing to attempt to improve quality. Default is `false` as this
+   *   can also degrade quality in some circumstances.
+   * - `type` _optional_: string; The type of voice to create. Defaults to instant.
+   * - `gender` _optional_: string; A tag describing the gender of this voice. Has no
+   *   effect on voice creation.
+   * - `description` _optional_: string; A text description of this voice.
+   */
+  metadata: string;
+}
+
 export interface ListVoicesParams {
   /**
    * Which owner's voices to return. Choose from `system`, `me`, or `all`.
@@ -262,6 +289,7 @@ export declare namespace TopLevel {
     type ListVoicesResponse as ListVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
+    type CreateVoiceParams as CreateVoiceParams,
     type ListVoicesParams as ListVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,

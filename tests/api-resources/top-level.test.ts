@@ -25,6 +25,27 @@ describe('top level methods', () => {
     await expect(client.account({ path: '/_stainless_unknown_path' })).rejects.toThrow(Lmnt.NotFoundError);
   });
 
+  test('createVoice: only required params', async () => {
+    const responsePromise = client.createVoice({
+      files: '@/Users/user/filename.wav',
+      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}; type=application/json',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('createVoice: required and optional params', async () => {
+    const response = await client.createVoice({
+      files: '@/Users/user/filename.wav',
+      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}; type=application/json',
+    });
+  });
+
   test('deleteVoice', async () => {
     const responsePromise = client.deleteVoice('');
     const rawResponse = await responsePromise.asResponse();
@@ -123,5 +144,23 @@ describe('top level methods', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Lmnt.NotFoundError);
+  });
+
+  test('voiceInfo', async () => {
+    const responsePromise = client.voiceInfo('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('voiceInfo: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.voiceInfo('id', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 });

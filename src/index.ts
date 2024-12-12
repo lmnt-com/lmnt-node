@@ -8,6 +8,7 @@ import * as Uploads from './uploads';
 import * as TopLevelAPI from './resources/top-level';
 import {
   AccountResponse,
+  CreateVoiceParams,
   DeleteVoiceResponse,
   ListVoicesParams,
   ListVoicesResponse,
@@ -135,6 +136,17 @@ export class Lmnt extends Core.APIClient {
   }
 
   /**
+   * Submits a request to create a voice with a supplied voice configuration and a
+   * batch of input audio data.
+   */
+  createVoice(
+    body: TopLevelAPI.CreateVoiceParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<TopLevelAPI.Voice> {
+    return this.post('/v1/ai/voice', Core.multipartFormRequestOptions({ body, ...options }));
+  }
+
+  /**
    * Deletes a voice and cancels any pending operations on it. Cannot be undone.
    */
   deleteVoice(id: string, options?: Core.RequestOptions): Core.APIPromise<unknown> {
@@ -192,6 +204,13 @@ export class Lmnt extends Core.APIClient {
     return this.put(`/v1/ai/voice/${id}`, { body, ...options });
   }
 
+  /**
+   * Returns details of a specific voice.
+   */
+  voiceInfo(id: string, options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.Voice> {
+    return this.get(`/v1/ai/voice/${id}`, options);
+  }
+
   protected override defaultQuery(): Core.DefaultQuery | undefined {
     return this._options.defaultQuery;
   }
@@ -235,6 +254,7 @@ export declare namespace Lmnt {
     type ListVoicesResponse as ListVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
+    type CreateVoiceParams as CreateVoiceParams,
     type ListVoicesParams as ListVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,
