@@ -4,11 +4,11 @@ export {
   type Voice,
   type AccountResponse,
   type DeleteVoiceResponse,
-  type ListVoicesResponse,
+  type FetchVoicesResponse,
   type SynthesizeResponse,
   type UpdateVoiceResponse,
   type CreateVoiceParams,
-  type ListVoicesParams,
+  type FetchVoicesParams,
   type SynthesizeParams,
   type UpdateVoiceParams,
 } from './top-level';
