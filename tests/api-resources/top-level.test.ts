@@ -64,8 +64,8 @@ describe('top level methods', () => {
     );
   });
 
-  test('listVoices', async () => {
-    const responsePromise = client.listVoices();
+  test('fetchVoices', async () => {
+    const responsePromise = client.fetchVoices();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -75,15 +75,17 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('listVoices: request options instead of params are passed correctly', async () => {
+  test('fetchVoices: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.listVoices({ path: '/_stainless_unknown_path' })).rejects.toThrow(Lmnt.NotFoundError);
+    await expect(client.fetchVoices({ path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 
-  test('listVoices: request options and params are passed correctly', async () => {
+  test('fetchVoices: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.listVoices({ owner: 'owner', starred: 'starred' }, { path: '/_stainless_unknown_path' }),
+      client.fetchVoices({ owner: 'owner', starred: 'starred' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Lmnt.NotFoundError);
   });
 

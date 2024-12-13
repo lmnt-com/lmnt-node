@@ -10,8 +10,8 @@ import {
   AccountResponse,
   CreateVoiceParams,
   DeleteVoiceResponse,
-  ListVoicesParams,
-  ListVoicesResponse,
+  FetchVoicesParams,
+  FetchVoicesResponse,
   SynthesizeParams,
   SynthesizeResponse,
   UpdateVoiceParams,
@@ -160,17 +160,17 @@ export class Lmnt extends Core.APIClient {
   /**
    * Returns a list of voices available to you.
    */
-  listVoices(
-    query?: TopLevelAPI.ListVoicesParams,
+  fetchVoices(
+    query?: TopLevelAPI.FetchVoicesParams,
     options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.ListVoicesResponse>;
-  listVoices(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.ListVoicesResponse>;
-  listVoices(
-    query: TopLevelAPI.ListVoicesParams | Core.RequestOptions = {},
+  ): Core.APIPromise<TopLevelAPI.FetchVoicesResponse>;
+  fetchVoices(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.FetchVoicesResponse>;
+  fetchVoices(
+    query: TopLevelAPI.FetchVoicesParams | Core.RequestOptions = {},
     options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.ListVoicesResponse> {
+  ): Core.APIPromise<TopLevelAPI.FetchVoicesResponse> {
     if (isRequestOptions(query)) {
-      return this.listVoices({}, query);
+      return this.fetchVoices({}, query);
     }
     return this.get('/v1/ai/voice/list', { query, ...options });
   }
@@ -258,11 +258,11 @@ export declare namespace Lmnt {
     type Voice as Voice,
     type AccountResponse as AccountResponse,
     type DeleteVoiceResponse as DeleteVoiceResponse,
-    type ListVoicesResponse as ListVoicesResponse,
+    type FetchVoicesResponse as FetchVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
     type CreateVoiceParams as CreateVoiceParams,
-    type ListVoicesParams as ListVoicesParams,
+    type FetchVoicesParams as FetchVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,
   };

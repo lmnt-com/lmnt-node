@@ -96,7 +96,7 @@ export namespace AccountResponse {
 
 export type DeleteVoiceResponse = unknown;
 
-export type ListVoicesResponse = Array<Voice>;
+export type FetchVoicesResponse = Array<Voice>;
 
 export interface SynthesizeResponse {
   /**
@@ -174,7 +174,7 @@ export interface CreateVoiceParams {
   metadata: string;
 }
 
-export interface ListVoicesParams {
+export interface FetchVoicesParams {
   /**
    * Which owner's voices to return. Choose from `system`, `me`, or `all`.
    */
@@ -273,11 +273,11 @@ export declare namespace TopLevel {
     type Voice as Voice,
     type AccountResponse as AccountResponse,
     type DeleteVoiceResponse as DeleteVoiceResponse,
-    type ListVoicesResponse as ListVoicesResponse,
+    type FetchVoicesResponse as FetchVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type UpdateVoiceResponse as UpdateVoiceResponse,
     type CreateVoiceParams as CreateVoiceParams,
-    type ListVoicesParams as ListVoicesParams,
+    type FetchVoicesParams as FetchVoicesParams,
     type SynthesizeParams as SynthesizeParams,
     type UpdateVoiceParams as UpdateVoiceParams,
   };
