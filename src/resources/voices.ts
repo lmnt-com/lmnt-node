@@ -121,14 +121,27 @@ export type VoiceDeleteResponse = unknown;
 
 export interface VoiceCreateParams {
   /**
-   * One or more input audio files in wav, mp3, mp4, m4a, or webm format. Max total
-   * file size: 250 MB. Professional voices require at least 5 minutes of source
-   * audio.
+   * One or more input audio files to train the voice in the form of binary `wav`,
+   * `mp3`, `mp4`, `m4a`, or `webm` attachments.
+   *
+   * - Max attached files: 20.
+   * - Max total file size: 250 MB.
+   * - Professional voices require at least 5 minutes of source audio to train from.
    */
-  files: Array<Core.Uploadable>;
+  files: Array<unknown>;
 
   /**
-   * Information about the voice you are creating
+   * Information about the voice you are creating; a stringified JSON object
+   * containing the following fields:
+   *
+   * - `name` **_required_**: string; The display name for this voice
+   * - `enhance` **_required_**: bool; For unclean audio with background noise,
+   *   applies processing to attempt to improve quality. Default is `false` as this
+   *   can also degrade quality in some circumstances.
+   * - `type` _optional_: string; The type of voice to create. Defaults to instant.
+   * - `gender` _optional_: string; A tag describing the gender of this voice. Has no
+   *   effect on voice creation.
+   * - `description` _optional_: string; A text description of this voice.
    */
   metadata: string;
 }
