@@ -28,7 +28,7 @@ import Lmnt from 'lmnt-node';
 const client = new Lmnt();
 
 async function main() {
-  const response = await client.synthesize({ text: 'text', voice: 'voice' });
+  const response = await client.synthesize({ text: 'hello world.', voice: 'ava' });
 
   console.log(response.audio);
 }
@@ -47,7 +47,7 @@ import Lmnt from 'lmnt-node';
 const client = new Lmnt();
 
 async function main() {
-  const params: Lmnt.SynthesizeParams = { text: 'text', voice: 'voice' };
+  const params: Lmnt.SynthesizeParams = { text: 'hello world.', voice: 'ava' };
   const response: Lmnt.SynthesizeResponse = await client.synthesize(params);
 }
 
@@ -65,7 +65,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const response = await client.synthesize({ text: 'text', voice: 'voice' }).catch(async (err) => {
+  const response = await client.synthesize({ text: 'hello world.', voice: 'ava' }).catch(async (err) => {
     if (err instanceof Lmnt.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -108,7 +108,7 @@ const client = new Lmnt({
 });
 
 // Or, configure per-request:
-await client.synthesize({ text: 'text', voice: 'voice' }, {
+await client.synthesize({ text: 'hello world.', voice: 'ava' }, {
   maxRetries: 5,
 });
 ```
@@ -125,7 +125,7 @@ const client = new Lmnt({
 });
 
 // Override per-request:
-await client.synthesize({ text: 'text', voice: 'voice' }, {
+await client.synthesize({ text: 'hello world.', voice: 'ava' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -146,12 +146,12 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Lmnt();
 
-const response = await client.synthesize({ text: 'text', voice: 'voice' }).asResponse();
+const response = await client.synthesize({ text: 'hello world.', voice: 'ava' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: response, response: raw } = await client
-  .synthesize({ text: 'text', voice: 'voice' })
+  .synthesize({ text: 'hello world.', voice: 'ava' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.audio);
@@ -259,7 +259,7 @@ const client = new Lmnt({
 
 // Override per-request:
 await client.synthesize(
-  { text: 'text', voice: 'voice' },
+  { text: 'hello world.', voice: 'ava' },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },
