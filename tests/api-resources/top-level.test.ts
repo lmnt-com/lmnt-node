@@ -45,6 +45,7 @@ describe('top level methods', () => {
       language: 'de',
       length: 0,
       model: 'aurora',
+      return_durations: true,
       sample_rate: 8000,
       seed: 0,
       speed: 0.25,
