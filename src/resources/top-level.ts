@@ -1,50 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-/**
- * Voice details
- */
-export interface Voice {
-  /**
-   * The unique identifier of this voice.
-   */
-  id: string;
-
-  /**
-   * The display name of this voice.
-   */
-  name: string;
-
-  /**
-   * The owner of this voice.
-   */
-  owner: 'system' | 'me' | 'other';
-
-  /**
-   * The state of this voice in the training pipeline (e.g., `ready`, `training`).
-   */
-  state: string;
-
-  /**
-   * A text description of this voice.
-   */
-  description?: string | null;
-
-  /**
-   * A tag describing the gender of this voice, e.g. `male`, `female`, `nonbinary`.
-   */
-  gender?: string;
-
-  /**
-   * Whether this voice has been starred by you or not.
-   */
-  starred?: boolean;
-
-  /**
-   * The method by which this voice was created: `instant` or `professional`.
-   */
-  type?: 'instant' | 'professional';
-}
-
 export interface AccountResponse {
   plan: AccountResponse.Plan;
 
@@ -94,10 +49,6 @@ export namespace AccountResponse {
   }
 }
 
-export type DeleteVoiceResponse = unknown;
-
-export type FetchVoicesResponse = Array<Voice>;
-
 export interface SynthesizeResponse {
   /**
    * The base64-encoded audio file; the format is determined by the `format`
@@ -138,52 +89,6 @@ export namespace SynthesizeResponse {
      */
     text?: string;
   }
-}
-
-export interface UpdateVoiceResponse {
-  /**
-   * Voice details
-   */
-  voice: Voice;
-}
-
-export interface CreateVoiceParams {
-  /**
-   * One or more input audio files to train the voice in the form of binary `wav`,
-   * `mp3`, `mp4`, `m4a`, or `webm` attachments.
-   *
-   * - Max attached files: 20.
-   * - Max total file size: 250 MB.
-   * - Professional voices require at least 5 minutes of source audio to train from.
-   */
-  files: string;
-
-  /**
-   * Information about the voice you are creating; a stringified JSON object
-   * containing the following fields:
-   *
-   * - `name` **_required_**: string; The display name for this voice
-   * - `enhance` **_required_**: bool; For unclean audio with background noise,
-   *   applies processing to attempt to improve quality. Default is `false` as this
-   *   can also degrade quality in some circumstances.
-   * - `type` _optional_: string; The type of voice to create. Defaults to instant.
-   * - `gender` _optional_: string; A tag describing the gender of this voice. Has no
-   *   effect on voice creation.
-   * - `description` _optional_: string; A text description of this voice.
-   */
-  metadata: string;
-}
-
-export interface FetchVoicesParams {
-  /**
-   * Which owner's voices to return. Choose from `system`, `me`, or `all`.
-   */
-  owner?: string;
-
-  /**
-   * If true, only returns voices that you have starred.
-   */
-  starred?: string;
 }
 
 export interface SynthesizeParams {
@@ -241,44 +146,10 @@ export interface SynthesizeParams {
   speed?: number;
 }
 
-export interface UpdateVoiceParams {
-  /**
-   * A description of this voice.
-   */
-  description?: string;
-
-  /**
-   * A tag describing the gender of this voice, e.g. `male`, `female`, `nonbinary`.
-   */
-  gender?: string;
-
-  /**
-   * The display name for this voice.
-   */
-  name?: string;
-
-  /**
-   * If `true`, adds this voice to your starred list.
-   */
-  starred?: boolean;
-
-  /**
-   * If true, unfreezes this voice and upgrades it to the latest model.
-   */
-  unfreeze?: boolean;
-}
-
 export declare namespace TopLevel {
   export {
-    type Voice as Voice,
     type AccountResponse as AccountResponse,
-    type DeleteVoiceResponse as DeleteVoiceResponse,
-    type FetchVoicesResponse as FetchVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
-    type UpdateVoiceResponse as UpdateVoiceResponse,
-    type CreateVoiceParams as CreateVoiceParams,
-    type FetchVoicesParams as FetchVoicesParams,
     type SynthesizeParams as SynthesizeParams,
-    type UpdateVoiceParams as UpdateVoiceParams,
   };
 }
