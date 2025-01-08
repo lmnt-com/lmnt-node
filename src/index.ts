@@ -1,27 +1,26 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { isRequestOptions } from './core';
 import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
+import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
+import { AccountResponse, SynthesizeParams, SynthesizeResponse } from './resources/top-level';
 import {
-  AccountResponse,
-  CreateVoiceParams,
-  DeleteVoiceResponse,
-  FetchVoicesParams,
-  FetchVoicesResponse,
-  SynthesizeParams,
-  SynthesizeResponse,
-  UpdateVoiceParams,
-  UpdateVoiceResponse,
   Voice,
-} from './resources/top-level';
+  VoiceCreateParams,
+  VoiceDeleteResponse,
+  VoiceListParams,
+  VoiceListResponse,
+  VoiceUpdateParams,
+  VoiceUpdateResponse,
+  Voices,
+} from './resources/voices';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['LMNT_API_KEY'].
+   * Your API key; get it from your [LMNT account page](https://app.lmnt.com/account).
    */
   apiKey?: string | undefined;
 
@@ -132,47 +131,13 @@ export class Lmnt extends Core.APIClient {
     this.apiKey = apiKey;
   }
 
+  voices: API.Voices = new API.Voices(this);
+
   /**
    * Returns details about your account.
    */
   account(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.AccountResponse> {
     return this.get('/v1/account', options);
-  }
-
-  /**
-   * Submits a request to create a voice with a supplied voice configuration and a
-   * batch of input audio data.
-   */
-  createVoice(
-    body: TopLevelAPI.CreateVoiceParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.Voice> {
-    return this.post('/v1/ai/voice', Core.multipartFormRequestOptions({ body, ...options }));
-  }
-
-  /**
-   * Deletes a voice and cancels any pending operations on it. Cannot be undone.
-   */
-  deleteVoice(id: string, options?: Core.RequestOptions): Core.APIPromise<unknown> {
-    return this.delete(`/v1/ai/voice/${id}`, options);
-  }
-
-  /**
-   * Returns a list of voices available to you.
-   */
-  fetchVoices(
-    query?: TopLevelAPI.FetchVoicesParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.FetchVoicesResponse>;
-  fetchVoices(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.FetchVoicesResponse>;
-  fetchVoices(
-    query: TopLevelAPI.FetchVoicesParams | Core.RequestOptions = {},
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.FetchVoicesResponse> {
-    if (isRequestOptions(query)) {
-      return this.fetchVoices({}, query);
-    }
-    return this.get('/v1/ai/voice/list', { query, ...options });
   }
 
   /**
@@ -186,33 +151,6 @@ export class Lmnt extends Core.APIClient {
     options?: Core.RequestOptions,
   ): Core.APIPromise<TopLevelAPI.SynthesizeResponse> {
     return this.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
-  }
-
-  /**
-   * Updates metadata for a specific voice. Only provided fields will be changed.
-   */
-  updateVoice(
-    id: string,
-    body?: TopLevelAPI.UpdateVoiceParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse>;
-  updateVoice(id: string, options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse>;
-  updateVoice(
-    id: string,
-    body: TopLevelAPI.UpdateVoiceParams | Core.RequestOptions = {},
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.UpdateVoiceResponse> {
-    if (isRequestOptions(body)) {
-      return this.updateVoice(id, {}, body);
-    }
-    return this.put(`/v1/ai/voice/${id}`, { body, ...options });
-  }
-
-  /**
-   * Returns details of a specific voice.
-   */
-  voiceInfo(id: string, options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.Voice> {
-    return this.get(`/v1/ai/voice/${id}`, options);
   }
 
   protected override defaultQuery(): Core.DefaultQuery | undefined {
@@ -251,20 +189,25 @@ export class Lmnt extends Core.APIClient {
   static fileFromPath = Uploads.fileFromPath;
 }
 
+Lmnt.Voices = Voices;
 export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
 
   export {
-    type Voice as Voice,
     type AccountResponse as AccountResponse,
-    type DeleteVoiceResponse as DeleteVoiceResponse,
-    type FetchVoicesResponse as FetchVoicesResponse,
     type SynthesizeResponse as SynthesizeResponse,
-    type UpdateVoiceResponse as UpdateVoiceResponse,
-    type CreateVoiceParams as CreateVoiceParams,
-    type FetchVoicesParams as FetchVoicesParams,
     type SynthesizeParams as SynthesizeParams,
-    type UpdateVoiceParams as UpdateVoiceParams,
+  };
+
+  export {
+    Voices as Voices,
+    type Voice as Voice,
+    type VoiceUpdateResponse as VoiceUpdateResponse,
+    type VoiceListResponse as VoiceListResponse,
+    type VoiceDeleteResponse as VoiceDeleteResponse,
+    type VoiceCreateParams as VoiceCreateParams,
+    type VoiceUpdateParams as VoiceUpdateParams,
+    type VoiceListParams as VoiceListParams,
   };
 }
 

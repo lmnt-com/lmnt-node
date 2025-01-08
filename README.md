@@ -25,9 +25,7 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt({
-  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
-});
+const client = new Lmnt();
 
 async function main() {
   const response = await client.synthesize({ text: 'text', voice: 'voice' });
@@ -46,9 +44,7 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt({
-  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
-});
+const client = new Lmnt();
 
 async function main() {
   const params: Lmnt.SynthesizeParams = { text: 'text', voice: 'voice' };
