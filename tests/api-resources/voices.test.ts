@@ -31,7 +31,7 @@ describe('resource voices', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.voices.update('');
+    const responsePromise = client.voices.update('123');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -43,7 +43,7 @@ describe('resource voices', () => {
 
   test('update: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.update('', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+    await expect(client.voices.update('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
       Lmnt.NotFoundError,
     );
   });
@@ -52,7 +52,7 @@ describe('resource voices', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.voices.update(
-        '',
+        '123',
         { description: 'description', gender: 'gender', name: 'name', starred: true, unfreeze: true },
         { path: '/_stainless_unknown_path' },
       ),
@@ -85,7 +85,7 @@ describe('resource voices', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.voices.delete('');
+    const responsePromise = client.voices.delete('123');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,7 +97,7 @@ describe('resource voices', () => {
 
   test('delete: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.delete('', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+    await expect(client.voices.delete('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
       Lmnt.NotFoundError,
     );
   });
