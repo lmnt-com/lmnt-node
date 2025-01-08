@@ -131,6 +131,12 @@ export interface SynthesizeParams {
   model?: 'aurora' | 'blizzard';
 
   /**
+   * If set as `true`, response will contain a durations object; see definition in
+   * the response section below.
+   */
+  return_durations?: boolean;
+
+  /**
    * The desired output sample rate in Hz
    */
   sample_rate?: 8000 | 16000 | 24000;

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Lmnt from 'lmnt-node';
+import Lmnt, { toFile } from 'lmnt-node';
 import { Response } from 'node-fetch';
 
 const client = new Lmnt({
@@ -11,7 +11,10 @@ const client = new Lmnt({
 describe('resource voices', () => {
   test('create: only required params', async () => {
     const responsePromise = client.voices.create({
-      files: '@/Users/user/filename.wav',
+      files: [
+        await toFile(Buffer.from('# my file contents'), 'README.md'),
+        await toFile(Buffer.from('# my file contents'), 'README.md'),
+      ],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}; type=application/json',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -25,7 +28,10 @@ describe('resource voices', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.voices.create({
-      files: '@/Users/user/filename.wav',
+      files: [
+        await toFile(Buffer.from('# my file contents'), 'README.md'),
+        await toFile(Buffer.from('# my file contents'), 'README.md'),
+      ],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}; type=application/json',
     });
   });
