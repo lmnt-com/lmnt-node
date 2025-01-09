@@ -152,10 +152,79 @@ export interface SynthesizeParams {
   speed?: number;
 }
 
+export interface SynthesizeChunkedParams {
+  /**
+   * The text to synthesize; max 5000 characters per request (including spaces).
+   */
+  text: string;
+
+  /**
+   * The voice id of the voice to use for synthesis; voice ids can be retrieved by
+   * calls to `List voices` or `Voice info`.
+   */
+  voice: string;
+
+  /**
+   * Your API key; get it from your
+   * [LMNT account page](https://app.lmnt.com/account).
+   */
+  'X-API-Key': string;
+
+  /**
+   * Set this to `true` to generate conversational-style speech rather than
+   * reading-style speech. Does not work with the `blizzard` model.
+   */
+  conversational?: boolean;
+
+  /**
+   * The file format of the synthesized audio output, either `aac`, `mp3`, `mulaw`,
+   * `raw`, `wav`.
+   */
+  format?: string;
+
+  /**
+   * The desired language of the synthesized speech. Two letter ISO 639-1 code. One
+   * of `de`, `en`, `es`, `fr`, `pt`, `zh`, `ko`, `hi`. Does not work with
+   * professional clones and the `blizzard` model.
+   */
+  language?: string;
+
+  /**
+   * Produce speech of this length in seconds; maximum 300.0 (5 minutes). Does not
+   * work with the `blizzard` model.
+   */
+  length?: number;
+
+  /**
+   * The model to use for synthesis. One of `aurora` (default) or `blizzard`. Learn
+   * more about models [here](https://docs.lmnt.com/guides/models).
+   */
+  model?: string;
+
+  /**
+   * The desired output sample rate in Hz, one of: `8000`, `16000`, `24000`; defaults
+   * to `24000` for all formats except `mulaw` which defaults to `8000`.
+   */
+  sample_rate?: number;
+
+  /**
+   * Seed used to specify a different take; defaults to random
+   * ([see here](http://docs.lmnt.com/speech/seed) for more details).
+   */
+  seed?: number;
+
+  /**
+   * The talking speed of the generated speech, a floating point value between `0.25`
+   * (slow) and `2.0` (fast).
+   */
+  speed?: number;
+}
+
 export declare namespace TopLevel {
   export {
     type AccountResponse as AccountResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type SynthesizeParams as SynthesizeParams,
+    type SynthesizeChunkedParams as SynthesizeChunkedParams,
   };
 }

@@ -51,4 +51,20 @@ describe('top level methods', () => {
       speed: 0.25,
     });
   });
+
+  test('synthesizeChunked: required and optional params', async () => {
+    const response = await client.synthesizeChunked({
+      text: 'text',
+      voice: 'voice',
+      'X-API-Key': 'X-API-Key',
+      conversational: true,
+      format: 'format',
+      language: 'language',
+      length: 0,
+      model: 'model',
+      sample_rate: 0,
+      seed: 0,
+      speed: 0,
+    });
+  });
 });
