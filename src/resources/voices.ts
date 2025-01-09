@@ -128,7 +128,7 @@ export interface VoiceCreateParams {
    * - Max total file size: 250 MB.
    * - Professional voices require at least 5 minutes of source audio to train from.
    */
-  files: Array<unknown>;
+  files: Array<Core.Uploadable>;
 
   /**
    * Information about the voice you are creating; a stringified JSON object

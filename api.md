@@ -9,6 +9,7 @@ Methods:
 
 - <code title="get /v1/account">client.<a href="./src/index.ts">account</a>() -> AccountResponse</code>
 - <code title="post /v1/ai/speech">client.<a href="./src/index.ts">synthesize</a>({ ...params }) -> SynthesizeResponse</code>
+- <code title="get /v1/ai/speech">client.<a href="./src/index.ts">synthesizeChunked</a>({ ...params }) -> Response</code>
 
 # Voices
 
