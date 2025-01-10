@@ -10,9 +10,4 @@ export {
   type VoiceUpdateParams,
   type VoiceListParams,
 } from './voices';
-export {
-  type AccountResponse,
-  type SynthesizeResponse,
-  type SynthesizeParams,
-  type SynthesizeChunkedParams,
-} from './top-level';
+export { type AccountResponse, type SynthesizeResponse, type SynthesizeParams } from './top-level';

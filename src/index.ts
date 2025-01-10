@@ -6,13 +6,7 @@ import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import {
-  AccountResponse,
-  SynthesizeChunkedParams,
-  SynthesizeParams,
-  SynthesizeResponse,
-} from './resources/top-level';
-import { type Response } from './_shims/index';
+import { AccountResponse, SynthesizeParams, SynthesizeResponse } from './resources/top-level';
 import {
   Voice,
   VoiceCreateParams,
@@ -159,18 +153,6 @@ export class Lmnt extends Core.APIClient {
     return this.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
   }
 
-  /**
-   * Synthesizes speech from a text string. Returns binary audio data in one of many
-   * supported audio formats (for more detailed output, use the POST request). This
-   * simplified version of synthesis can be directly used in HTML5 audio tags.
-   */
-  synthesizeChunked(
-    query: TopLevelAPI.SynthesizeChunkedParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<Response> {
-    return this.get('/v1/ai/speech', { query, ...options, __binaryResponse: true });
-  }
-
   protected override defaultQuery(): Core.DefaultQuery | undefined {
     return this._options.defaultQuery;
   }
@@ -215,7 +197,6 @@ export declare namespace Lmnt {
     type AccountResponse as AccountResponse,
     type SynthesizeResponse as SynthesizeResponse,
     type SynthesizeParams as SynthesizeParams,
-    type SynthesizeChunkedParams as SynthesizeChunkedParams,
   };
 
   export {
