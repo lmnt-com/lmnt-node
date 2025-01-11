@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export { Accounts, type AccountRetrieveResponse } from './accounts';
+export { Speech, type SpeechSynthesizeResponse, type SpeechSynthesizeParams } from './speech';
 export {
   Voices,
   type Voice,
@@ -10,4 +12,3 @@ export {
   type VoiceUpdateParams,
   type VoiceListParams,
 } from './voices';
-export { type AccountResponse, type SynthesizeResponse, type SynthesizeParams } from './top-level';

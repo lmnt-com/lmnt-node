@@ -1,55 +1,24 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export interface AccountResponse {
-  plan: AccountResponse.Plan;
+import { APIResource } from '../resource';
+import * as Core from '../core';
 
-  usage: AccountResponse.Usage;
-}
-
-export namespace AccountResponse {
-  export interface Plan {
-    /**
-     * The number of characters you are allowed to synthesize in this billing period.
-     */
-    character_limit: number;
-
-    commercial_use_allowed: boolean;
-
-    /**
-     * The number of professional voices you are allowed to create.
-     */
-    professional_voice_limit: number | null;
-
-    /**
-     * The type of plan you are subscribed to.
-     */
-    type: string;
-
-    /**
-     * The number of instant voices you are allowed to create.
-     */
-    instant_voice_limit?: number;
-  }
-
-  export interface Usage {
-    /**
-     * The number of characters you have synthesized in this billing period.
-     */
-    characters: number;
-
-    /**
-     * The number of professional voices you have created.
-     */
-    professional_voices: number;
-
-    /**
-     * The number of instant voices you have created.
-     */
-    instant_voices?: number;
+export class Speech extends APIResource {
+  /**
+   * Synthesizes speech from a text string and provides advanced information about
+   * the synthesis. Returns a JSON object that contains a base64-encoded audio file,
+   * the seed used in speech generation, and optionally an object detailing the
+   * duration of each word spoken.
+   */
+  synthesize(
+    body: SpeechSynthesizeParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<SpeechSynthesizeResponse> {
+    return this._client.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
   }
 }
 
-export interface SynthesizeResponse {
+export interface SpeechSynthesizeResponse {
   /**
    * The base64-encoded audio file; the format is determined by the `format`
    * parameter.
@@ -69,10 +38,10 @@ export interface SynthesizeResponse {
    * [example of this object](https://imgur.com/Uw6qNzY.png) for the input string
    * "Hello world!"
    */
-  durations?: Array<SynthesizeResponse.Duration>;
+  durations?: Array<SpeechSynthesizeResponse.Duration>;
 }
 
-export namespace SynthesizeResponse {
+export namespace SpeechSynthesizeResponse {
   export interface Duration {
     /**
      * The spoken duration of each synthesized input element, in seconds.
@@ -91,7 +60,7 @@ export namespace SynthesizeResponse {
   }
 }
 
-export interface SynthesizeParams {
+export interface SpeechSynthesizeParams {
   /**
    * The text to synthesize; max 5000 characters per request (including spaces)
    */
@@ -152,10 +121,9 @@ export interface SynthesizeParams {
   speed?: number;
 }
 
-export declare namespace TopLevel {
+export declare namespace Speech {
   export {
-    type AccountResponse as AccountResponse,
-    type SynthesizeResponse as SynthesizeResponse,
-    type SynthesizeParams as SynthesizeParams,
+    type SpeechSynthesizeResponse as SpeechSynthesizeResponse,
+    type SpeechSynthesizeParams as SpeechSynthesizeParams,
   };
 }

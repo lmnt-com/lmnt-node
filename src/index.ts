@@ -5,8 +5,8 @@ import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
-import * as TopLevelAPI from './resources/top-level';
-import { AccountResponse, SynthesizeParams, SynthesizeResponse } from './resources/top-level';
+import { AccountRetrieveResponse, Accounts } from './resources/accounts';
+import { Speech, SpeechSynthesizeParams, SpeechSynthesizeResponse } from './resources/speech';
 import {
   Voice,
   VoiceCreateParams,
@@ -131,27 +131,9 @@ export class Lmnt extends Core.APIClient {
     this.apiKey = apiKey;
   }
 
+  speech: API.Speech = new API.Speech(this);
+  accounts: API.Accounts = new API.Accounts(this);
   voices: API.Voices = new API.Voices(this);
-
-  /**
-   * Returns details about your account.
-   */
-  account(options?: Core.RequestOptions): Core.APIPromise<TopLevelAPI.AccountResponse> {
-    return this.get('/v1/account', options);
-  }
-
-  /**
-   * Synthesizes speech from a text string and provides advanced information about
-   * the synthesis. Returns a JSON object that contains a base64-encoded audio file,
-   * the seed used in speech generation, and optionally an object detailing the
-   * duration of each word spoken.
-   */
-  synthesize(
-    body: TopLevelAPI.SynthesizeParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<TopLevelAPI.SynthesizeResponse> {
-    return this.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
-  }
 
   protected override defaultQuery(): Core.DefaultQuery | undefined {
     return this._options.defaultQuery;
@@ -189,15 +171,19 @@ export class Lmnt extends Core.APIClient {
   static fileFromPath = Uploads.fileFromPath;
 }
 
+Lmnt.Speech = Speech;
+Lmnt.Accounts = Accounts;
 Lmnt.Voices = Voices;
 export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
 
   export {
-    type AccountResponse as AccountResponse,
-    type SynthesizeResponse as SynthesizeResponse,
-    type SynthesizeParams as SynthesizeParams,
+    Speech as Speech,
+    type SpeechSynthesizeResponse as SpeechSynthesizeResponse,
+    type SpeechSynthesizeParams as SpeechSynthesizeParams,
   };
+
+  export { Accounts as Accounts, type AccountRetrieveResponse as AccountRetrieveResponse };
 
   export {
     Voices as Voices,
