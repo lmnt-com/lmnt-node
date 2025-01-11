@@ -14,6 +14,13 @@ export class Voices extends APIResource {
   }
 
   /**
+   * Returns details of a specific voice.
+   */
+  retrieve(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
+    return this._client.get(`/v1/ai/voice/${id}`, options);
+  }
+
+  /**
    * Updates metadata for a specific voice. Only provided fields will be changed.
    */
   update(
@@ -53,13 +60,6 @@ export class Voices extends APIResource {
    */
   delete(id: string, options?: Core.RequestOptions): Core.APIPromise<unknown> {
     return this._client.delete(`/v1/ai/voice/${id}`, options);
-  }
-
-  /**
-   * Returns details of a specific voice.
-   */
-  get(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
-    return this._client.get(`/v1/ai/voice/${id}`, options);
   }
 }
 
