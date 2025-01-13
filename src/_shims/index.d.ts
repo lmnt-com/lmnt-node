@@ -65,6 +65,11 @@ export type ReadableStream = SelectType<manual.ReadableStream, auto.ReadableStre
 // @ts-ignore
 export const ReadableStream: SelectType<typeof manual.ReadableStream, typeof auto.ReadableStream>;
 
+// @ts-ignore
+export type WebSocket = SelectType<manual.WebSocket, auto.WebSocket>;
+// @ts-ignore
+export const WebSocket: SelectType<typeof manual.WebSocket, typeof auto.WebSocket>;
+
 export function getMultipartRequestOptions<T = Record<string, unknown>>(
   form: FormData,
   opts: RequestOptions<T>,

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../resource';
 import * as Core from '../core';
+import { Sessions, SpeechSessionParams } from './sessions';
 
 export class Speech extends APIResource {
   /**
@@ -16,6 +17,8 @@ export class Speech extends APIResource {
   ): Core.APIPromise<SpeechGenerateResponse> {
     return this._client.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
   }
+
+  sessions: Sessions = new Sessions(this._client);
 }
 
 export interface SpeechGenerateResponse {
@@ -126,4 +129,5 @@ export declare namespace Speech {
     type SpeechGenerateResponse as SpeechGenerateResponse,
     type SpeechGenerateParams as SpeechGenerateParams,
   };
+  export { Sessions as Sessions, type SpeechSessionParams as SpeechSessionParams };
 }
