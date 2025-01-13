@@ -10,15 +10,15 @@ export class Speech extends APIResource {
    * the seed used in speech generation, and optionally an object detailing the
    * duration of each word spoken.
    */
-  synthesize(
-    body: SpeechSynthesizeParams,
+  generate(
+    body: SpeechGenerateParams,
     options?: Core.RequestOptions,
-  ): Core.APIPromise<SpeechSynthesizeResponse> {
+  ): Core.APIPromise<SpeechGenerateResponse> {
     return this._client.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
   }
 }
 
-export interface SpeechSynthesizeResponse {
+export interface SpeechGenerateResponse {
   /**
    * The base64-encoded audio file; the format is determined by the `format`
    * parameter.
@@ -38,10 +38,10 @@ export interface SpeechSynthesizeResponse {
    * [example of this object](https://imgur.com/Uw6qNzY.png) for the input string
    * "Hello world!"
    */
-  durations?: Array<SpeechSynthesizeResponse.Duration>;
+  durations?: Array<SpeechGenerateResponse.Duration>;
 }
 
-export namespace SpeechSynthesizeResponse {
+export namespace SpeechGenerateResponse {
   export interface Duration {
     /**
      * The spoken duration of each synthesized input element, in seconds.
@@ -60,7 +60,7 @@ export namespace SpeechSynthesizeResponse {
   }
 }
 
-export interface SpeechSynthesizeParams {
+export interface SpeechGenerateParams {
   /**
    * The text to synthesize; max 5000 characters per request (including spaces)
    */
@@ -123,7 +123,7 @@ export interface SpeechSynthesizeParams {
 
 export declare namespace Speech {
   export {
-    type SpeechSynthesizeResponse as SpeechSynthesizeResponse,
-    type SpeechSynthesizeParams as SpeechSynthesizeParams,
+    type SpeechGenerateResponse as SpeechGenerateResponse,
+    type SpeechGenerateParams as SpeechGenerateParams,
   };
 }

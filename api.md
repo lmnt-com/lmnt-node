@@ -2,11 +2,11 @@
 
 Types:
 
-- <code><a href="./src/resources/speech.ts">SpeechSynthesizeResponse</a></code>
+- <code><a href="./src/resources/speech.ts">SpeechGenerateResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/ai/speech">client.speech.<a href="./src/resources/speech.ts">synthesize</a>({ ...params }) -> SpeechSynthesizeResponse</code>
+- <code title="post /v1/ai/speech">client.speech.<a href="./src/resources/speech.ts">generate</a>({ ...params }) -> SpeechGenerateResponse</code>
 
 # Accounts
 
