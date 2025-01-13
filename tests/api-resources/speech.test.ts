@@ -9,8 +9,8 @@ const client = new Lmnt({
 });
 
 describe('resource speech', () => {
-  test('synthesize: only required params', async () => {
-    const responsePromise = client.speech.synthesize({ text: 'hello world.', voice: 'ava' });
+  test('generate: only required params', async () => {
+    const responsePromise = client.speech.generate({ text: 'hello world.', voice: 'ava' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,8 +20,8 @@ describe('resource speech', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('synthesize: required and optional params', async () => {
-    const response = await client.speech.synthesize({
+  test('generate: required and optional params', async () => {
+    const response = await client.speech.generate({
       text: 'hello world.',
       voice: 'ava',
       conversational: true,
