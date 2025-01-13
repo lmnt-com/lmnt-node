@@ -2,6 +2,7 @@
 
 export { Accounts, type AccountRetrieveResponse } from './accounts';
 export { Speech, type SpeechGenerateResponse, type SpeechGenerateParams } from './speech';
+export { Sessions, type SpeechSessionParams } from './sessions';
 export {
   Voices,
   type Voice,
