@@ -1,0 +1,13 @@
+{
+    "name": "lmnt-examples",
+    "version": "1.0.0",
+    "description": "Usage examples for the Lmnt Node.js SDK.",
+    "main": "index.js",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "lmnt-node": "^2.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.3"
+    }
+}
