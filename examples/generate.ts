@@ -11,7 +11,7 @@ async function main() {
     voice: 'morgan',
     format: 'mp3',
   });
-  const audioBuffer = Buffer.from(synthesis.audio, 'base64');
+  const audioBuffer = Buffer.from(await synthesis.arrayBuffer());
   writeFileSync('output.mp3', audioBuffer);
   console.log(`Done.`);
 }
