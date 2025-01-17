@@ -1,7 +1,6 @@
 import { Buffer } from 'buffer';
 import { LmntError } from '../error';
 import { SpeechSessionParams } from '../resources/sessions';
-import { SpeechGenerateResponse } from '../resources/speech';
 import { WebSocket } from '../_shims/index';
 
 const URL_STREAMING = 'wss://api.lmnt.com/v1/ai/speech/stream';
@@ -40,6 +39,23 @@ class MessageQueue {
   }
 }
 
+export interface Duration {
+  /**
+   * The spoken duration of each synthesized input element, in seconds.
+   */
+  duration?: number;
+
+  /**
+   * The start time of each synthsized input element, in seconds.
+   */
+  start?: number;
+
+  /**
+   * The synthesized input elements; beginning and ending with a short silence.
+   */
+  text?: string;
+}
+
 export interface SpeechStreamResponse {
   /**
    * The synthesized speech audio data
@@ -49,7 +65,7 @@ export interface SpeechStreamResponse {
   /**
    * The durations of the generated speech
    */
-  durations?: SpeechGenerateResponse.Duration[];
+  durations?: Duration[];
 
   /**
    * A warning message
