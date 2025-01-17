@@ -17,9 +17,9 @@ export class Speech extends APIResource {
       headers: { Accept: 'application/octet-stream', ...options?.headers },
       __binaryResponse: true,
     });
+  }
 
   sessions: Sessions = new Sessions(this._client);
-  }
 }
 
 export interface SpeechGenerateParams {
