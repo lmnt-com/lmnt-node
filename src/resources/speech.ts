@@ -2,64 +2,23 @@
 
 import { APIResource } from '../resource';
 import * as Core from '../core';
+import { type Response } from '../_shims/index';
 import { Sessions, SpeechSessionParams } from './sessions';
 
 export class Speech extends APIResource {
   /**
-   * Synthesizes speech from a text string and provides advanced information about
-   * the synthesis. Returns a JSON object that contains a base64-encoded audio file,
-   * the seed used in speech generation, and optionally an object detailing the
-   * duration of each word spoken.
+   * Synthesizes speech from a text string and returns the audio data as a binary
+   * stream.
    */
-  generate(
-    body: SpeechGenerateParams,
-    options?: Core.RequestOptions,
-  ): Core.APIPromise<SpeechGenerateResponse> {
-    return this._client.post('/v1/ai/speech', Core.multipartFormRequestOptions({ body, ...options }));
-  }
+  generate(body: SpeechGenerateParams, options?: Core.RequestOptions): Core.APIPromise<Response> {
+    return this._client.post('/v1/ai/speech/bytes', {
+      body,
+      ...options,
+      headers: { Accept: 'application/octet-stream', ...options?.headers },
+      __binaryResponse: true,
+    });
 
   sessions: Sessions = new Sessions(this._client);
-}
-
-export interface SpeechGenerateResponse {
-  /**
-   * The base64-encoded audio file; the format is determined by the `format`
-   * parameter.
-   */
-  audio: string;
-
-  /**
-   * The seed used to generate this speech; can be used to replicate this output take
-   * (assuming the same text is resynthsized with this seed number,
-   * [see here](http://docs.lmnt.com/speech/seed) for more details).
-   */
-  seed: number;
-
-  /**
-   * A JSON object outlining the spoken duration of each synthesized input element
-   * (words and non-words like spaces, punctuation, etc.). See an
-   * [example of this object](https://imgur.com/Uw6qNzY.png) for the input string
-   * "Hello world!"
-   */
-  durations?: Array<SpeechGenerateResponse.Duration>;
-}
-
-export namespace SpeechGenerateResponse {
-  export interface Duration {
-    /**
-     * The spoken duration of each synthesized input element, in seconds.
-     */
-    duration?: number;
-
-    /**
-     * The start time of each synthsized input element, in seconds.
-     */
-    start?: number;
-
-    /**
-     * The synthesized input elements; beginning and ending with a short silence.
-     */
-    text?: string;
   }
 }
 
@@ -77,7 +36,7 @@ export interface SpeechGenerateParams {
 
   /**
    * Set this to `true` to generate conversational-style speech rather than
-   * reading-style speech.
+   * reading-style speech. Does not work with the `blizzard` model.
    */
   conversational?: boolean;
 
@@ -87,12 +46,14 @@ export interface SpeechGenerateParams {
   format?: 'aac' | 'mp3' | 'mulaw' | 'raw' | 'wav';
 
   /**
-   * The desired language of the synthesized speech. Two letter ISO 639-1 code.
+   * The desired language of the synthesized speech. Two letter ISO 639-1 code. Does
+   * not work with professional clones and the `blizzard` model.
    */
   language?: 'de' | 'en' | 'es' | 'fr' | 'pt' | 'zh' | 'ko' | 'hi';
 
   /**
-   * Produce speech of this length in seconds; maximum 300.0 (5 minutes).
+   * Produce speech of this length in seconds; maximum 300.0 (5 minutes). Does not
+   * work with the `blizzard` model.
    */
   length?: number;
 
@@ -101,12 +62,6 @@ export interface SpeechGenerateParams {
    * more about models [here](https://docs.lmnt.com/guides/models).
    */
   model?: 'aurora' | 'blizzard';
-
-  /**
-   * If set as `true`, response will contain a durations object; see definition in
-   * the response section below.
-   */
-  return_durations?: boolean;
 
   /**
    * The desired output sample rate in Hz
@@ -119,15 +74,13 @@ export interface SpeechGenerateParams {
   seed?: number;
 
   /**
-   * The talking speed of the generated speech
+   * The talking speed of the generated speech, a floating point value between `0.25`
+   * (slow) and `2.0` (fast).
    */
   speed?: number;
 }
 
 export declare namespace Speech {
-  export {
-    type SpeechGenerateResponse as SpeechGenerateResponse,
-    type SpeechGenerateParams as SpeechGenerateParams,
-  };
+  export { type SpeechGenerateParams as SpeechGenerateParams };
   export { Sessions as Sessions, type SpeechSessionParams as SpeechSessionParams };
 }

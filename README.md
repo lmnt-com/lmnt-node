@@ -27,7 +27,8 @@ const client = new Lmnt();
 async function main() {
   const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' });
 
-  console.log(response.audio);
+  const content = await response.blob();
+  console.log(content);
 }
 
 main();
@@ -45,7 +46,7 @@ const client = new Lmnt();
 
 async function main() {
   const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'ava' };
-  const response: Lmnt.SpeechGenerateResponse = await client.speech.generate(params);
+  const response: Response = await client.speech.generate(params);
 }
 
 main();
@@ -151,7 +152,7 @@ const { data: response, response: raw } = await client.speech
   .generate({ text: 'hello world.', voice: 'ava' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.audio);
+console.log(response);
 ```
 
 ### Making custom/undocumented requests
