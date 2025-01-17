@@ -58,7 +58,7 @@ export class Voices extends APIResource {
   /**
    * Deletes a voice and cancels any pending operations on it. Cannot be undone.
    */
-  delete(id: string, options?: Core.RequestOptions): Core.APIPromise<unknown> {
+  delete(id: string, options?: Core.RequestOptions): Core.APIPromise<VoiceDeleteResponse> {
     return this._client.delete(`/v1/ai/voice/${id}`, options);
   }
 }
@@ -117,7 +117,9 @@ export interface VoiceUpdateResponse {
 
 export type VoiceListResponse = Array<Voice>;
 
-export type VoiceDeleteResponse = unknown;
+export interface VoiceDeleteResponse {
+  success: boolean;
+}
 
 export interface VoiceCreateParams {
   /**

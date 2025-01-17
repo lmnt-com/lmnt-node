@@ -6,7 +6,7 @@ import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import { AccountRetrieveResponse, Accounts } from './resources/accounts';
-import { Speech, SpeechGenerateParams, SpeechGenerateResponse } from './resources/speech';
+import { Speech, SpeechGenerateParams } from './resources/speech';
 import { Sessions, SpeechSessionParams } from './resources/sessions';
 import {
   Voice,
@@ -178,11 +178,7 @@ Lmnt.Voices = Voices;
 export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
 
-  export {
-    Speech as Speech,
-    type SpeechGenerateResponse as SpeechGenerateResponse,
-    type SpeechGenerateParams as SpeechGenerateParams,
-  };
+  export { Speech as Speech, type SpeechGenerateParams as SpeechGenerateParams };
 
   export { Sessions as Sessions, type SpeechSessionParams as SpeechSessionParams };
 

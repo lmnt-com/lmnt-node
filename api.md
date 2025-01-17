@@ -1,12 +1,8 @@
 # Speech
 
-Types:
-
-- <code><a href="./src/resources/speech.ts">SpeechGenerateResponse</a></code>
-
 Methods:
 
-- <code title="post /v1/ai/speech">client.speech.<a href="./src/resources/speech.ts">generate</a>({ ...params }) -> SpeechGenerateResponse</code>
+- <code title="post /v1/ai/speech/bytes">client.speech.<a href="./src/resources/speech.ts">generate</a>({ ...params }) -> Response</code>
 
 ## Sessions
 
@@ -39,4 +35,4 @@ Methods:
 - <code title="get /v1/ai/voice/{id}">client.voices.<a href="./src/resources/voices.ts">retrieve</a>(id) -> Voice</code>
 - <code title="put /v1/ai/voice/{id}">client.voices.<a href="./src/resources/voices.ts">update</a>(id, { ...params }) -> VoiceUpdateResponse</code>
 - <code title="get /v1/ai/voice/list">client.voices.<a href="./src/resources/voices.ts">list</a>({ ...params }) -> VoiceListResponse</code>
-- <code title="delete /v1/ai/voice/{id}">client.voices.<a href="./src/resources/voices.ts">delete</a>(id) -> unknown</code>
+- <code title="delete /v1/ai/voice/{id}">client.voices.<a href="./src/resources/voices.ts">delete</a>(id) -> VoiceDeleteResponse</code>
