@@ -14,6 +14,7 @@ import { type RequestOptions } from '../core';
 import { MultipartBody } from './MultipartBody';
 import { type Shims } from './registry';
 import { ReadableStream } from 'node:stream/web';
+import WebSocket from 'ws';
 
 type FileFromPathOptions = Omit<FilePropertyBag, 'lastModified'>;
 
@@ -77,5 +78,6 @@ export function getRuntime(): Shims {
     getDefaultAgent: (url: string): Agent => (url.startsWith('https') ? defaultHttpsAgent : defaultHttpAgent),
     fileFromPath,
     isFsReadStream: (value: any): value is FsReadStream => value instanceof FsReadStream,
+    WebSocket: WebSocket,
   };
 }

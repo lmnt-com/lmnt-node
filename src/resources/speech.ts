@@ -3,6 +3,7 @@
 import { APIResource } from '../resource';
 import * as Core from '../core';
 import { type Response } from '../_shims/index';
+import { Sessions, SpeechSessionParams } from './sessions';
 
 export class Speech extends APIResource {
   /**
@@ -16,6 +17,8 @@ export class Speech extends APIResource {
       headers: { Accept: 'application/octet-stream', ...options?.headers },
       __binaryResponse: true,
     });
+
+  sessions: Sessions = new Sessions(this._client);
   }
 }
 
@@ -79,4 +82,5 @@ export interface SpeechGenerateParams {
 
 export declare namespace Speech {
   export { type SpeechGenerateParams as SpeechGenerateParams };
+  export { Sessions as Sessions, type SpeechSessionParams as SpeechSessionParams };
 }

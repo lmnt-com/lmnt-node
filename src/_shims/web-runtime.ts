@@ -99,5 +99,16 @@ export function getRuntime({ manuallyImported }: { manuallyImported?: boolean } 
       );
     },
     isFsReadStream: (value: any) => false,
+    WebSocket:
+      // @ts-ignore
+      typeof WebSocket !== 'undefined' ? WebSocket : (
+        class WebSocket {
+          constructor() {
+            throw new Error(
+              `WebSocket isn't supported in this environment yet as 'WebSocket' is undefined. ${recommendation}`,
+            );
+          }
+        }
+      ),
   };
 }

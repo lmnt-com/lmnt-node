@@ -4,6 +4,12 @@ Methods:
 
 - <code title="post /v1/ai/speech/bytes">client.speech.<a href="./src/resources/speech.ts">generate</a>({ ...params }) -> Response</code>
 
+## Sessions
+
+Methods:
+
+- <code>client.speech.sessions.<a href="./src/resources/sessions.ts">create</a>({ ...params }) -> SpeechSession</code>
+
 # Accounts
 
 Types:
