@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1 (2025-01-18)
+
+Full Changelog: [v2.1.0...v2.1.1](https://github.com/lmnt-com/lmnt-node/compare/v2.1.0...v2.1.1)
+
+### Bug Fixes
+
+* conform generate example to SDK ([ab9c8d9](https://github.com/lmnt-com/lmnt-node/commit/ab9c8d9666b44910089a187daa36f216d0011cf6))
+
 ## 2.1.0 (2025-01-17)
 
 Full Changelog: [v2.0.0...v2.1.0](https://github.com/lmnt-com/lmnt-node/compare/v2.0.0...v2.1.0)
