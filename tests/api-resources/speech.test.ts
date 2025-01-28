@@ -15,7 +15,7 @@ describe('resource speech', () => {
       conversational: true,
       format: 'aac',
       language: 'de',
-      length: 0,
+      length: 300,
       model: 'aurora',
       sample_rate: 8000,
       seed: 0,
