@@ -1,5 +1,5 @@
 import { createWriteStream } from 'fs';
-import Lmnt from '../src/index';
+import Lmnt from 'lmnt-node';
 
 async function main() {
   // Gets API Key from environment variable LMNT_API_KEY
@@ -10,15 +10,14 @@ async function main() {
   const audioFile = createWriteStream('stream-output.mp3');
 
   // Construct the streaming connection with our desired voice
-  // and the callback to process incoming audio data.
   const speechSession = lmnt.speech.sessions.create({
     voice: 'morgan',
   });
 
   const writeTask = async () => {
-    // Send 5 messages to the server.
+    // Simulate a message stream w/ a 1 second delay between messages.
     for (let i = 0; i < 5; i++) {
-      speechSession.appendText(`Hello, world! ${i}.`);
+      speechSession.appendText(`Hello, world!`);
       console.log(` ** Sent to LMNT -- Message ${i} ** `);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
