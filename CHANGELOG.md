@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.2.0 (2025-02-06)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/lmnt-com/lmnt-node/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* **client:** send `X-Stainless-Timeout` header ([#75](https://github.com/lmnt-com/lmnt-node/issues/75)) ([2c49aef](https://github.com/lmnt-com/lmnt-node/commit/2c49aef561f4464e412946fb85bcde9346d27e94))
+* docs(api): Add session usage example to main README ([baf2f4c](https://github.com/lmnt-com/lmnt-node/commit/baf2f4c98247d028eb4ceae8cd5357aba063224f))
+
+
+### Bug Fixes
+
+* conform generate example to SDK ([ab9c8d9](https://github.com/lmnt-com/lmnt-node/commit/ab9c8d9666b44910089a187daa36f216d0011cf6))
+
+
+### Chores
+
+* **internal:** codegen related update ([#72](https://github.com/lmnt-com/lmnt-node/issues/72)) ([7176c03](https://github.com/lmnt-com/lmnt-node/commit/7176c0387a0ffaf0e11018b341cf90a70256ec2e))
+* **internal:** codegen related update ([#73](https://github.com/lmnt-com/lmnt-node/issues/73)) ([b96d8d6](https://github.com/lmnt-com/lmnt-node/commit/b96d8d60683b6c5cbc6204efd3a4d191c72d8d3b))
+
 ## 2.1.0 (2025-01-17)
 
 Full Changelog: [v2.0.0...v2.1.0](https://github.com/lmnt-com/lmnt-node/compare/v2.0.0...v2.1.0)
