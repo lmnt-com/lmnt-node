@@ -10,6 +10,7 @@ async function main() {
     text: 'Hello, world! This is a test of the LMNT speech synthesis API.',
     voice: 'morgan',
     format: 'mp3',
+    model: 'blizzard',
   });
   const audioBuffer = Buffer.from(await synthesis.arrayBuffer());
   writeFileSync('output.mp3', audioBuffer);
