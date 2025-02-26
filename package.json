@@ -1,6 +1,6 @@
 {
   "name": "lmnt-node",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "The official TypeScript library for the Lmnt API",
   "author": "Lmnt <feedback@lmnt.com>",
   "types": "dist/index.d.ts",
@@ -109,17 +109,38 @@
       "default": "./dist/index.mjs"
     },
     "./*.mjs": {
-      "types": ["./dist/*.d.ts", "./dist/*/index.d.ts"],
-      "default": ["./dist/*.mjs", "./dist/*/index.mjs"]
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "default": [
+        "./dist/*.mjs",
+        "./dist/*/index.mjs"
+      ]
     },
     "./*.js": {
-      "types": ["./dist/*.d.ts", "./dist/*/index.d.ts"],
-      "default": ["./dist/*.js", "./dist/*/index.js"]
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "default": [
+        "./dist/*.js",
+        "./dist/*/index.js"
+      ]
     },
     "./*": {
-      "types": ["./dist/*.d.ts", "./dist/*/index.d.ts"],
-      "require": ["./dist/*.js", "./dist/*/index.js"],
-      "default": ["./dist/*.mjs", "./dist/*/index.mjs"]
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "require": [
+        "./dist/*.js",
+        "./dist/*/index.js"
+      ],
+      "default": [
+        "./dist/*.mjs",
+        "./dist/*/index.mjs"
+      ]
     }
   }
 }

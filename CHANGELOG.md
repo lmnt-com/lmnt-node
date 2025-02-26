@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.3.0 (2025-02-26)
+
+Full Changelog: [v2.2.0...v2.3.0](https://github.com/lmnt-com/lmnt-node/compare/v2.2.0...v2.3.0)
+
+### Features
+
+* **api:** voice conversion and other manual updates ([#80](https://github.com/lmnt-com/lmnt-node/issues/80)) ([93d5643](https://github.com/lmnt-com/lmnt-node/commit/93d56436662f575e9d85a34958450706832c525b))
+
+
+### Bug Fixes
+
+* **client:** fix export map for index exports ([#77](https://github.com/lmnt-com/lmnt-node/issues/77)) ([a1ae220](https://github.com/lmnt-com/lmnt-node/commit/a1ae22069f3c834cf1ac693a540b408d2077b09f))
+
+
+### Chores
+
+* **internal:** fix devcontainers setup ([#79](https://github.com/lmnt-com/lmnt-node/issues/79)) ([338a93e](https://github.com/lmnt-com/lmnt-node/commit/338a93e3d0e8d8eaa01d980655477f6ec8444be2))
+
 ## 2.2.0 (2025-02-06)
 
 Full Changelog: [v2.1.0...v2.2.0](https://github.com/lmnt-com/lmnt-node/compare/v2.1.0...v2.2.0)
