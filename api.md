@@ -2,6 +2,7 @@
 
 Methods:
 
+- <code title="post /v1/ai/speech/convert">client.speech.<a href="./src/resources/speech.ts">convert</a>({ ...params }) -> Response</code>
 - <code title="post /v1/ai/speech/bytes">client.speech.<a href="./src/resources/speech.ts">generate</a>({ ...params }) -> Response</code>
 
 ## Sessions

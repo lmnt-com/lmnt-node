@@ -104,6 +104,36 @@ main();
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
 
+## File uploads
+
+Request parameters that correspond to file uploads can be passed in many different forms:
+
+- `File` (or an object with the same structure)
+- a `fetch` `Response` (or an object with the same structure)
+- an `fs.ReadStream`
+- the return value of our `toFile` helper
+
+```ts
+import fs from 'fs';
+import fetch from 'node-fetch';
+import Lmnt, { toFile } from 'lmnt-node';
+
+const client = new Lmnt();
+
+// If you have access to Node `fs` we recommend using `fs.createReadStream()`:
+await client.speech.convert({ audio: fs.createReadStream('/path/to/file'), voice: 'ava' });
+
+// Or if you have the web `File` API you can pass a `File` instance:
+await client.speech.convert({ audio: new File(['my bytes'], 'file'), voice: 'ava' });
+
+// You can also pass a `fetch` `Response`:
+await client.speech.convert({ audio: await fetch('https://somesite/file'), voice: 'ava' });
+
+// Finally, if none of the above are convenient, you can use our `toFile` helper:
+await client.speech.convert({ audio: await toFile(Buffer.from('my bytes'), 'file'), voice: 'ava' });
+await client.speech.convert({ audio: await toFile(new Uint8Array([0, 1, 2]), 'file'), voice: 'ava' });
+```
+
 ## Handling errors
 
 When the library is unable to connect to the API,
