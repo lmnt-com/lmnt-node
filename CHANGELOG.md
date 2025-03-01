@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.1 (2025-03-01)
+
+Full Changelog: [v2.3.0...v2.3.1](https://github.com/lmnt-com/lmnt-node/compare/v2.3.0...v2.3.1)
+
+### Documentation
+
+* update URLs from stainlessapi.com to stainless.com ([#83](https://github.com/lmnt-com/lmnt-node/issues/83)) ([c6fc612](https://github.com/lmnt-com/lmnt-node/commit/c6fc612ca51ee49cf2ce3d7a2b12795056bcf9b9))
+
 ## 2.3.0 (2025-02-26)
 
 Full Changelog: [v2.2.0...v2.3.0](https://github.com/lmnt-com/lmnt-node/compare/v2.2.0...v2.3.0)
