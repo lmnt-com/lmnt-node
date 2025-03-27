@@ -1,6 +1,6 @@
 import fs from 'fs';
-import path from 'path';
 import Lmnt from 'lmnt-node';
+import path from 'path';
 
 async function main() {
   // gets API Key from environment variable LMNT_API_KEY
