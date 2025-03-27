@@ -1,2 +1,4 @@
 configured_endpoints: 8
 openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/lmnt-kaikato-aryp6r%2Flmnt-com-d1b59768dd6e04b4b8226ed0b9a0bc243949555852e94cc92f8168e634a5509c.yml
+openapi_spec_hash: 61289cc053388a462a546189fe446d21
+config_hash: 09b5484ce79cbec6d92262e8f9bee55c
