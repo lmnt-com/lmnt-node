@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.4.0 (2025-03-27)
+
+Full Changelog: [v2.3.0...v2.4.0](https://github.com/lmnt-com/lmnt-node/compare/v2.3.0...v2.4.0)
+
+### Features
+
+* Add example for voice conversion ([4846f6c](https://github.com/lmnt-com/lmnt-node/commit/4846f6c4fc9f8a87619d134b5e139a358b527330))
+* chore(lint): Fix linting errors ([2262582](https://github.com/lmnt-com/lmnt-node/commit/2262582ffef49d9ae05348e0a385e370bb0df1a9))
+
+
+### Bug Fixes
+
+* avoid type error in certain environments ([#90](https://github.com/lmnt-com/lmnt-node/issues/90)) ([d4e9129](https://github.com/lmnt-com/lmnt-node/commit/d4e91290e459e01fa13522ec071717b27e8a53cb))
+
+
+### Chores
+
+* **exports:** cleaner resource index imports ([#88](https://github.com/lmnt-com/lmnt-node/issues/88)) ([f4737fa](https://github.com/lmnt-com/lmnt-node/commit/f4737faf5095b965d05a838034640570e49acd72))
+* **exports:** stop using path fallbacks ([#89](https://github.com/lmnt-com/lmnt-node/issues/89)) ([9056558](https://github.com/lmnt-com/lmnt-node/commit/90565587576e2a6f950eb9ef43e98ecd51caadb6))
+* **internal:** codegen related update ([#86](https://github.com/lmnt-com/lmnt-node/issues/86)) ([bb45285](https://github.com/lmnt-com/lmnt-node/commit/bb45285ece0af99f5f114f33f6893f41effca98e))
+* **internal:** remove extra empty newlines ([#87](https://github.com/lmnt-com/lmnt-node/issues/87)) ([aa21830](https://github.com/lmnt-com/lmnt-node/commit/aa218301ab02fece44a2b23e7d722e618ae364be))
+
+
+### Documentation
+
+* update URLs from stainlessapi.com to stainless.com ([#83](https://github.com/lmnt-com/lmnt-node/issues/83)) ([c6fc612](https://github.com/lmnt-com/lmnt-node/commit/c6fc612ca51ee49cf2ce3d7a2b12795056bcf9b9))
+
 ## 2.3.0 (2025-02-26)
 
 Full Changelog: [v2.2.0...v2.3.0](https://github.com/lmnt-com/lmnt-node/compare/v2.2.0...v2.3.0)
