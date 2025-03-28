@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.1 (2025-03-28)
+
+Full Changelog: [v2.4.0...v2.4.1](https://github.com/lmnt-com/lmnt-node/compare/v2.4.0...v2.4.1)
+
+### Bug Fixes
+
+* **internal:** work around https://github.com/vercel/next.js/issues/76881 ([#92](https://github.com/lmnt-com/lmnt-node/issues/92)) ([51c9ef5](https://github.com/lmnt-com/lmnt-node/commit/51c9ef526927fa5fa97751e337baca90ea271bb7))
+
 ## 2.4.0 (2025-03-27)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/lmnt-com/lmnt-node/compare/v2.3.0...v2.4.0)
