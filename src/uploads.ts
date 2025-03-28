@@ -243,7 +243,7 @@ const addFormValue = async (form: FormData, key: string, value: unknown): Promis
     const file = await toFile(value);
     form.append(key, file as File);
   } else if (Array.isArray(value)) {
-    await Promise.all(value.map((entry) => addFormValue(form, key + '[]', entry)));
+    await Promise.all(value.map((entry) => addFormValue(form, key, entry)));
   } else if (typeof value === 'object') {
     await Promise.all(
       Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop)),
