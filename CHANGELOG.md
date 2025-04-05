@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.4.1 (2025-04-05)
+
+Full Changelog: [v2.4.0...v2.4.1](https://github.com/lmnt-com/lmnt-node/compare/v2.4.0...v2.4.1)
+
+### Bug Fixes
+
+* **api:** improve type resolution when importing as a package ([#97](https://github.com/lmnt-com/lmnt-node/issues/97)) ([0a6f188](https://github.com/lmnt-com/lmnt-node/commit/0a6f188bd5e411f9051b2e249d823ff155c1e6b9))
+* **client:** send `X-Stainless-Timeout` in seconds ([#95](https://github.com/lmnt-com/lmnt-node/issues/95)) ([9e301a2](https://github.com/lmnt-com/lmnt-node/commit/9e301a28eeb8daa2cac382ac1656d6a13de2376d))
+* **internal:** work around https://github.com/vercel/next.js/issues/76881 ([#92](https://github.com/lmnt-com/lmnt-node/issues/92)) ([51c9ef5](https://github.com/lmnt-com/lmnt-node/commit/51c9ef526927fa5fa97751e337baca90ea271bb7))
+* **mcp:** remove unused tools.ts ([#98](https://github.com/lmnt-com/lmnt-node/issues/98)) ([40402a1](https://github.com/lmnt-com/lmnt-node/commit/40402a1c9636413a845b4b5408786d16c5c5462d))
+
+
+### Chores
+
+* **internal:** add aliases for Record and Array ([#96](https://github.com/lmnt-com/lmnt-node/issues/96)) ([1d49f3d](https://github.com/lmnt-com/lmnt-node/commit/1d49f3dae525f2ce4b45f70a4f6d3a243141b71c))
+
 ## 2.4.0 (2025-03-27)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/lmnt-com/lmnt-node/compare/v2.3.0...v2.4.0)
