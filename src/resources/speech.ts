@@ -7,6 +7,17 @@ import { type Response } from '../_shims/index';
 export class Speech extends APIResource {
   /**
    * Converts speech from one voice to another.
+   *
+   * @example
+   * ```ts
+   * const response = await client.speech.convert({
+   *   audio: fs.createReadStream('path/to/file'),
+   *   voice: 'ava',
+   * });
+   *
+   * const content = await response.blob();
+   * console.log(content);
+   * ```
    */
   convert(body: SpeechConvertParams, options?: Core.RequestOptions): Core.APIPromise<Response> {
     return this._client.post(
@@ -23,6 +34,17 @@ export class Speech extends APIResource {
   /**
    * Synthesizes speech from a text string and returns the audio data as a binary
    * stream.
+   *
+   * @example
+   * ```ts
+   * const response = await client.speech.generate({
+   *   text: 'hello world.',
+   *   voice: 'ava',
+   * });
+   *
+   * const content = await response.blob();
+   * console.log(content);
+   * ```
    */
   generate(body: SpeechGenerateParams, options?: Core.RequestOptions): Core.APIPromise<Response> {
     return this._client.post('/v1/ai/speech/bytes', {
