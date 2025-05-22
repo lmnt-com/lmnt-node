@@ -8,6 +8,18 @@ export class Voices extends APIResource {
   /**
    * Submits a request to create a voice with a supplied voice configuration and a
    * batch of input audio data.
+   *
+   * @example
+   * ```ts
+   * const voice = await client.voices.create({
+   *   files: [
+   *     fs.createReadStream('path/to/file'),
+   *     fs.createReadStream('path/to/file'),
+   *   ],
+   *   metadata:
+   *     '{"name": "new-voice", "type": "instant", "enhance": false}',
+   * });
+   * ```
    */
   create(body: VoiceCreateParams, options?: Core.RequestOptions): Core.APIPromise<Voice> {
     return this._client.post('/v1/ai/voice', Core.multipartFormRequestOptions({ body, ...options }));
@@ -15,6 +27,11 @@ export class Voices extends APIResource {
 
   /**
    * Returns details of a specific voice.
+   *
+   * @example
+   * ```ts
+   * const voice = await client.voices.retrieve('id');
+   * ```
    */
   retrieve(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
     return this._client.get(`/v1/ai/voice/${id}`, options);
@@ -22,6 +39,11 @@ export class Voices extends APIResource {
 
   /**
    * Updates metadata for a specific voice. Only provided fields will be changed.
+   *
+   * @example
+   * ```ts
+   * const voice = await client.voices.update('123');
+   * ```
    */
   update(
     id: string,
@@ -42,6 +64,11 @@ export class Voices extends APIResource {
 
   /**
    * Returns a list of voices available to you.
+   *
+   * @example
+   * ```ts
+   * const voices = await client.voices.list();
+   * ```
    */
   list(query?: VoiceListParams, options?: Core.RequestOptions): Core.APIPromise<VoiceListResponse>;
   list(options?: Core.RequestOptions): Core.APIPromise<VoiceListResponse>;
@@ -57,6 +84,11 @@ export class Voices extends APIResource {
 
   /**
    * Deletes a voice and cancels any pending operations on it. Cannot be undone.
+   *
+   * @example
+   * ```ts
+   * const voice = await client.voices.delete('123');
+   * ```
    */
   delete(id: string, options?: Core.RequestOptions): Core.APIPromise<VoiceDeleteResponse> {
     return this._client.delete(`/v1/ai/voice/${id}`, options);
