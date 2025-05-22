@@ -1,5 +1,35 @@
 # Changelog
 
+## 2.4.1 (2025-05-22)
+
+Full Changelog: [v2.4.0...v2.4.1](https://github.com/lmnt-com/lmnt-node/compare/v2.4.0...v2.4.1)
+
+### Bug Fixes
+
+* **api:** improve type resolution when importing as a package ([#97](https://github.com/lmnt-com/lmnt-node/issues/97)) ([0a6f188](https://github.com/lmnt-com/lmnt-node/commit/0a6f188bd5e411f9051b2e249d823ff155c1e6b9))
+* **client:** send `X-Stainless-Timeout` in seconds ([#95](https://github.com/lmnt-com/lmnt-node/issues/95)) ([9e301a2](https://github.com/lmnt-com/lmnt-node/commit/9e301a28eeb8daa2cac382ac1656d6a13de2376d))
+* **internal:** work around https://github.com/vercel/next.js/issues/76881 ([#92](https://github.com/lmnt-com/lmnt-node/issues/92)) ([51c9ef5](https://github.com/lmnt-com/lmnt-node/commit/51c9ef526927fa5fa97751e337baca90ea271bb7))
+* **mcp:** remove unused tools.ts ([#98](https://github.com/lmnt-com/lmnt-node/issues/98)) ([40402a1](https://github.com/lmnt-com/lmnt-node/commit/40402a1c9636413a845b4b5408786d16c5c5462d))
+
+
+### Chores
+
+* **ci:** add timeout thresholds for CI jobs ([b6963dd](https://github.com/lmnt-com/lmnt-node/commit/b6963ddf3e8377d206c2515d9776bc3f01265fa5))
+* **ci:** bump node version for release workflows ([87e3b2c](https://github.com/lmnt-com/lmnt-node/commit/87e3b2c3fa06f500a3e1449d32fcae081e429c55))
+* **ci:** only use depot for staging repos ([e5ddeed](https://github.com/lmnt-com/lmnt-node/commit/e5ddeed26a5e759624f5da30b8d28d78bd089302))
+* **client:** minor internal fixes ([2e65e1c](https://github.com/lmnt-com/lmnt-node/commit/2e65e1cc836b3cb1e2efecf8c1e8d0300763c905))
+* **docs:** grammar improvements ([e23331f](https://github.com/lmnt-com/lmnt-node/commit/e23331f3c16e04573327fb889680f6dbb8a5cf2a))
+* **internal:** add aliases for Record and Array ([#96](https://github.com/lmnt-com/lmnt-node/issues/96)) ([1d49f3d](https://github.com/lmnt-com/lmnt-node/commit/1d49f3dae525f2ce4b45f70a4f6d3a243141b71c))
+* **internal:** codegen related update ([9c5d934](https://github.com/lmnt-com/lmnt-node/commit/9c5d9342df101fd774d18c1cbb79f4662233f096))
+* **internal:** reduce CI branch coverage ([8be04f2](https://github.com/lmnt-com/lmnt-node/commit/8be04f2879ddb8992fc481a65af94bc897fa7973))
+* **internal:** upload builds and expand CI branch coverage ([99503c4](https://github.com/lmnt-com/lmnt-node/commit/99503c4907f8898024c4d163f481e3eada01eeae))
+
+
+### Documentation
+
+* add examples to tsdocs ([a0310cb](https://github.com/lmnt-com/lmnt-node/commit/a0310cb7cdbca6c319588b21aeceada527b540e4))
+* **readme:** fix typo ([0d23dac](https://github.com/lmnt-com/lmnt-node/commit/0d23dac83f2b159336cf67e16e924b21885fca92))
+
 ## 2.4.0 (2025-03-27)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/lmnt-com/lmnt-node/compare/v2.3.0...v2.4.0)
