@@ -62,7 +62,7 @@ export class Speech extends APIResource {
 export interface SpeechConvertParams {
   /**
    * The audio file to be converted into a new voice. Specify source language using
-   * the `language` parameter. Max file size: 1 MB.
+   * the `language` parameter. Acceptable formats: `wav`, `mp3`. Max file size: 1 MB.
    */
   audio: Core.Uploadable;
 
@@ -73,24 +73,60 @@ export interface SpeechConvertParams {
   voice: string;
 
   /**
-   * The file format of the audio output
+   * The desired output format of the audio. If you are using a streaming endpoint,
+   * you'll generate audio faster by selecting a streamable format since chunks are
+   * encoded and returned as they're generated. For non-streamable formats, the
+   * entire audio will be synthesized before encoding.
+   *
+   * Streamable formats:
+   *
+   * - `mp3`: 96kbps MP3 audio.
+   * - `raw`: 32-bit floating point raw audio.
+   * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
+   * - `webm`: WebM format with Opus audio codec.
+   *
+   * Non-streamable formats:
+   *
+   * - `aac`: AAC audio codec.
+   * - `wav`: 16-bit PCM audio in WAV container.
    */
-  format?: 'aac' | 'mp3' | 'mulaw' | 'raw' | 'wav';
+  format?: 'aac' | 'mp3' | 'raw' | 'ulaw' | 'wav' | 'webm';
 
   /**
    * The language of the source audio. Two letter ISO 639-1 code.
    */
-  language?: 'en' | 'es' | 'pt' | 'fr' | 'de' | 'zh' | 'ko' | 'hi' | 'ja' | 'ru' | 'it' | 'tr';
+  language?:
+    | 'auto'
+    | 'de'
+    | 'en'
+    | 'es'
+    | 'fr'
+    | 'hi'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'ru'
+    | 'sv'
+    | 'th'
+    | 'tr'
+    | 'uk'
+    | 'vi'
+    | 'zh';
 
   /**
-   * The desired output sample rate in Hz
+   * The desired output sample rate in Hz. Defaults to `24000` for all formats except
+   * `mulaw` which defaults to `8000`.
    */
   sample_rate?: 8000 | 16000 | 24000;
 }
 
 export interface SpeechGenerateParams {
   /**
-   * The text to synthesize; max 5000 characters per request (including spaces)
+   * The text to synthesize; max 5000 characters per request (including spaces).
    */
   text: string;
 
@@ -101,36 +137,60 @@ export interface SpeechGenerateParams {
   voice: string;
 
   /**
-   * Set this to `true` to generate conversational-style speech rather than
-   * reading-style speech. Does not work with the `blizzard` model.
+   * The desired output format of the audio. If you are using a streaming endpoint,
+   * you'll generate audio faster by selecting a streamable format since chunks are
+   * encoded and returned as they're generated. For non-streamable formats, the
+   * entire audio will be synthesized before encoding.
+   *
+   * Streamable formats:
+   *
+   * - `mp3`: 96kbps MP3 audio.
+   * - `raw`: 32-bit floating point raw audio.
+   * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
+   * - `webm`: WebM format with Opus audio codec.
+   *
+   * Non-streamable formats:
+   *
+   * - `aac`: AAC audio codec.
+   * - `wav`: 16-bit PCM audio in WAV container.
    */
-  conversational?: boolean;
+  format?: 'aac' | 'mp3' | 'raw' | 'ulaw' | 'wav' | 'webm';
 
   /**
-   * The file format of the audio output
+   * The desired language. Two letter ISO 639-1 code. Defaults to auto language
+   * detection.
    */
-  format?: 'aac' | 'mp3' | 'mulaw' | 'raw' | 'wav';
+  language?:
+    | 'auto'
+    | 'de'
+    | 'en'
+    | 'es'
+    | 'fr'
+    | 'hi'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'ru'
+    | 'sv'
+    | 'th'
+    | 'tr'
+    | 'uk'
+    | 'vi'
+    | 'zh';
 
   /**
-   * The desired language. Two letter ISO 639-1 code. Does not work with professional
-   * clones. Not all languages work with all models.
+   * The model to use for synthesis. Learn more about models
+   * [here](https://docs.lmnt.com/guides/models).
    */
-  language?: 'en' | 'es' | 'pt' | 'fr' | 'de' | 'zh' | 'ko' | 'hi' | 'ja' | 'ru' | 'it' | 'tr';
+  model?: 'blizzard';
 
   /**
-   * Produce speech of this length in seconds; maximum 300.0 (5 minutes). Does not
-   * work with the `blizzard` model.
-   */
-  length?: number;
-
-  /**
-   * The model to use for synthesis. One of `aurora` (default) or `blizzard`. Learn
-   * more about models [here](https://docs.lmnt.com/guides/models).
-   */
-  model?: 'aurora' | 'blizzard';
-
-  /**
-   * The desired output sample rate in Hz
+   * The desired output sample rate in Hz. Defaults to `24000` for all formats except
+   * `mulaw` which defaults to `8000`.
    */
   sample_rate?: 8000 | 16000 | 24000;
 
@@ -138,12 +198,6 @@ export interface SpeechGenerateParams {
    * Seed used to specify a different take; defaults to random
    */
   seed?: number;
-
-  /**
-   * The talking speed of the generated speech, a floating point value between `0.25`
-   * (slow) and `2.0` (fast).
-   */
-  speed?: number;
 
   /**
    * Influences how expressive and emotionally varied the speech becomes. Lower

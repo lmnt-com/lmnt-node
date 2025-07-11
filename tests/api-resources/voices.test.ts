@@ -11,10 +11,7 @@ const client = new Lmnt({
 describe('resource voices', () => {
   test('create: only required params', async () => {
     const responsePromise = client.voices.create({
-      files: [
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-      ],
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -28,16 +25,13 @@ describe('resource voices', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.voices.create({
-      files: [
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-      ],
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.voices.retrieve('id');
+    const responsePromise = client.voices.retrieve('123');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +43,7 @@ describe('resource voices', () => {
 
   test('retrieve: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.retrieve('id', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+    await expect(client.voices.retrieve('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
       Lmnt.NotFoundError,
     );
   });
