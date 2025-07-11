@@ -9,7 +9,8 @@ const client = new Lmnt({
 });
 
 describe('resource voices', () => {
-  test('create: only required params', async () => {
+  // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
+  test.skip('create: only required params', async () => {
     const responsePromise = client.voices.create({
       files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
@@ -23,7 +24,8 @@ describe('resource voices', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('create: required and optional params', async () => {
+  // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
+  test.skip('create: required and optional params', async () => {
     const response = await client.voices.create({
       files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
       metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
