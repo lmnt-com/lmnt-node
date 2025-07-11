@@ -27,14 +27,10 @@ import Lmnt from 'lmnt-node';
 
 const client = new Lmnt();
 
-async function main() {
-  const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' });
+const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' });
 
-  const content = await response.blob();
-  console.log(content);
-}
-
-main();
+const content = await response.blob();
+console.log(content);
 ```
 
 #### Session:
@@ -94,12 +90,8 @@ import Lmnt from 'lmnt-node';
 
 const client = new Lmnt();
 
-async function main() {
-  const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'ava' };
-  const response: Response = await client.speech.generate(params);
-}
-
-main();
+const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'ava' };
+const response: Response = await client.speech.generate(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -142,19 +134,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-async function main() {
-  const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' }).catch(async (err) => {
-    if (err instanceof Lmnt.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
-}
-
-main();
+const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' }).catch(async (err) => {
+  if (err instanceof Lmnt.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
