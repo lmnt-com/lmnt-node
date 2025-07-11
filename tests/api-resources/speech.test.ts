@@ -13,7 +13,7 @@ describe('resource speech', () => {
       audio: await toFile(Buffer.from('# my file contents'), 'README.md'),
       voice: 'ava',
       format: 'aac',
-      language: 'en',
+      language: 'auto',
       sample_rate: 8000,
     });
   });
@@ -22,14 +22,11 @@ describe('resource speech', () => {
     const response = await client.speech.generate({
       text: 'hello world.',
       voice: 'ava',
-      conversational: true,
       format: 'aac',
-      language: 'en',
-      length: 300,
-      model: 'aurora',
+      language: 'auto',
+      model: 'blizzard',
       sample_rate: 8000,
       seed: 0,
-      speed: 0.25,
       temperature: 0,
       top_p: 0,
     });

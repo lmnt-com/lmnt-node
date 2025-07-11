@@ -12,10 +12,7 @@ export class Voices extends APIResource {
    * @example
    * ```ts
    * const voice = await client.voices.create({
-   *   files: [
-   *     fs.createReadStream('path/to/file'),
-   *     fs.createReadStream('path/to/file'),
-   *   ],
+   *   files: [fs.createReadStream('path/to/file')],
    *   metadata:
    *     '{"name": "new-voice", "type": "instant", "enhance": false}',
    * });
@@ -30,7 +27,7 @@ export class Voices extends APIResource {
    *
    * @example
    * ```ts
-   * const voice = await client.voices.retrieve('id');
+   * const voice = await client.voices.retrieve('123');
    * ```
    */
   retrieve(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
@@ -128,6 +125,12 @@ export interface Voice {
    * A tag describing the gender of this voice, e.g. `male`, `female`, `nonbinary`.
    */
   gender?: string;
+
+  /**
+   * A URL that returns a preview speech sample of this voice. The file can be played
+   * directly in a browser or audio player.
+   */
+  preview_url?: string;
 
   /**
    * Whether this voice has been starred by you or not.
