@@ -33,8 +33,12 @@ export class Speech extends APIResource {
   }
 
   /**
-   * Synthesizes speech from a text string and returns the audio data as a binary
-   * stream.
+   * Generates speech from text and streams the audio as binary data chunks in
+   * real-time as they are generated.
+   *
+   * This is the recommended endpoint for most text-to-speech use cases. You can
+   * either stream the chunks for low-latency playback or collect all chunks to get
+   * the complete audio file.
    *
    * @example
    * ```ts
