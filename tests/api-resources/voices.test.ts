@@ -12,8 +12,9 @@ describe('resource voices', () => {
   // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
   test.skip('create: only required params', async () => {
     const responsePromise = client.voices.create({
+      enhance: false,
       files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
-      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
+      name: 'new-voice',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,8 +28,11 @@ describe('resource voices', () => {
   // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
   test.skip('create: required and optional params', async () => {
     const response = await client.voices.create({
+      enhance: false,
       files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
-      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
+      name: 'new-voice',
+      description: 'description',
+      gender: 'gender',
     });
   });
 
@@ -73,7 +77,7 @@ describe('resource voices', () => {
     await expect(
       client.voices.update(
         '123',
-        { description: 'description', gender: 'gender', name: 'name', starred: true, unfreeze: true },
+        { description: 'description', gender: 'gender', name: 'name', starred: true },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Lmnt.NotFoundError);
