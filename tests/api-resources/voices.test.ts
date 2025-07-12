@@ -9,13 +9,12 @@ const client = new Lmnt({
 });
 
 describe('resource voices', () => {
-  test('create: only required params', async () => {
+  // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
+  test.skip('create: only required params', async () => {
     const responsePromise = client.voices.create({
-      files: [
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-      ],
-      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
+      enhance: false,
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+      name: 'new-voice',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -26,18 +25,19 @@ describe('resource voices', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('create: required and optional params', async () => {
+  // Prism bug detailed here: https://github.com/stoplightio/prism/pull/2654
+  test.skip('create: required and optional params', async () => {
     const response = await client.voices.create({
-      files: [
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-        await toFile(Buffer.from('# my file contents'), 'README.md'),
-      ],
-      metadata: '{"name": "new-voice", "type": "instant", "enhance": false}',
+      enhance: false,
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+      name: 'new-voice',
+      description: 'description',
+      gender: 'gender',
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.voices.retrieve('id');
+    const responsePromise = client.voices.retrieve('123');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +49,7 @@ describe('resource voices', () => {
 
   test('retrieve: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.retrieve('id', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+    await expect(client.voices.retrieve('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
       Lmnt.NotFoundError,
     );
   });
@@ -77,7 +77,7 @@ describe('resource voices', () => {
     await expect(
       client.voices.update(
         '123',
-        { description: 'description', gender: 'gender', name: 'name', starred: true, unfreeze: true },
+        { description: 'description', gender: 'gender', name: 'name', starred: true },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Lmnt.NotFoundError);

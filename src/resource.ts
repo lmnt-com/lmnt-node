@@ -2,7 +2,7 @@
 
 import type { Lmnt } from './index';
 
-export class APIResource {
+export abstract class APIResource {
   protected _client: Lmnt;
 
   constructor(client: Lmnt) {

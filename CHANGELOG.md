@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.5.0 (2025-07-12)
+
+Full Changelog: [v2.4.1...v2.5.0](https://github.com/lmnt-com/lmnt-node/compare/v2.4.1...v2.5.0)
+
+### Features
+
+* **api:** api update ([e5a354d](https://github.com/lmnt-com/lmnt-node/commit/e5a354dbf99013d65338b8743b43df6e403ccb6f))
+* **api:** api update ([76b2da2](https://github.com/lmnt-com/lmnt-node/commit/76b2da22799ed7431fd6b97106279603386af234))
+
+
+### Bug Fixes
+
+* **tests:** skip tests broken by Prism ([08f7952](https://github.com/lmnt-com/lmnt-node/commit/08f7952e084a0e6a49b7b068c4f0b9e454c2a24e))
+
+
+### Chores
+
+* **internal:** version bump ([919a654](https://github.com/lmnt-com/lmnt-node/commit/919a654f8864fedd56953eefbf3f921a5b701b0c))
+
 ## 2.4.1 (2025-05-22)
 
 Full Changelog: [v2.4.0...v2.4.1](https://github.com/lmnt-com/lmnt-node/compare/v2.4.0...v2.4.1)

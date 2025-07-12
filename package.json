@@ -1,6 +1,6 @@
 {
   "name": "lmnt-node",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "The official TypeScript library for the Lmnt API",
   "author": "Lmnt <feedback@lmnt.com>",
   "types": "dist/index.d.ts",

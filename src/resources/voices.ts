@@ -12,12 +12,9 @@ export class Voices extends APIResource {
    * @example
    * ```ts
    * const voice = await client.voices.create({
-   *   files: [
-   *     fs.createReadStream('path/to/file'),
-   *     fs.createReadStream('path/to/file'),
-   *   ],
-   *   metadata:
-   *     '{"name": "new-voice", "type": "instant", "enhance": false}',
+   *   enhance: false,
+   *   files: [fs.createReadStream('path/to/file')],
+   *   name: 'new-voice',
    * });
    * ```
    */
@@ -30,7 +27,7 @@ export class Voices extends APIResource {
    *
    * @example
    * ```ts
-   * const voice = await client.voices.retrieve('id');
+   * const voice = await client.voices.retrieve('123');
    * ```
    */
   retrieve(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
@@ -130,6 +127,12 @@ export interface Voice {
   gender?: string;
 
   /**
+   * A URL that returns a preview speech sample of this voice. The file can be played
+   * directly in a browser or audio player.
+   */
+  preview_url?: string;
+
+  /**
    * Whether this voice has been starred by you or not.
    */
   starred?: boolean;
@@ -155,29 +158,35 @@ export interface VoiceDeleteResponse {
 
 export interface VoiceCreateParams {
   /**
+   * For unclean audio with background noise, applies processing to attempt to
+   * improve quality. Default is `false` as this can also degrade quality in some
+   * circumstances.
+   */
+  enhance: boolean;
+
+  /**
    * One or more input audio files to train the voice in the form of binary `wav`,
    * `mp3`, `mp4`, `m4a`, or `webm` attachments.
    *
    * - Max attached files: 20.
    * - Max total file size: 250 MB.
-   * - Professional voices require at least 5 minutes of source audio to train from.
    */
   files: Array<Core.Uploadable>;
 
   /**
-   * Information about the voice you are creating; a stringified JSON object
-   * containing the following fields:
-   *
-   * - `name` **_required_**: string; The display name for this voice
-   * - `enhance` **_required_**: bool; For unclean audio with background noise,
-   *   applies processing to attempt to improve quality. Default is `false` as this
-   *   can also degrade quality in some circumstances.
-   * - `type` _optional_: string; The type of voice to create. Defaults to instant.
-   * - `gender` _optional_: string; A tag describing the gender of this voice. Has no
-   *   effect on voice creation.
-   * - `description` _optional_: string; A text description of this voice.
+   * The display name for this voice
    */
-  metadata: string;
+  name: string;
+
+  /**
+   * A text description of this voice.
+   */
+  description?: string;
+
+  /**
+   * A tag describing the gender of this voice. Has no effect on voice creation.
+   */
+  gender?: string;
 }
 
 export interface VoiceUpdateParams {
@@ -200,11 +209,6 @@ export interface VoiceUpdateParams {
    * If `true`, adds this voice to your starred list.
    */
   starred?: boolean;
-
-  /**
-   * If true, unfreezes this voice and upgrades it to the latest model.
-   */
-  unfreeze?: boolean;
 }
 
 export interface VoiceListParams {
