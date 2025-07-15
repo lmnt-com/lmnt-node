@@ -25,7 +25,9 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt();
+const client = new Lmnt({
+  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
+});
 
 const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' });
 
@@ -88,7 +90,9 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Lmnt from 'lmnt-node';
 
-const client = new Lmnt();
+const client = new Lmnt({
+  apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
+});
 
 const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'ava' };
 const response: Response = await client.speech.generate(params);
