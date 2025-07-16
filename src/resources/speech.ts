@@ -60,8 +60,6 @@ export class Speech extends APIResource {
     });
   }
 
-  sessions: Sessions = new Sessions(this._client)
-;
   /**
    * Generates speech from text and returns a JSON object that contains a
    * **base64-encoded audio string** and optionally word-level durations
@@ -82,6 +80,8 @@ export class Speech extends APIResource {
   ): Core.APIPromise<SpeechGenerateDetailedResponse> {
     return this._client.post('/v1/ai/speech', { body, ...options });
   }
+
+  sessions: Sessions = new Sessions(this._client);
 }
 
 export interface SpeechGenerateDetailedResponse {
