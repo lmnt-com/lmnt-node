@@ -6,7 +6,13 @@ import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import { AccountRetrieveResponse, Accounts } from './resources/accounts';
-import { Speech, SpeechConvertParams, SpeechGenerateParams } from './resources/speech';
+import {
+  Speech,
+  SpeechConvertParams,
+  SpeechGenerateDetailedParams,
+  SpeechGenerateDetailedResponse,
+  SpeechGenerateParams,
+} from './resources/speech';
 import {
   Voice,
   VoiceCreateParams,
@@ -189,8 +195,10 @@ export declare namespace Lmnt {
 
   export {
     Speech as Speech,
+    type SpeechGenerateDetailedResponse as SpeechGenerateDetailedResponse,
     type SpeechConvertParams as SpeechConvertParams,
     type SpeechGenerateParams as SpeechGenerateParams,
+    type SpeechGenerateDetailedParams as SpeechGenerateDetailedParams,
   };
 
   export { Accounts as Accounts, type AccountRetrieveResponse as AccountRetrieveResponse };
