@@ -1,7 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export { Accounts, type AccountRetrieveResponse } from './accounts';
-export { Speech, type SpeechConvertParams, type SpeechGenerateParams } from './speech';
+export {
+  Speech,
+  type SpeechGenerateDetailedResponse,
+  type SpeechConvertParams,
+  type SpeechGenerateParams,
+  type SpeechGenerateDetailedParams,
+} from './speech';
 export { Sessions, type SpeechSessionParams } from './sessions';
 export {
   Voices,
