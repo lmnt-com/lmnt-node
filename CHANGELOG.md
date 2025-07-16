@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.6.0 (2025-07-16)
+
+Full Changelog: [v2.5.0...v2.6.0](https://github.com/lmnt-com/lmnt-node/compare/v2.5.0...v2.6.0)
+
+### Features
+
+* **api:** add generate detailed method ([8ba36ed](https://github.com/lmnt-com/lmnt-node/commit/8ba36edfce77f8f3e5cd145108668707055edf37))
+* clean up environment call outs ([00ecd27](https://github.com/lmnt-com/lmnt-node/commit/00ecd27578e48d35bd6079e31b2c7d44e0527e4f))
+
+
+### Bug Fixes
+
+* **api:** formatting fix for lint error ([2f49fa4](https://github.com/lmnt-com/lmnt-node/commit/2f49fa4027e72468cfb5f6a8a189f02e1eb54a19))
+
 ## 2.5.0 (2025-07-14)
 
 Full Changelog: [v2.4.1...v2.5.0](https://github.com/lmnt-com/lmnt-node/compare/v2.4.1...v2.5.0)
