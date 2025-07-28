@@ -164,6 +164,7 @@ export interface SpeechConvertParams {
    */
   language?:
     | 'auto'
+    | 'ar'
     | 'de'
     | 'en'
     | 'es'
@@ -181,6 +182,7 @@ export interface SpeechConvertParams {
     | 'th'
     | 'tr'
     | 'uk'
+    | 'ur'
     | 'vi'
     | 'zh';
 
@@ -229,6 +231,7 @@ export interface SpeechGenerateParams {
    */
   language?:
     | 'auto'
+    | 'ar'
     | 'de'
     | 'en'
     | 'es'
@@ -246,6 +249,7 @@ export interface SpeechGenerateParams {
     | 'th'
     | 'tr'
     | 'uk'
+    | 'ur'
     | 'vi'
     | 'zh';
 
@@ -320,6 +324,7 @@ export interface SpeechGenerateDetailedParams {
    */
   language?:
     | 'auto'
+    | 'ar'
     | 'de'
     | 'en'
     | 'es'
@@ -337,6 +342,7 @@ export interface SpeechGenerateDetailedParams {
     | 'th'
     | 'tr'
     | 'uk'
+    | 'ur'
     | 'vi'
     | 'zh';
 
