@@ -1,3 +1,5 @@
+// Text-to-speech in a WebSocket session.
+
 import { createWriteStream } from 'fs';
 import Lmnt from 'lmnt-node';
 
@@ -11,7 +13,7 @@ async function main() {
 
   // Construct the streaming connection with our desired voice
   const speechSession = lmnt.speech.sessions.create({
-    voice: 'morgan',
+    voice: 'leah',
   });
 
   const writeTask = async () => {
