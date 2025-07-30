@@ -60,10 +60,6 @@
     "./shims/web.js",
     "./shims/web.mjs"
   ],
-  "imports": {
-    "lmnt-node": ".",
-    "lmnt-node/*": "./src/*"
-  },
   "exports": {
     "./_shims/auto/*": {
       "deno": {
