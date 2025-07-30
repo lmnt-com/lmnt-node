@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.7.0 (2025-07-30)
+
+Full Changelog: [v2.6.0...v2.7.0](https://github.com/lmnt-com/lmnt-node/compare/v2.6.0...v2.7.0)
+
+### Features
+
+* **api:** api update ([f810ae8](https://github.com/lmnt-com/lmnt-node/commit/f810ae8a1165b2edc6a2629839bda8da394ba539))
+
+
+### Chores
+
+* **internal:** remove redundant imports config ([36387d1](https://github.com/lmnt-com/lmnt-node/commit/36387d1c0453e2f845f1bbf366529328415f183f))
+
 ## 2.6.0 (2025-07-16)
 
 Full Changelog: [v2.5.0...v2.6.0](https://github.com/lmnt-com/lmnt-node/compare/v2.5.0...v2.6.0)
