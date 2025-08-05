@@ -31,9 +31,11 @@ async function main() {
 
   const readTask = async () => {
     for await (const message of speechSession) {
-      const audioBytes = Buffer.byteLength(message.audio);
-      console.log(` ** Received from LMNT -- ${audioBytes} bytes ** `);
-      audioFile.write(message.audio);
+      if (message.type === 'audio') {
+        const audioBytes = message.audio.byteLength;
+        console.log(` ** Received from LMNT -- ${audioBytes} bytes ** `);
+        audioFile.write(message.audio);
+      }
     }
 
     speechSession.close();
