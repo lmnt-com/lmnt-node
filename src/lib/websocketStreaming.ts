@@ -7,9 +7,6 @@ const URL_STREAMING = 'wss://api.lmnt.com/v1/ai/speech/stream';
 const WEBSOCKET_OPEN_STATE = 1;
 const WEBSOCKET_NORMAL_CLOSE = 1000;
 
-const MESSAGE_EOF = { eof: true };
-const MESSAGE_FLUSH = { flush: true };
-
 class MessageQueue {
   private messages: any[] = [];
   private resolvers: ((value: any) => void)[] = [];
@@ -17,7 +14,7 @@ class MessageQueue {
   finish() {
     while (this.resolvers.length) {
       const resolve = this.resolvers.shift();
-      resolve?.(MESSAGE_EOF);
+      resolve?.(null);
     }
   }
 
@@ -56,26 +53,41 @@ export interface Duration {
   text?: string;
 }
 
-export interface SpeechStreamResponse {
-  /**
-   * The synthesized speech audio data
-   */
+export type SpeechStreamMessage = AudioMessage | ExtrasMessage | ErrorMessage | CompleteMessage;
+
+/**
+ * Audio message containing synthesized speech data
+ */
+export interface AudioMessage {
+  type: 'audio';
   audio: ArrayBuffer | Buffer;
+}
 
-  /**
-   * The durations of the generated speech
-   */
+/**
+ * Extras message containing metadata about the synthesis
+ */
+export interface ExtrasMessage {
+  type: 'extras';
   durations?: Duration[];
-
-  /**
-   * A warning message
-   */
   warning?: string;
-
-  /**
-   * Whether the buffer on the server is empty
-   */
   buffer_empty?: boolean;
+}
+
+/**
+ * Error message containing error information
+ */
+export interface ErrorMessage {
+  type: 'error';
+  error: string;
+}
+
+/**
+ * Complete message for commands (reset/flush)
+ */
+export interface CompleteMessage {
+  type: 'complete';
+  complete: 'reset' | 'flush';
+  nonce: number;
 }
 
 export class SpeechSession {
@@ -83,6 +95,7 @@ export class SpeechSession {
   private outMessages: any[] = [];
   private inMessages: MessageQueue;
   private returnExtras: boolean;
+  private nextNonce: number = 1;
 
   /**
    * Creates a new streaming speech connection.
@@ -107,6 +120,7 @@ export class SpeechSession {
       sample_rate: options.sample_rate,
       send_extras: options.return_extras,
       speed: options.speed,
+      protocol_version: 2,
     });
   }
 
@@ -134,8 +148,12 @@ export class SpeechSession {
     this.inMessages.finish();
   }
 
-  private onMessage(message: any) {
-    this.inMessages.push(message);
+  private onMessage(event: MessageEvent) {
+    const isText = typeof event.data === 'string';
+    this.inMessages.push({
+      type: isText ? 'text' : 'binary',
+      data: event.data,
+    });
   }
 
   /**
@@ -159,9 +177,24 @@ export class SpeechSession {
   /**
    * Triggers the server to synthesize all currently queued text and return the audio data.
    * Use sparingly as it may affect the natural flow of speech synthesis.
+   *
+   * @returns The nonce used for this flush command
    */
-  flush() {
-    this.sendMessage(MESSAGE_FLUSH);
+  flush(): number {
+    const nonce = this.nextNonce++;
+    this.sendMessage({ command: 'flush', nonce });
+    return nonce;
+  }
+
+  /**
+   * Resets the speech session, discarding all queued text and stopping current synthesis.
+   *
+   * @returns The nonce used for this reset command
+   */
+  reset(): number {
+    const nonce = this.nextNonce++;
+    this.sendMessage({ command: 'reset', nonce });
+    return nonce;
   }
 
   /**
@@ -169,7 +202,53 @@ export class SpeechSession {
    * and close the connection after all audio has been received.
    */
   finish() {
-    this.sendMessage(MESSAGE_EOF);
+    this.sendMessage({ command: 'eof' });
+  }
+
+  /**
+   * Iterate over messages from the server.
+   *
+   * @returns AsyncIterator<SpeechStreamMessage>
+   */
+  async *[Symbol.asyncIterator](): AsyncIterator<SpeechStreamMessage> {
+    while (true) {
+      const message = await this.inMessages.next();
+      if (message === null) {
+        return;
+      }
+
+      if (message.type === 'text') {
+        yield this.parseTextMessage(message.data);
+      } else {
+        try {
+          const audio = await this.processAudioData(message.data);
+          yield { type: 'audio', audio };
+        } catch (error) {
+          yield { type: 'error', error: error instanceof Error ? error.message : String(error) };
+        }
+      }
+    }
+  }
+
+  private parseTextMessage(textData: string): SpeechStreamMessage {
+    const messageJson = JSON.parse(textData);
+
+    if ('error' in messageJson) {
+      return { type: 'error', ...messageJson };
+    }
+
+    if ('complete' in messageJson) {
+      return { type: 'complete', ...messageJson };
+    }
+
+    if (
+      this.returnExtras &&
+      (messageJson.durations || messageJson.warning || messageJson.buffer_empty !== undefined)
+    ) {
+      return { type: 'extras', ...messageJson };
+    }
+
+    return { type: 'error', ...messageJson };
   }
 
   private sendMessage(message: any) {
@@ -186,65 +265,13 @@ export class SpeechSession {
     }
   }
 
-  /**
-   * Returns an async iterator that yields objects containing synthesized speech audio data
-   * and optional metadata like durations and warnings when return_extras is enabled.
-   * @returns AsyncIterator<SpeechStreamResponse>
-   */
-  async *[Symbol.asyncIterator](): AsyncIterator<SpeechStreamResponse> {
-    while (true) {
-      const message = await this.inMessages.next();
-      if (message === MESSAGE_EOF) {
-        return;
-      }
-
-      let data: SpeechStreamResponse;
-      if (this.returnExtras) {
-        const msg1Json = this.parseAndCheckForError(message.data, false);
-        const msg2 = await this.inMessages.next();
-        const audio = await this.processAudioData(msg2.data);
-        data = {
-          audio,
-          durations: msg1Json['durations'],
-        };
-        if ('warning' in msg1Json) {
-          data.warning = msg1Json['warning'];
-        }
-        if ('buffer_empty' in msg1Json) {
-          data.buffer_empty = msg1Json['buffer_empty'];
-        }
-      } else {
-        const audio = await this.processAudioData(message.data);
-        data = { audio };
-      }
-      yield data;
-    }
-  }
-
-  private async processAudioData(audioData: any): Promise<ArrayBuffer | Buffer> {
+  private async processAudioData(audioData: Blob | Buffer): Promise<ArrayBuffer | Buffer> {
     if (audioData instanceof Blob) {
       return await audioData.arrayBuffer();
     } else if (audioData instanceof Buffer) {
       return audioData;
     } else {
-      this.parseAndCheckForError(audioData);
+      throw new LmntError(`Unexpected message type received from server: ${audioData}`);
     }
-    return new ArrayBuffer(0);
-  }
-
-  private parseAndCheckForError(message: any, requireError = true) {
-    let messageJson;
-    try {
-      messageJson = JSON.parse(message);
-    } catch {
-      throw new Error(`Unexpected message type received from server: ${message}`);
-    }
-    if ('error' in messageJson) {
-      throw new LmntError(messageJson['error']);
-    }
-    if (requireError) {
-      throw new Error(`Unexpected message type received from server: ${message}`);
-    }
-    return messageJson;
   }
 }
