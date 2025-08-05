@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8.0 (2025-08-05)
+
+Full Changelog: [v2.7.0...v2.8.0](https://github.com/lmnt-com/lmnt-node/compare/v2.7.0...v2.8.0)
+
+### Features
+
+* add support for resets in speech sessions ([667d386](https://github.com/lmnt-com/lmnt-node/commit/667d3861de888124faf96f6d70e30130a766d0c4))
+
 ## 2.7.0 (2025-07-30)
 
 Full Changelog: [v2.6.0...v2.7.0](https://github.com/lmnt-com/lmnt-node/compare/v2.6.0...v2.7.0)
