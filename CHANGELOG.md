@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.8.1 (2025-08-09)
+
+Full Changelog: [v2.8.0...v2.8.1](https://github.com/lmnt-com/lmnt-node/compare/v2.8.0...v2.8.1)
+
+### Chores
+
+* **internal:** move publish config ([7f41d87](https://github.com/lmnt-com/lmnt-node/commit/7f41d87adb8e62d91bd6d0edb4a9f012c443f6e6))
+* update @stainless-api/prism-cli to v5.15.0 ([10fbe16](https://github.com/lmnt-com/lmnt-node/commit/10fbe169e228a0fb00c7ff5fb9970cd42531bf1c))
+
 ## 2.8.0 (2025-08-05)
 
 Full Changelog: [v2.7.0...v2.8.0](https://github.com/lmnt-com/lmnt-node/compare/v2.7.0...v2.8.0)
