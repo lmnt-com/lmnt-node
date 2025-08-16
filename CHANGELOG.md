@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.8.2 (2025-08-16)
+
+Full Changelog: [v2.8.1...v2.8.2](https://github.com/lmnt-com/lmnt-node/compare/v2.8.1...v2.8.2)
+
+### Chores
+
+* **deps:** update dependency node-fetch to v2.6.13 ([37b4c05](https://github.com/lmnt-com/lmnt-node/commit/37b4c053dbc9ed3b64da461536f046279bbe3f3a))
+* **internal:** formatting change ([2fb54bd](https://github.com/lmnt-com/lmnt-node/commit/2fb54bd3f09673d765397c2356a51b72cde48ccd))
+* **internal:** update comment in script ([905d4fb](https://github.com/lmnt-com/lmnt-node/commit/905d4fb4789ec3eb007169206ab1df90a44e7ac3))
+
 ## 2.8.1 (2025-08-09)
 
 Full Changelog: [v2.8.0...v2.8.1](https://github.com/lmnt-com/lmnt-node/compare/v2.8.0...v2.8.1)
