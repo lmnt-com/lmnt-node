@@ -191,6 +191,7 @@ export class Lmnt extends Core.APIClient {
 Lmnt.Speech = Speech;
 Lmnt.Accounts = Accounts;
 Lmnt.Voices = Voices;
+
 export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
 
