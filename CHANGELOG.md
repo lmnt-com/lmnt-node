@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8.3 (2025-08-23)
+
+Full Changelog: [v2.8.2...v2.8.3](https://github.com/lmnt-com/lmnt-node/compare/v2.8.2...v2.8.3)
+
+### Chores
+
+* update CI script ([75205cf](https://github.com/lmnt-com/lmnt-node/commit/75205cf041386414f505c5edbed0bb1aa8638bde))
+
 ## 2.8.2 (2025-08-16)
 
 Full Changelog: [v2.8.1...v2.8.2](https://github.com/lmnt-com/lmnt-node/compare/v2.8.1...v2.8.2)
