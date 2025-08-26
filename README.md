@@ -26,7 +26,7 @@ const client = new Lmnt({
   apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' });
+const response = await client.speech.generate({ text: 'hello world.', voice: 'leah' });
 
 const content = await response.blob();
 console.log(content);
@@ -44,7 +44,7 @@ const client = new Lmnt({
   apiKey: process.env['LMNT_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'ava' };
+const params: Lmnt.SpeechGenerateParams = { text: 'hello world.', voice: 'leah' };
 const response: Response = await client.speech.generate(params);
 ```
 
@@ -67,17 +67,17 @@ import Lmnt, { toFile } from 'lmnt-node';
 const client = new Lmnt();
 
 // If you have access to Node `fs` we recommend using `fs.createReadStream()`:
-await client.speech.convert({ audio: fs.createReadStream('/path/to/file'), voice: 'ava' });
+await client.speech.convert({ audio: fs.createReadStream('/path/to/file'), voice: 'leah' });
 
 // Or if you have the web `File` API you can pass a `File` instance:
-await client.speech.convert({ audio: new File(['my bytes'], 'file'), voice: 'ava' });
+await client.speech.convert({ audio: new File(['my bytes'], 'file'), voice: 'leah' });
 
 // You can also pass a `fetch` `Response`:
-await client.speech.convert({ audio: await fetch('https://somesite/file'), voice: 'ava' });
+await client.speech.convert({ audio: await fetch('https://somesite/file'), voice: 'leah' });
 
 // Finally, if none of the above are convenient, you can use our `toFile` helper:
-await client.speech.convert({ audio: await toFile(Buffer.from('my bytes'), 'file'), voice: 'ava' });
-await client.speech.convert({ audio: await toFile(new Uint8Array([0, 1, 2]), 'file'), voice: 'ava' });
+await client.speech.convert({ audio: await toFile(Buffer.from('my bytes'), 'file'), voice: 'leah' });
+await client.speech.convert({ audio: await toFile(new Uint8Array([0, 1, 2]), 'file'), voice: 'leah' });
 ```
 
 ## Handling errors
@@ -88,7 +88,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' }).catch(async (err) => {
+const response = await client.speech.generate({ text: 'hello world.', voice: 'leah' }).catch(async (err) => {
   if (err instanceof Lmnt.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -128,7 +128,7 @@ const client = new Lmnt({
 });
 
 // Or, configure per-request:
-await client.speech.generate({ text: 'hello world.', voice: 'ava' }, {
+await client.speech.generate({ text: 'hello world.', voice: 'leah' }, {
   maxRetries: 5,
 });
 ```
@@ -145,7 +145,7 @@ const client = new Lmnt({
 });
 
 // Override per-request:
-await client.speech.generate({ text: 'hello world.', voice: 'ava' }, {
+await client.speech.generate({ text: 'hello world.', voice: 'leah' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -166,12 +166,12 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Lmnt();
 
-const response = await client.speech.generate({ text: 'hello world.', voice: 'ava' }).asResponse();
+const response = await client.speech.generate({ text: 'hello world.', voice: 'leah' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: response, response: raw } = await client.speech
-  .generate({ text: 'hello world.', voice: 'ava' })
+  .generate({ text: 'hello world.', voice: 'leah' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response);
@@ -279,7 +279,7 @@ const client = new Lmnt({
 
 // Override per-request:
 await client.speech.generate(
-  { text: 'hello world.', voice: 'ava' },
+  { text: 'hello world.', voice: 'leah' },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },
