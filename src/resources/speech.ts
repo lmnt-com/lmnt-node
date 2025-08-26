@@ -13,7 +13,7 @@ export class Speech extends APIResource {
    * ```ts
    * const response = await client.speech.convert({
    *   audio: fs.createReadStream('path/to/file'),
-   *   voice: 'ava',
+   *   voice: 'leah',
    * });
    *
    * const content = await response.blob();
@@ -44,7 +44,7 @@ export class Speech extends APIResource {
    * ```ts
    * const response = await client.speech.generate({
    *   text: 'hello world.',
-   *   voice: 'ava',
+   *   voice: 'leah',
    * });
    *
    * const content = await response.blob();
@@ -70,7 +70,7 @@ export class Speech extends APIResource {
    * ```ts
    * const response = await client.speech.generateDetailed({
    *   text: 'hello world.',
-   *   voice: 'ava',
+   *   voice: 'leah',
    * });
    * ```
    */

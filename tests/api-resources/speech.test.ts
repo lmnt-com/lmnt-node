@@ -12,7 +12,7 @@ describe('resource speech', () => {
   test('convert: required and optional params', async () => {
     const response = await client.speech.convert({
       audio: await toFile(Buffer.from('# my file contents'), 'README.md'),
-      voice: 'ava',
+      voice: 'leah',
       format: 'aac',
       language: 'auto',
       sample_rate: 8000,
@@ -22,7 +22,7 @@ describe('resource speech', () => {
   test('generate: required and optional params', async () => {
     const response = await client.speech.generate({
       text: 'hello world.',
-      voice: 'ava',
+      voice: 'leah',
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
@@ -34,7 +34,7 @@ describe('resource speech', () => {
   });
 
   test('generateDetailed: only required params', async () => {
-    const responsePromise = client.speech.generateDetailed({ text: 'hello world.', voice: 'ava' });
+    const responsePromise = client.speech.generateDetailed({ text: 'hello world.', voice: 'leah' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -47,7 +47,7 @@ describe('resource speech', () => {
   test('generateDetailed: required and optional params', async () => {
     const response = await client.speech.generateDetailed({
       text: 'hello world.',
-      voice: 'ava',
+      voice: 'leah',
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
