@@ -148,16 +148,15 @@ export interface SpeechConvertParams {
    * Streamable formats:
    *
    * - `mp3`: 96kbps MP3 audio.
-   * - `raw`: 32-bit floating point raw audio.
    * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
    * - `webm`: WebM format with Opus audio codec.
-   *
-   * Non-streamable formats:
-   *
+   * - `pcm_s16le`: PCM signed 16-bit little-endian audio.
+   * - `pcm_f32le`: PCM 32-bit floating-point little-endian audio. Non-streamable
+   *   formats:
    * - `aac`: AAC audio codec.
    * - `wav`: 16-bit PCM audio in WAV container.
    */
-  format?: 'aac' | 'mp3' | 'raw' | 'ulaw' | 'wav' | 'webm';
+  format?: 'aac' | 'mp3' | 'ulaw' | 'wav' | 'webm' | 'pcm_s16le' | 'pcm_f32le';
 
   /**
    * The language of the source audio. Two letter ISO 639-1 code.
@@ -214,16 +213,15 @@ export interface SpeechGenerateParams {
    * Streamable formats:
    *
    * - `mp3`: 96kbps MP3 audio.
-   * - `raw`: 32-bit floating point raw audio.
    * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
    * - `webm`: WebM format with Opus audio codec.
-   *
-   * Non-streamable formats:
-   *
+   * - `pcm_s16le`: PCM signed 16-bit little-endian audio.
+   * - `pcm_f32le`: PCM 32-bit floating-point little-endian audio. Non-streamable
+   *   formats:
    * - `aac`: AAC audio codec.
    * - `wav`: 16-bit PCM audio in WAV container.
    */
-  format?: 'aac' | 'mp3' | 'raw' | 'ulaw' | 'wav' | 'webm';
+  format?: 'aac' | 'mp3' | 'ulaw' | 'wav' | 'webm' | 'pcm_s16le' | 'pcm_f32le';
 
   /**
    * The desired language. Two letter ISO 639-1 code. Defaults to auto language
@@ -307,16 +305,15 @@ export interface SpeechGenerateDetailedParams {
    * Streamable formats:
    *
    * - `mp3`: 96kbps MP3 audio.
-   * - `raw`: 32-bit floating point raw audio.
    * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
    * - `webm`: WebM format with Opus audio codec.
-   *
-   * Non-streamable formats:
-   *
+   * - `pcm_s16le`: PCM signed 16-bit little-endian audio.
+   * - `pcm_f32le`: PCM 32-bit floating-point little-endian audio. Non-streamable
+   *   formats:
    * - `aac`: AAC audio codec.
    * - `wav`: 16-bit PCM audio in WAV container.
    */
-  format?: 'aac' | 'mp3' | 'raw' | 'ulaw' | 'wav' | 'webm';
+  format?: 'aac' | 'mp3' | 'ulaw' | 'wav' | 'webm' | 'pcm_s16le' | 'pcm_f32le';
 
   /**
    * The desired language. Two letter ISO 639-1 code. Defaults to auto language
