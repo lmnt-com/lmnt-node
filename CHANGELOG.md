@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.9.0 (2025-08-27)
+
+Full Changelog: [v2.8.2...v2.9.0](https://github.com/lmnt-com/lmnt-node/compare/v2.8.2...v2.9.0)
+
+### Features
+
+* **api:** api update ([4341733](https://github.com/lmnt-com/lmnt-node/commit/43417339eb980daaa1383ac8a0ba8ba67ca7b4a0))
+* **api:** api update ([279b11a](https://github.com/lmnt-com/lmnt-node/commit/279b11a7a47eb1739e2968bbcf5b255779ded386))
+
+
+### Chores
+
+* update CI script ([75205cf](https://github.com/lmnt-com/lmnt-node/commit/75205cf041386414f505c5edbed0bb1aa8638bde))
+
 ## 2.8.2 (2025-08-16)
 
 Full Changelog: [v2.8.1...v2.8.2](https://github.com/lmnt-com/lmnt-node/compare/v2.8.1...v2.8.2)
