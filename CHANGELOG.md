@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.10.0 (2025-09-09)
+
+Full Changelog: [v2.9.0...v2.10.0](https://github.com/lmnt-com/lmnt-node/compare/v2.9.0...v2.10.0)
+
+### Features
+
+* **api:** api update ([59137ee](https://github.com/lmnt-com/lmnt-node/commit/59137ee7b933aaf6f671e10aa777146e3a196f65))
+
+
+### Bug Fixes
+
+* coerce nullable values to undefined ([e01cd14](https://github.com/lmnt-com/lmnt-node/commit/e01cd1417c0749b926aa9e8859de9241a6bccb40))
+
+
+### Chores
+
+* ci build action ([6b1624e](https://github.com/lmnt-com/lmnt-node/commit/6b1624e1e03aa4654c4b8879eb4b0bfa32ec54ac))
+
 ## 2.9.0 (2025-08-27)
 
 Full Changelog: [v2.8.2...v2.9.0](https://github.com/lmnt-com/lmnt-node/compare/v2.8.2...v2.9.0)
