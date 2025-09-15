@@ -226,7 +226,7 @@ export interface SpeechGenerateParams {
 
   /**
    * The desired language. Two letter ISO 639-1 code. Defaults to auto language
-   * detection.
+   * detection, but specifying the language is recommended for faster generation.
    */
   language?:
     | 'auto'
@@ -320,7 +320,7 @@ export interface SpeechGenerateDetailedParams {
 
   /**
    * The desired language. Two letter ISO 639-1 code. Defaults to auto language
-   * detection.
+   * detection, but specifying the language is recommended for faster generation.
    */
   language?:
     | 'auto'
