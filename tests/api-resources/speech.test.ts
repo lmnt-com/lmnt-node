@@ -23,6 +23,7 @@ describe('resource speech', () => {
     const response = await client.speech.generate({
       text: 'hello world.',
       voice: 'leah',
+      debug: true,
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
@@ -48,6 +49,7 @@ describe('resource speech', () => {
     const response = await client.speech.generateDetailed({
       text: 'hello world.',
       voice: 'leah',
+      debug: true,
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
