@@ -207,6 +207,12 @@ export interface SpeechGenerateParams {
   voice: string;
 
   /**
+   * When set to true, the generated speech will also be saved to your
+   * [clip library](https://app.lmnt.com/clips) in the LMNT playground.
+   */
+  debug?: boolean;
+
+  /**
    * The desired output format of the audio. If you are using a streaming endpoint,
    * you'll generate audio faster by selecting a streamable format since chunks are
    * encoded and returned as they're generated. For non-streamable formats, the
@@ -299,6 +305,12 @@ export interface SpeechGenerateDetailedParams {
    * `List voices` or `Voice info`.
    */
   voice: string;
+
+  /**
+   * When set to true, the generated speech will also be saved to your
+   * [clip library](https://app.lmnt.com/clips) in the LMNT playground.
+   */
+  debug?: boolean;
 
   /**
    * The desired output format of the audio. If you are using a streaming endpoint,
