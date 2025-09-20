@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.11.0 (2025-09-20)
+
+Full Changelog: [v2.10.0...v2.11.0](https://github.com/lmnt-com/lmnt-node/compare/v2.10.0...v2.11.0)
+
+### Features
+
+* **api:** api update ([ff62538](https://github.com/lmnt-com/lmnt-node/commit/ff62538615ef2ec19ffa6317e356a5b305551997))
+* **api:** api update ([b826c33](https://github.com/lmnt-com/lmnt-node/commit/b826c3335c4636f49f227ff83d4425e29054c3b5))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([d4ea28e](https://github.com/lmnt-com/lmnt-node/commit/d4ea28e28bbaeddaf9f2cb7640db80fea158b019))
+
 ## 2.10.0 (2025-09-09)
 
 Full Changelog: [v2.9.0...v2.10.0](https://github.com/lmnt-com/lmnt-node/compare/v2.9.0...v2.10.0)
