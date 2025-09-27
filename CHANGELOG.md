@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.11.1 (2025-09-27)
+
+Full Changelog: [v2.11.0...v2.11.1](https://github.com/lmnt-com/lmnt-node/compare/v2.11.0...v2.11.1)
+
+### Performance Improvements
+
+* faster formatting ([a8fedac](https://github.com/lmnt-com/lmnt-node/commit/a8fedac081ed1b0bc77f9bb241d666a1555cd5e7))
+
+
+### Chores
+
+* **internal:** codegen related update ([62bbc54](https://github.com/lmnt-com/lmnt-node/commit/62bbc543a0b9bac578b07050de569fadabb4224b))
+* **internal:** fix incremental formatting in some cases ([5384beb](https://github.com/lmnt-com/lmnt-node/commit/5384beb51473f5820f53c169568f757d8f990839))
+* **internal:** ignore .eslintcache ([4ddebe6](https://github.com/lmnt-com/lmnt-node/commit/4ddebe609ab9b9dd4e1917c71961f177697edf0a))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([a229a66](https://github.com/lmnt-com/lmnt-node/commit/a229a664afd1d0e74f8f5d7b23114ed5185640ab))
+
 ## 2.11.0 (2025-09-20)
 
 Full Changelog: [v2.10.0...v2.11.0](https://github.com/lmnt-com/lmnt-node/compare/v2.10.0...v2.11.0)
