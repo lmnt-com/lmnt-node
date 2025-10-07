@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.11.2 (2025-10-07)
+
+Full Changelog: [v2.11.1...v2.11.2](https://github.com/lmnt-com/lmnt-node/compare/v2.11.1...v2.11.2)
+
+### Chores
+
+* **internal:** remove .eslintcache ([7c0a5e5](https://github.com/lmnt-com/lmnt-node/commit/7c0a5e514da8ac98e0d1ca3e9d058af21e5c1130))
+* **internal:** use npm pack for build uploads ([00f524a](https://github.com/lmnt-com/lmnt-node/commit/00f524a1b07a146bed6af884e48e6c4dafce63ac))
+
 ## 2.11.1 (2025-09-27)
 
 Full Changelog: [v2.11.0...v2.11.1](https://github.com/lmnt-com/lmnt-node/compare/v2.11.0...v2.11.1)
