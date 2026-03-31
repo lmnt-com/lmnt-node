@@ -128,8 +128,14 @@ await client.speech.convert({ audio: new File(['my bytes'], 'file'), voice: 'lea
 await client.speech.convert({ audio: await fetch('https://somesite/file'), voice: 'leah' });
 
 // Finally, if none of the above are convenient, you can use our `toFile` helper:
-await client.speech.convert({ audio: await toFile(Buffer.from('my bytes'), 'file'), voice: 'leah' });
-await client.speech.convert({ audio: await toFile(new Uint8Array([0, 1, 2]), 'file'), voice: 'leah' });
+await client.speech.convert({
+  audio: await toFile(Buffer.from('my bytes'), 'file'),
+  voice: 'leah',
+});
+await client.speech.convert({
+  audio: await toFile(new Uint8Array([0, 1, 2]), 'file'),
+  voice: 'leah',
+});
 ```
 
 ## Handling errors
@@ -140,15 +146,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.speech.generate({ text: 'hello world.', voice: 'leah' }).catch(async (err) => {
-  if (err instanceof Lmnt.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const response = await client.speech
+  .generate({ text: 'hello world.', voice: 'leah' })
+  .catch(async (err) => {
+    if (err instanceof Lmnt.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
