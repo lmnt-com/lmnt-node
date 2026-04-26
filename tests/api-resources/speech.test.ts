@@ -11,7 +11,7 @@ const client = new Lmnt({
 describe('resource speech', () => {
   test('convert: required and optional params', async () => {
     const response = await client.speech.convert({
-      audio: await toFile(Buffer.from('# my file contents'), 'README.md'),
+      audio: await toFile(Buffer.from('Example data'), 'README.md'),
       voice: 'leah',
       format: 'aac',
       language: 'auto',

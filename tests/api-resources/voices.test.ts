@@ -13,7 +13,7 @@ describe('resource voices', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.voices.create({
       enhance: false,
-      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+      files: [await toFile(Buffer.from('Example data'), 'README.md')],
       name: 'new-voice',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -29,7 +29,7 @@ describe('resource voices', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.voices.create({
       enhance: false,
-      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+      files: [await toFile(Buffer.from('Example data'), 'README.md')],
       name: 'new-voice',
       description: 'description',
       gender: 'gender',
@@ -77,7 +77,12 @@ describe('resource voices', () => {
     await expect(
       client.voices.update(
         '123',
-        { description: 'description', gender: 'gender', name: 'name', starred: true },
+        {
+          description: 'description',
+          gender: 'gender',
+          name: 'name',
+          starred: true,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Lmnt.NotFoundError);
