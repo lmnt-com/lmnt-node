@@ -18,6 +18,5 @@ jobs:
         run: |
           bash ./bin/check-release-environment
         env:
-          NPM_TOKEN: ${{ secrets.LMNT_NPM_TOKEN || secrets.NPM_TOKEN }}
           RELEASE_PLEASE_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
