@@ -119,7 +119,6 @@ export class SpeechSession {
       language: options.language,
       sample_rate: options.sample_rate,
       send_extras: options.return_extras,
-      speed: options.speed,
       protocol_version: 2,
     });
   }
