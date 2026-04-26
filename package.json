@@ -27,7 +27,7 @@
     "fix": "./scripts/format"
   },
   "dependencies": {
-    "@types/node": "^18.11.18",
+    "@types/node": "^20.0.0",
     "@types/node-fetch": "^2.6.4",
     "abort-controller": "^3.0.0",
     "agentkeepalive": "^4.2.1",
