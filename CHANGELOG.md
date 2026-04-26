@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.11.2](https://github.com/lmnt-com/lmnt-node/compare/v2.11.1...v2.11.2) (2026-04-26)
+
+
+### Bug Fixes
+
+* drop unsupported speed param from session init ([3828179](https://github.com/lmnt-com/lmnt-node/commit/38281791a03b042d77a6372c6250bd2f748089a9))
+
+
+### Chores
+
+* bump minimum supported Node to 20 LTS ([11e9e3c](https://github.com/lmnt-com/lmnt-node/commit/11e9e3c8fffc83562c5f3a20e806fb66c102f668))
+* clean up deprecated files ([f3d42aa](https://github.com/lmnt-com/lmnt-node/commit/f3d42aa5d465bdf13fdb69b28b3476ad1388e922))
+* regenerate from carbonsteel preview build ([7f0861b](https://github.com/lmnt-com/lmnt-node/commit/7f0861becad6c743cf03741657213be46ba812b7))
+
 ## 2.11.1 (2025-09-27)
 
 Full Changelog: [v2.11.0...v2.11.1](https://github.com/lmnt-com/lmnt-node/compare/v2.11.0...v2.11.1)
