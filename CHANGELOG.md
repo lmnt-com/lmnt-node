@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.12.0 (2026-04-26)
+
+Full Changelog: [v2.11.1...v2.12.0](https://github.com/lmnt-com/lmnt-node/compare/v2.11.1...v2.12.0)
+
+### Features
+
+* **api:** api update ([288481b](https://github.com/lmnt-com/lmnt-node/commit/288481b683f7c2ba39f9e353f2b13a4a6ac1dd61))
+
+
+### Bug Fixes
+
+* drop unsupported speed param from session init ([3828179](https://github.com/lmnt-com/lmnt-node/commit/38281791a03b042d77a6372c6250bd2f748089a9))
+
+
+### Chores
+
+* **internal:** codegen related update ([ffc900c](https://github.com/lmnt-com/lmnt-node/commit/ffc900c32fb6fb8b2974d1a4b7eea8d1d66df452))
+* **internal:** codegen related update ([e97b790](https://github.com/lmnt-com/lmnt-node/commit/e97b79094e0c07cd6f5bd50b2dce340611d9bfc5))
+* **internal:** codegen related update ([c638401](https://github.com/lmnt-com/lmnt-node/commit/c6384012065ce06097ca87f76e073d3678c4f80e))
+* **internal:** use npm pack for build uploads ([e52bc38](https://github.com/lmnt-com/lmnt-node/commit/e52bc383a566d136ca6c6eefc377161d768a90a6))
+* regenerate from carbonsteel preview build ([7f0861b](https://github.com/lmnt-com/lmnt-node/commit/7f0861becad6c743cf03741657213be46ba812b7))
+* **tests:** bump steady to v0.20.2 ([f920fd0](https://github.com/lmnt-com/lmnt-node/commit/f920fd05a31910b28e0cb6605a3b64f5fe7ce0ee))
+
 ## 2.11.1 (2025-09-27)
 
 Full Changelog: [v2.11.0...v2.11.1](https://github.com/lmnt-com/lmnt-node/compare/v2.11.0...v2.11.1)
