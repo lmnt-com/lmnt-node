@@ -26,9 +26,7 @@ jobs:
           node-version: '20'
 
       - name: Upgrade npm to OIDC-capable version
-        run: |
-          npm install -g npm@latest
-          echo "npm: $(which npm) $(npm --version)"
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: |
