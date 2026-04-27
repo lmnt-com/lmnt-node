@@ -7,32 +7,6 @@ import { Sessions, SpeechSessionParams } from './sessions';
 
 export class Speech extends APIResource {
   /**
-   * Converts speech from one voice to another.
-   *
-   * @example
-   * ```ts
-   * const response = await client.speech.convert({
-   *   audio: fs.createReadStream('path/to/file'),
-   *   voice: 'leah',
-   * });
-   *
-   * const content = await response.blob();
-   * console.log(content);
-   * ```
-   */
-  convert(body: SpeechConvertParams, options?: Core.RequestOptions): Core.APIPromise<Response> {
-    return this._client.post(
-      '/v1/ai/speech/convert',
-      Core.multipartFormRequestOptions({
-        body,
-        ...options,
-        headers: { Accept: 'application/octet-stream', ...options?.headers },
-        __binaryResponse: true,
-      }),
-    );
-  }
-
-  /**
    * Generates speech from text and streams the audio as binary data chunks in
    * real-time as they are generated.
    *
@@ -124,74 +98,6 @@ export namespace SpeechGenerateDetailedResponse {
      */
     text: string;
   }
-}
-
-export interface SpeechConvertParams {
-  /**
-   * The audio file to be converted into a new voice. Specify source language using
-   * the `language` parameter. Acceptable formats: `wav`, `mp3`. Max file size: 1 MB.
-   */
-  audio: Core.Uploadable;
-
-  /**
-   * The voice id to convert the speech into. Voice ids can be retrieved by calls to
-   * `List voices` or `Voice info`.
-   */
-  voice: string;
-
-  /**
-   * The desired output format of the audio. If you are using a streaming endpoint,
-   * you'll generate audio faster by selecting a streamable format since chunks are
-   * encoded and returned as they're generated. For non-streamable formats, the
-   * entire audio will be synthesized before encoding.
-   *
-   * Streamable formats:
-   *
-   * - `mp3`: 96kbps MP3 audio.
-   * - `ulaw`: 8-bit G711 µ-law audio with a WAV header.
-   * - `webm`: WebM format with Opus audio codec.
-   * - `pcm_s16le`: PCM signed 16-bit little-endian audio.
-   * - `pcm_f32le`: PCM 32-bit floating-point little-endian audio.
-   *
-   * Non-streamable formats:
-   *
-   * - `aac`: AAC audio codec.
-   * - `wav`: 16-bit PCM audio in WAV container.
-   */
-  format?: 'aac' | 'mp3' | 'ulaw' | 'wav' | 'webm' | 'pcm_s16le' | 'pcm_f32le';
-
-  /**
-   * The language of the source audio. Two letter ISO 639-1 code.
-   */
-  language?:
-    | 'auto'
-    | 'ar'
-    | 'de'
-    | 'en'
-    | 'es'
-    | 'fr'
-    | 'hi'
-    | 'id'
-    | 'it'
-    | 'ja'
-    | 'ko'
-    | 'nl'
-    | 'pl'
-    | 'pt'
-    | 'ru'
-    | 'sv'
-    | 'th'
-    | 'tr'
-    | 'uk'
-    | 'ur'
-    | 'vi'
-    | 'zh';
-
-  /**
-   * The desired output sample rate in Hz. Defaults to `24000` for all formats except
-   * `mulaw` which defaults to `8000`.
-   */
-  sample_rate?: 8000 | 16000 | 24000;
 }
 
 export interface SpeechGenerateParams {
@@ -402,7 +308,6 @@ export interface SpeechGenerateDetailedParams {
 export declare namespace Speech {
   export {
     type SpeechGenerateDetailedResponse as SpeechGenerateDetailedResponse,
-    type SpeechConvertParams as SpeechConvertParams,
     type SpeechGenerateParams as SpeechGenerateParams,
     type SpeechGenerateDetailedParams as SpeechGenerateDetailedParams,
   };

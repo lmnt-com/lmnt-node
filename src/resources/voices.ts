@@ -60,6 +60,18 @@ export class Voices extends APIResource {
   }
 
   /**
+   * Deletes a voice and cancels any pending operations on it. Cannot be undone.
+   *
+   * @example
+   * ```ts
+   * const voice = await client.voices.delete('123');
+   * ```
+   */
+  delete(id: string, options?: Core.RequestOptions): Core.APIPromise<VoiceDeleteResponse> {
+    return this._client.delete(`/v1/ai/voice/${id}`, options);
+  }
+
+  /**
    * Returns a list of voices available to you.
    *
    * @example
@@ -77,18 +89,6 @@ export class Voices extends APIResource {
       return this.list({}, query);
     }
     return this._client.get('/v1/ai/voice/list', { query, ...options });
-  }
-
-  /**
-   * Deletes a voice and cancels any pending operations on it. Cannot be undone.
-   *
-   * @example
-   * ```ts
-   * const voice = await client.voices.delete('123');
-   * ```
-   */
-  delete(id: string, options?: Core.RequestOptions): Core.APIPromise<VoiceDeleteResponse> {
-    return this._client.delete(`/v1/ai/voice/${id}`, options);
   }
 }
 
@@ -150,11 +150,11 @@ export interface VoiceUpdateResponse {
   voice: Voice;
 }
 
-export type VoiceListResponse = Array<Voice>;
-
 export interface VoiceDeleteResponse {
   success: boolean;
 }
+
+export type VoiceListResponse = Array<Voice>;
 
 export interface VoiceCreateParams {
   /**
@@ -227,8 +227,8 @@ export declare namespace Voices {
   export {
     type Voice as Voice,
     type VoiceUpdateResponse as VoiceUpdateResponse,
-    type VoiceListResponse as VoiceListResponse,
     type VoiceDeleteResponse as VoiceDeleteResponse,
+    type VoiceListResponse as VoiceListResponse,
     type VoiceCreateParams as VoiceCreateParams,
     type VoiceUpdateParams as VoiceUpdateParams,
     type VoiceListParams as VoiceListParams,
