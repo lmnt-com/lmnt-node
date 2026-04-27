@@ -116,17 +116,17 @@ import Lmnt, { toFile } from 'lmnt-node';
 const client = new Lmnt();
 
 // If you have access to Node `fs` we recommend using `fs.createReadStream()`:
-await client.speech.convert({ audio: fs.createReadStream('/path/to/file'), voice: 'leah' });
+await client.voices.create({ name: 'new-voice', files: [fs.createReadStream('/path/to/file')] });
 
 // Or if you have the web `File` API you can pass a `File` instance:
-await client.speech.convert({ audio: new File(['my bytes'], 'file'), voice: 'leah' });
+await client.voices.create({ name: 'new-voice', files: [new File(['my bytes'], 'file')] });
 
 // You can also pass a `fetch` `Response`:
-await client.speech.convert({ audio: await fetch('https://somesite/file'), voice: 'leah' });
+await client.voices.create({ name: 'new-voice', files: [await fetch('https://somesite/file')] });
 
 // Finally, if none of the above are convenient, you can use our `toFile` helper:
-await client.speech.convert({ audio: await toFile(Buffer.from('my bytes'), 'file'), voice: 'leah' });
-await client.speech.convert({ audio: await toFile(new Uint8Array([0, 1, 2]), 'file'), voice: 'leah' });
+await client.voices.create({ name: 'new-voice', files: [await toFile(Buffer.from('my bytes'), 'file')] });
+await client.voices.create({ name: 'new-voice', files: [await toFile(new Uint8Array([0, 1, 2]), 'file')] });
 ```
 
 ## Handling errors
