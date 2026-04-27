@@ -83,6 +83,24 @@ describe('resource voices', () => {
     ).rejects.toThrow(Lmnt.NotFoundError);
   });
 
+  test('delete', async () => {
+    const responsePromise = client.voices.delete('123');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('delete: request options instead of params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.voices.delete('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
+  });
+
   test('list', async () => {
     const responsePromise = client.voices.list();
     const rawResponse = await responsePromise.asResponse();
@@ -106,23 +124,5 @@ describe('resource voices', () => {
     await expect(
       client.voices.list({ owner: 'owner', starred: 'starred' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Lmnt.NotFoundError);
-  });
-
-  test('delete', async () => {
-    const responsePromise = client.voices.delete('123');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('delete: request options instead of params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.delete('123', { path: '/_stainless_unknown_path' })).rejects.toThrow(
-      Lmnt.NotFoundError,
-    );
   });
 });

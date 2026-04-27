@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-04-26T05:42:10Z",
-  "spec_sha": "b8435ec93cccd280:510635fad1875bc4",
+  "generated_at": "2026-04-27T22:51:06Z",
+  "spec_sha": "035a7c4d77945565:510635fad1875bc4",
   "files": [
     "api.md",
     "src/_shims/MultipartBody.ts",

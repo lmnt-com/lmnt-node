@@ -8,7 +8,6 @@ import * as API from './resources/index';
 import { AccountRetrieveResponse, Accounts } from './resources/accounts';
 import {
   Speech,
-  SpeechConvertParams,
   SpeechGenerateDetailedParams,
   SpeechGenerateDetailedResponse,
   SpeechGenerateParams,
@@ -198,7 +197,6 @@ export declare namespace Lmnt {
   export {
     Speech as Speech,
     type SpeechGenerateDetailedResponse as SpeechGenerateDetailedResponse,
-    type SpeechConvertParams as SpeechConvertParams,
     type SpeechGenerateParams as SpeechGenerateParams,
     type SpeechGenerateDetailedParams as SpeechGenerateDetailedParams,
   };
@@ -211,8 +209,8 @@ export declare namespace Lmnt {
     Voices as Voices,
     type Voice as Voice,
     type VoiceUpdateResponse as VoiceUpdateResponse,
-    type VoiceListResponse as VoiceListResponse,
     type VoiceDeleteResponse as VoiceDeleteResponse,
+    type VoiceListResponse as VoiceListResponse,
     type VoiceCreateParams as VoiceCreateParams,
     type VoiceUpdateParams as VoiceUpdateParams,
     type VoiceListParams as VoiceListParams,

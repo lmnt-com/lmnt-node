@@ -4,7 +4,6 @@ export { Accounts, type AccountRetrieveResponse } from './accounts';
 export {
   Speech,
   type SpeechGenerateDetailedResponse,
-  type SpeechConvertParams,
   type SpeechGenerateParams,
   type SpeechGenerateDetailedParams,
 } from './speech';
@@ -13,8 +12,8 @@ export {
   Voices,
   type Voice,
   type VoiceUpdateResponse,
-  type VoiceListResponse,
   type VoiceDeleteResponse,
+  type VoiceListResponse,
   type VoiceCreateParams,
   type VoiceUpdateParams,
   type VoiceListParams,
