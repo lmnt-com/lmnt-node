@@ -5,7 +5,6 @@ import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
-import { AccountRetrieveResponse, Accounts } from './resources/accounts';
 import {
   Speech,
   SpeechGenerateDetailedParams,
@@ -23,6 +22,7 @@ import {
   VoiceUpdateResponse,
   Voices,
 } from './resources/voices';
+import { AccountRetrieveResponse, Accounts } from './resources/accounts';
 
 export interface ClientOptions {
   /**
@@ -141,8 +141,8 @@ export class Lmnt extends Core.APIClient {
   }
 
   speech: API.Speech = new API.Speech(this);
-  accounts: API.Accounts = new API.Accounts(this);
   voices: API.Voices = new API.Voices(this);
+  accounts: API.Accounts = new API.Accounts(this);
 
   /**
    * Check whether the base URL is set to its default.
@@ -188,8 +188,8 @@ export class Lmnt extends Core.APIClient {
 }
 
 Lmnt.Speech = Speech;
-Lmnt.Accounts = Accounts;
 Lmnt.Voices = Voices;
+Lmnt.Accounts = Accounts;
 
 export declare namespace Lmnt {
   export type RequestOptions = Core.RequestOptions;
@@ -203,8 +203,6 @@ export declare namespace Lmnt {
 
   export { Sessions as Sessions, type SpeechSessionParams as SpeechSessionParams };
 
-  export { Accounts as Accounts, type AccountRetrieveResponse as AccountRetrieveResponse };
-
   export {
     Voices as Voices,
     type Voice as Voice,
@@ -215,6 +213,8 @@ export declare namespace Lmnt {
     type VoiceUpdateParams as VoiceUpdateParams,
     type VoiceListParams as VoiceListParams,
   };
+
+  export { Accounts as Accounts, type AccountRetrieveResponse as AccountRetrieveResponse };
 }
 
 export { toFile, fileFromPath } from './uploads';
