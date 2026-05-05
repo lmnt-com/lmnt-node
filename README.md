@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/lmnt-node.svg)](https://npmjs.org/package/lmnt-node)
 
-The LMNT TypeScript SDK provides convenient access to the LMNT API from server-side TypeScript applications.
+The LMNT TypeScript SDK provides convenient access to the [LMNT API](https://docs.lmnt.com/api/) from server-side TypeScript applications.
 
 ## Documentation
 
