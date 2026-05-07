@@ -4,6 +4,7 @@ import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
 import * as Uploads from './uploads';
+import { LMNT_API_VERSION } from './version';
 import * as API from './resources/index';
 import {
   Speech,
@@ -158,6 +159,7 @@ export class Lmnt extends Core.APIClient {
   protected override defaultHeaders(opts: Core.FinalRequestOptions): Core.Headers {
     return {
       ...super.defaultHeaders(opts),
+      'lmnt-version': LMNT_API_VERSION,
       ...this._options.defaultHeaders,
     };
   }

@@ -11,21 +11,23 @@ const client = new Lmnt({
 describe('resource speech', () => {
   test('generate: required and optional params', async () => {
     const response = await client.speech.generate({
-      text: 'hello world.',
+      text: "Uhh, did you see the weather in Palo Alto tomorrow? Yeah, can't believe it's gonna rain, dude. Like what?",
       voice: 'leah',
       debug: true,
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
       sample_rate: 8000,
-      seed: 0,
       temperature: 0,
       top_p: 0,
     });
   });
 
   test('generateDetailed: only required params', async () => {
-    const responsePromise = client.speech.generateDetailed({ text: 'hello world.', voice: 'leah' });
+    const responsePromise = client.speech.generateDetailed({
+      text: "Uhh, did you see the weather in Palo Alto tomorrow? Yeah, can't believe it's gonna rain, dude. Like what?",
+      voice: 'leah',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -37,15 +39,14 @@ describe('resource speech', () => {
 
   test('generateDetailed: required and optional params', async () => {
     const response = await client.speech.generateDetailed({
-      text: 'hello world.',
+      text: "Uhh, did you see the weather in Palo Alto tomorrow? Yeah, can't believe it's gonna rain, dude. Like what?",
       voice: 'leah',
       debug: true,
       format: 'aac',
       language: 'auto',
       model: 'blizzard',
-      return_durations: true,
+      return_timestamps: true,
       sample_rate: 8000,
-      seed: 0,
       temperature: 0,
       top_p: 0,
     });

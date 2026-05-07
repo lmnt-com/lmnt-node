@@ -17,7 +17,7 @@ export class Speech extends APIResource {
    * @example
    * ```ts
    * const response = await client.speech.generate({
-   *   text: 'hello world.',
+   *   text: 'Uhh, did you see the weather in Palo Alto tomorrow? Yeah, can\'t believe it\'s gonna rain, dude. Like what?',
    *   voice: 'leah',
    * });
    *
@@ -36,14 +36,14 @@ export class Speech extends APIResource {
 
   /**
    * Generates speech from text and returns a JSON object that contains a
-   * **base64-encoded audio string** and optionally word-level durations
-   * (timestamps). This endpoint waits for the entire synthesis before responding, so
-   * it is not ideal for latency-sensitive applications.
+   * base64-encoded audio string and optionally word-level timestamps. This endpoint
+   * waits for all speech to be generated before responding, so it is not ideal for
+   * latency-sensitive applications.
    *
    * @example
    * ```ts
    * const response = await client.speech.generateDetailed({
-   *   text: 'hello world.',
+   *   text: 'Uhh, did you see the weather in Palo Alto tomorrow? Yeah, can\'t believe it\'s gonna rain, dude. Like what?',
    *   voice: 'leah',
    * });
    * ```
@@ -66,35 +66,26 @@ export interface SpeechGenerateDetailedResponse {
   audio: string;
 
   /**
-   * The seed used to generate this speech; can be used to replicate this output take
-   * (assuming the same text is resynthsized with this seed number,
-   * [see here](http://docs.lmnt.com/speech/seed) for more details).
+   * An array describing where each generated input element (words and non-words like
+   * spaces, punctuation, etc.) falls in the audio.
    */
-  seed: number;
-
-  /**
-   * A JSON object outlining the spoken duration of each synthesized input element
-   * (words and non-words like spaces, punctuation, etc.). See an
-   * [example of this object](https://imgur.com/Uw6qNzY.png) for the input string
-   * "Hello world!"
-   */
-  durations?: Array<SpeechGenerateDetailedResponse.Duration>;
+  timestamps?: Array<SpeechGenerateDetailedResponse.Timestamp>;
 }
 
 export namespace SpeechGenerateDetailedResponse {
-  export interface Duration {
+  export interface Timestamp {
     /**
-     * The spoken duration of each synthesized input element, in seconds.
+     * The spoken duration of the generated input element, in seconds.
      */
     duration: number;
 
     /**
-     * The start time of each synthsized input element, in seconds.
+     * The start time of the generated input element, in seconds.
      */
     start: number;
 
     /**
-     * The synthesized input elements; beginning and ending with a short silence.
+     * The generated input element; beginning and ending with a short silence.
      */
     text: string;
   }
@@ -102,7 +93,8 @@ export namespace SpeechGenerateDetailedResponse {
 
 export interface SpeechGenerateParams {
   /**
-   * The text to synthesize; max 5000 characters per request (including spaces).
+   * The text to generate speech from; max 5000 characters per request (including
+   * spaces).
    */
   text: string;
 
@@ -121,8 +113,8 @@ export interface SpeechGenerateParams {
   /**
    * The desired output format of the audio. If you are using a streaming endpoint,
    * you'll generate audio faster by selecting a streamable format since chunks are
-   * encoded and returned as they're generated. For non-streamable formats, the
-   * entire audio will be synthesized before encoding.
+   * encoded and returned as they're generated. For non-streamable formats, all
+   * speech will be generated before encoding.
    *
    * Streamable formats:
    *
@@ -146,20 +138,30 @@ export interface SpeechGenerateParams {
   language?:
     | 'auto'
     | 'ar'
+    | 'as'
+    | 'bn'
+    | 'cs'
+    | 'da'
     | 'de'
     | 'en'
     | 'es'
+    | 'fi'
     | 'fr'
     | 'hi'
     | 'id'
     | 'it'
     | 'ja'
     | 'ko'
+    | 'ml'
+    | 'mr'
     | 'nl'
     | 'pl'
     | 'pt'
     | 'ru'
+    | 'sk'
     | 'sv'
+    | 'ta'
+    | 'te'
     | 'th'
     | 'tr'
     | 'uk'
@@ -168,8 +170,8 @@ export interface SpeechGenerateParams {
     | 'zh';
 
   /**
-   * The model to use for synthesis. Learn more about models
-   * [here](https://docs.lmnt.com/guides/models).
+   * The model to use for speech generation. Learn more about models
+   * [here](https://docs.lmnt.com/models/overview).
    */
   model?: 'blizzard';
 
@@ -178,11 +180,6 @@ export interface SpeechGenerateParams {
    * `mulaw` which defaults to `8000`.
    */
   sample_rate?: 8000 | 16000 | 24000;
-
-  /**
-   * Seed used to specify a different take; defaults to random
-   */
-  seed?: number;
 
   /**
    * Influences how expressive and emotionally varied the speech becomes. Lower
@@ -202,7 +199,8 @@ export interface SpeechGenerateParams {
 
 export interface SpeechGenerateDetailedParams {
   /**
-   * The text to synthesize; max 5000 characters per request (including spaces).
+   * The text to generate speech from; max 5000 characters per request (including
+   * spaces).
    */
   text: string;
 
@@ -221,8 +219,8 @@ export interface SpeechGenerateDetailedParams {
   /**
    * The desired output format of the audio. If you are using a streaming endpoint,
    * you'll generate audio faster by selecting a streamable format since chunks are
-   * encoded and returned as they're generated. For non-streamable formats, the
-   * entire audio will be synthesized before encoding.
+   * encoded and returned as they're generated. For non-streamable formats, all
+   * speech will be generated before encoding.
    *
    * Streamable formats:
    *
@@ -246,20 +244,30 @@ export interface SpeechGenerateDetailedParams {
   language?:
     | 'auto'
     | 'ar'
+    | 'as'
+    | 'bn'
+    | 'cs'
+    | 'da'
     | 'de'
     | 'en'
     | 'es'
+    | 'fi'
     | 'fr'
     | 'hi'
     | 'id'
     | 'it'
     | 'ja'
     | 'ko'
+    | 'ml'
+    | 'mr'
     | 'nl'
     | 'pl'
     | 'pt'
     | 'ru'
+    | 'sk'
     | 'sv'
+    | 'ta'
+    | 'te'
     | 'th'
     | 'tr'
     | 'uk'
@@ -268,26 +276,22 @@ export interface SpeechGenerateDetailedParams {
     | 'zh';
 
   /**
-   * The model to use for synthesis. Learn more about models
-   * [here](https://docs.lmnt.com/guides/models).
+   * The model to use for speech generation. Learn more about models
+   * [here](https://docs.lmnt.com/models/overview).
    */
   model?: 'blizzard';
 
   /**
-   * If set as `true`, response will contain a durations object.
+   * If set as `true`, the response will contain a `timestamps` array describing
+   * where each input element falls in the generated audio.
    */
-  return_durations?: boolean;
+  return_timestamps?: boolean;
 
   /**
    * The desired output sample rate in Hz. Defaults to `24000` for all formats except
    * `mulaw` which defaults to `8000`.
    */
   sample_rate?: 8000 | 16000 | 24000;
-
-  /**
-   * Seed used to specify a different take; defaults to random
-   */
-  seed?: number;
 
   /**
    * Influences how expressive and emotionally varied the speech becomes. Lower
