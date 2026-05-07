@@ -12,8 +12,7 @@ export class Voices extends APIResource {
    * @example
    * ```ts
    * const voice = await client.voices.create({
-   *   enhance: false,
-   *   files: [fs.createReadStream('path/to/file')],
+   *   file: fs.createReadStream('path/to/file'),
    *   name: 'new-voice',
    * });
    * ```
@@ -138,6 +137,11 @@ export interface Voice {
   starred?: boolean;
 
   /**
+   * Tags attached to this voice.
+   */
+  tags?: Array<string>;
+
+  /**
    * The method by which this voice was created: `instant` or `professional`.
    */
   type?: 'instant' | 'professional';
@@ -158,20 +162,12 @@ export type VoiceListResponse = Array<Voice>;
 
 export interface VoiceCreateParams {
   /**
-   * For unclean audio with background noise, applies processing to attempt to
-   * improve quality. Default is `false` as this can also degrade quality in some
-   * circumstances.
-   */
-  enhance: boolean;
-
-  /**
-   * One or more input audio files to train the voice in the form of binary `wav`,
-   * `mp3`, `mp4`, `m4a`, or `webm` attachments.
+   * The input audio file to train the voice with, as a binary `wav`, `mp3`, `mp4`,
+   * `m4a`, or `webm` attachment.
    *
-   * - Max attached files: 20.
-   * - Max total file size: 250 MB.
+   * - Max file size: 250 MB.
    */
-  files: Array<Core.Uploadable>;
+  file: Core.Uploadable;
 
   /**
    * The display name for this voice
@@ -187,6 +183,11 @@ export interface VoiceCreateParams {
    * A tag describing the gender of this voice. Has no effect on voice creation.
    */
   gender?: string;
+
+  /**
+   * A list of tags to attach to this voice.
+   */
+  tags?: Array<string>;
 }
 
 export interface VoiceUpdateParams {
@@ -209,6 +210,11 @@ export interface VoiceUpdateParams {
    * If `true`, adds this voice to your starred list.
    */
   starred?: boolean;
+
+  /**
+   * Replaces the tags attached to this voice with the given list.
+   */
+  tags?: Array<string>;
 }
 
 export interface VoiceListParams {

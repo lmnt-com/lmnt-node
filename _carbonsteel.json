@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "generated_at": "2026-04-27T23:27:14Z",
-  "spec_sha": "04a10d47ed2270bd:510635fad1875bc4",
+  "version": "1.1",
+  "generated_at": "2026-05-07T23:13:22Z",
+  "spec_sha": "dd2556942628d8b4:63d381c5e2045349",
   "files": [
     "api.md",
     "src/_shims/MultipartBody.ts",
@@ -32,6 +32,7 @@
     "src/_shims/web-types.d.ts",
     "src/_shims/web-types.js",
     "src/_shims/web-types.mjs",
+    "src/_websocketRuntime.ts",
     "src/core.ts",
     "src/error.ts",
     "src/index.ts",
@@ -45,6 +46,7 @@
     "src/uploads.ts",
     "src/version.ts",
     "tests/api-resources/accounts.test.ts",
+    "tests/api-resources/sessions.test.ts",
     "tests/api-resources/speech.test.ts",
     "tests/api-resources/voices.test.ts",
     "tests/form.test.ts",
