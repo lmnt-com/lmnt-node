@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.12.0](https://github.com/lmnt-com/lmnt-node/compare/v2.11.2...v2.12.0) (2026-05-09)
+
+
+### Features
+
+* **api:** regenerate for LMNT API 1.1 ([d369090](https://github.com/lmnt-com/lmnt-node/commit/d369090f32b2a9d39d379cb0ea5615050ece69f4))
+* **api:** speech session improvements for API 1.1 ([e113410](https://github.com/lmnt-com/lmnt-node/commit/e11341056f5a0f8e79e62455531a9642eb960499))
+
+
+### Bug Fixes
+
+* pin npm publish registry ([8ffb2d8](https://github.com/lmnt-com/lmnt-node/commit/8ffb2d85053988122cffb7ab1dd3f6cdb68b4a1a))
+
+
+### Chores
+
+* **examples:** drop stale speech.convert references ([d3b9acb](https://github.com/lmnt-com/lmnt-node/commit/d3b9acb452042f02d55a017dc6e057d6fd1530a5))
+* regenerate sdk ([ac364d1](https://github.com/lmnt-com/lmnt-node/commit/ac364d1ec026aa61f382e29739fc0f2ffcee419f))
+* regenerate sdk ([438e98b](https://github.com/lmnt-com/lmnt-node/commit/438e98b40096f91075b98b561a8664f4ccd14ccf))
+
+
+### Documentation
+
+* link LMNT API reference in README intro ([4b97641](https://github.com/lmnt-com/lmnt-node/commit/4b9764165f4f52bb24958393bc9b40c34d77b117))
+* rebrand to LMNT TypeScript SDK ([30dd5b8](https://github.com/lmnt-com/lmnt-node/commit/30dd5b82ced5afd18557e7dff291d631c010b47f))
+* refresh speech session descriptions ([ff18ab9](https://github.com/lmnt-com/lmnt-node/commit/ff18ab9e31daf475913e0e69ef9671e6014f6ec1))
+* streamline README and drop examples/ ([430760f](https://github.com/lmnt-com/lmnt-node/commit/430760fc63d95936f12531a82f269988b220c265))
+
 ## [2.11.2](https://github.com/lmnt-com/lmnt-node/compare/v2.11.1...v2.11.2) (2026-04-26)
 
 
