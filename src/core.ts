@@ -85,7 +85,7 @@ async function defaultParseResponse<T>(props: APIResponseProps): Promise<T> {
 }
 
 /**
- * Attaches `_request_id` (read from the `request-id` response header) as a non-enumerable
+ * Attaches `request_id` (read from the `request-id` response header) as a non-enumerable
  * property on object responses. Skipped for arrays and non-objects (callers can read the
  * `request-id` header from the underlying `Response` directly via `.withResponse()`).
  */
@@ -93,16 +93,16 @@ export function addRequestID<T>(value: T, response: Response): T {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     return value;
   }
-  return Object.defineProperty(value, '_request_id', {
+  return Object.defineProperty(value, 'request_id', {
     value: response.headers.get('request-id'),
     enumerable: false,
   }) as T;
 }
 
-/** Optional `_request_id` field added to plain-object responses by `addRequestID`. */
+/** `request_id` field added to plain-object responses by `addRequestID`. */
 export type WithRequestID<T> =
   T extends Array<any> | Response ? T
-  : T extends Record<string, any> ? T & { _request_id?: string | null }
+  : T extends Record<string, any> ? T & { request_id: string | null }
   : T;
 
 /**

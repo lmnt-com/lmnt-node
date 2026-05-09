@@ -1,11 +1,7 @@
-// Vendored by carbonsteel. DO NOT EDIT here in the SDK; edit
-// tool/carbonsteel/src/lmnt/tool/carbonsteel/codegen/node/vendor/src/_websocketRuntime.ts
-// in the monorepo and re-run carbonsteel.
-//
 // Spec-agnostic WebSocket session helpers shared by the generated SpeechSession.
 // MessageQueue: simple async resolver/buffer pair so the generated session can
 // expose an `AsyncIterator` while the underlying WebSocket pushes via callbacks.
-// processAudioData: normalises Blob/Buffer payloads to a uniform binary type.
+// processBinaryFrame: normalises Blob/Buffer payloads to a uniform binary type.
 
 import { Buffer } from 'buffer';
 import { LmntError } from './error';
@@ -47,12 +43,12 @@ export class MessageQueue {
   }
 }
 
-export async function processAudioData(audioData: Blob | Buffer): Promise<ArrayBuffer | Buffer> {
-  if (audioData instanceof Blob) {
-    return await audioData.arrayBuffer();
-  } else if (audioData instanceof Buffer) {
-    return audioData;
+export async function processBinaryFrame(frame: Blob | Buffer): Promise<ArrayBuffer | Buffer> {
+  if (frame instanceof Blob) {
+    return await frame.arrayBuffer();
+  } else if (frame instanceof Buffer) {
+    return frame;
   } else {
-    throw new LmntError(`Unexpected message type received from server: ${audioData}`);
+    throw new LmntError(`Unexpected message type received from server: ${frame}`);
   }
 }

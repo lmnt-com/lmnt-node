@@ -26,7 +26,7 @@ export class Voices extends APIResource {
    *
    * @example
    * ```ts
-   * const voice = await client.voices.retrieve('123');
+   * const voice = await client.voices.retrieve('9c4a8f2b3e1d7c40');
    * ```
    */
   retrieve(id: string, options?: Core.RequestOptions): Core.APIPromise<Voice> {
@@ -38,7 +38,7 @@ export class Voices extends APIResource {
    *
    * @example
    * ```ts
-   * const voice = await client.voices.update('123');
+   * const voice = await client.voices.update('9c4a8f2b3e1d7c40');
    * ```
    */
   update(
@@ -63,7 +63,7 @@ export class Voices extends APIResource {
    *
    * @example
    * ```ts
-   * const voice = await client.voices.delete('123');
+   * const voice = await client.voices.delete('9c4a8f2b3e1d7c40');
    * ```
    */
   delete(id: string, options?: Core.RequestOptions): Core.APIPromise<VoiceDeleteResponse> {
@@ -142,9 +142,9 @@ export interface Voice {
   tags?: Array<string>;
 
   /**
-   * The method by which this voice was created: `instant` or `professional`.
+   * The method by which this voice was created. Always `instant`.
    */
-  type?: 'instant' | 'professional';
+  type?: 'instant';
 }
 
 export interface VoiceUpdateResponse {

@@ -48,12 +48,12 @@ describe('resource sessions', () => {
     FakeWebSocket.instances = [];
   });
 
-  test('initMessageOperation', async () => {
+  test('initOperation', async () => {
     const session = client.speech.sessions.create({ voice: 'voice-id' });
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    // First sent frame is the `initMessage` payload — flushed on socket open.
+    // First sent frame is the `init` payload — flushed on socket open.
     expect(fake.sent.length).toBe(1);
     const init = JSON.parse(fake.sent[0]);
     expect(init['X-API-Key']).toBe('test-api-key');
@@ -62,15 +62,15 @@ describe('resource sessions', () => {
     session.close();
   });
 
-  test('textStreamingOperation', async () => {
+  test('textOperation', async () => {
     const session = client.speech.sessions.create({ voice: 'voice-id' });
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    session.appendText('hello world');
+    session.sendText('text-value');
 
     expect(fake.sent.length).toBe(2);
-    expect(JSON.parse(fake.sent[1])).toEqual({ text: 'hello world' });
+    expect(JSON.parse(fake.sent[1])).toEqual({ type: 'text', text: 'text-value' });
     session.close();
   });
 
@@ -79,55 +79,45 @@ describe('resource sessions', () => {
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    const nonce = session.flush();
+    const nonce = session.sendFlush();
     expect(nonce).toBe(1);
 
     expect(fake.sent.length).toBe(2);
-    expect(JSON.parse(fake.sent[1])).toEqual({ command: 'flush', nonce: 1 });
+    expect(JSON.parse(fake.sent[1])).toEqual({ type: 'flush', nonce: 1 });
     session.close();
   });
 
-  test('eofOperation', async () => {
+  test('resetOperation', async () => {
     const session = client.speech.sessions.create({ voice: 'voice-id' });
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    session.finish();
+    const nonce = session.sendReset();
+    expect(nonce).toBe(1);
 
     expect(fake.sent.length).toBe(2);
-    expect(JSON.parse(fake.sent[1])).toEqual({ command: 'eof' });
+    expect(JSON.parse(fake.sent[1])).toEqual({ type: 'reset', nonce: 1 });
     session.close();
   });
 
-  test('receiveAudio', async () => {
+  test('finishOperation', async () => {
     const session = client.speech.sessions.create({ voice: 'voice-id' });
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    const audioBytes = Buffer.from([0, 1, 2, 3]);
-    fake.simulateMessage(audioBytes);
-    fake.simulateClose({ code: 1000 });
+    session.sendFinish();
 
-    const received: any[] = [];
-    for await (const msg of session) {
-      received.push(msg);
-    }
-
-    expect(received.length).toBe(1);
-    expect(received[0].type).toBe('audio');
-    expect(received[0].audio).toBe(audioBytes);
+    expect(fake.sent.length).toBe(2);
+    expect(JSON.parse(fake.sent[1])).toEqual({ type: 'finish' });
+    session.close();
   });
 
-  test('receiveExtras', async () => {
-    const session = client.speech.sessions.create({ voice: 'voice-id', return_extras: true });
+  test('receiveReady', async () => {
+    const session = client.speech.sessions.create({ voice: 'voice-id' });
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    const payload = {
-      timestamps: [{ text: 'hi', start: 0.0, duration: 0.5 }],
-      buffer_empty: true,
-      warning: undefined,
-    };
+    const payload = { type: 'ready', request_id: 'request_id-value' };
     fake.simulateMessage(JSON.stringify(payload));
     fake.simulateClose({ code: 1000 });
 
@@ -137,10 +127,85 @@ describe('resource sessions', () => {
     }
 
     expect(received.length).toBe(1);
-    expect(received[0].type).toBe('extras');
+    expect(received[0].type).toBe('ready');
+    expect(received[0].request_id).toBe('request_id-value');
+  });
+
+  test('receiveAudio', async () => {
+    const session = client.speech.sessions.create({ voice: 'voice-id' });
+    const fake = FakeWebSocket.instances[0];
+    fake.simulateOpen();
+
+    const payload = Buffer.from([0, 1, 2, 3]);
+    fake.simulateMessage(payload);
+    fake.simulateClose({ code: 1000 });
+
+    const received: any[] = [];
+    for await (const msg of session) {
+      received.push(msg);
+    }
+
+    expect(received.length).toBe(1);
+    expect(received[0].type).toBe('audio');
+    expect(received[0].audio).toBe(payload);
+  });
+
+  test('receiveTimestamps', async () => {
+    const session = client.speech.sessions.create({ voice: 'voice-id', return_timestamps: true });
+    const fake = FakeWebSocket.instances[0];
+    fake.simulateOpen();
+
+    const payload = { type: 'timestamps', timestamps: [{ text: 'hi', start: 0.0, duration: 0.5 }] };
+    fake.simulateMessage(JSON.stringify(payload));
+    fake.simulateClose({ code: 1000 });
+
+    const received: any[] = [];
+    for await (const msg of session) {
+      received.push(msg);
+    }
+
+    expect(received.length).toBe(1);
+    expect(received[0].type).toBe('timestamps');
     expect(received[0].timestamps).toBeDefined();
     expect(received[0].timestamps.length).toBe(1);
-    expect(received[0].buffer_empty).toBe(true);
+  });
+
+  test('receiveFlushComplete', async () => {
+    const session = client.speech.sessions.create({ voice: 'voice-id' });
+    const fake = FakeWebSocket.instances[0];
+    fake.simulateOpen();
+
+    const payload = { type: 'flush_complete', nonce: 1 };
+    fake.simulateMessage(JSON.stringify(payload));
+    fake.simulateClose({ code: 1000 });
+
+    const received: any[] = [];
+    for await (const msg of session) {
+      received.push(msg);
+    }
+
+    expect(received.length).toBe(1);
+    expect(received[0].type).toBe('flush_complete');
+    expect(received[0].nonce).toBe(1);
+  });
+
+  test('receiveResetComplete', async () => {
+    const session = client.speech.sessions.create({ voice: 'voice-id' });
+    const fake = FakeWebSocket.instances[0];
+    fake.simulateOpen();
+
+    const payload = { type: 'reset_complete', nonce: 1 };
+    fake.simulateMessage(JSON.stringify(payload));
+    fake.simulateClose({ code: 1000 });
+
+    const received: any[] = [];
+    for await (const msg of session) {
+      received.push(msg);
+    }
+
+    expect(received.length).toBe(1);
+    expect(received[0].type).toBe('reset_complete');
+    expect(received[0].nonce).toBe(1);
   });
 
   test('receiveError', async () => {
@@ -148,7 +213,8 @@ describe('resource sessions', () => {
     const fake = FakeWebSocket.instances[0];
     fake.simulateOpen();
 
-    fake.simulateMessage(JSON.stringify({ error: 'voice not found' }));
+    const payload = { type: 'error', error: undefined, request_id: 'request_id-value' };
+    fake.simulateMessage(JSON.stringify(payload));
     fake.simulateClose({ code: 1000 });
 
     const received: any[] = [];
@@ -158,6 +224,6 @@ describe('resource sessions', () => {
 
     expect(received.length).toBe(1);
     expect(received[0].type).toBe('error');
-    expect(received[0].error).toBe('voice not found');
+    expect(received[0].request_id).toBe('request_id-value');
   });
 });
