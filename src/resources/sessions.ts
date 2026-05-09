@@ -8,10 +8,26 @@ import {
   MessageQueue,
   WEBSOCKET_NORMAL_CLOSE,
   WEBSOCKET_OPEN_STATE,
-  processAudioData,
+  processBinaryFrame,
 } from '../_websocketRuntime';
 
 const URL_STREAMING = 'wss://api.lmnt.com/v1/ai/speech/stream';
+const WS_PATH = '/v1/ai/speech/stream';
+const DEFAULT_BASE_URL = 'https://api.lmnt.com';
+
+/**
+ * Compose the streaming WebSocket URL from the client base URL.
+ *
+ * Rewrites the scheme (`http(s)` -> `ws(s)`) and appends `WS_PATH`, so a custom
+ * `baseURL` on the Lmnt client (e.g. staging or a local proxy) flows through to
+ * the WebSocket connection.
+ */
+function wsUrlFromBase(baseURL: string): string {
+  const s = baseURL.replace(/\/+$/, '');
+  if (s.startsWith('https://')) return 'wss://' + s.slice('https://'.length) + WS_PATH;
+  if (s.startsWith('http://')) return 'ws://' + s.slice('http://'.length) + WS_PATH;
+  return s + WS_PATH;
+}
 
 export interface Timestamp {
   /**
@@ -30,63 +46,98 @@ export interface Timestamp {
   duration: number;
 }
 
-export type SpeechStreamMessage = AudioMessage | ExtrasMessage | ErrorMessage | CompleteMessage;
+export interface ErrorBody {
+  /**
+   * Slug identifying the error category.
+   */
+  type:
+    | 'invalid_request_error'
+    | 'authentication_error'
+    | 'permission_error'
+    | 'not_found_error'
+    | 'payment_required_error'
+    | 'rate_limit_error'
+    | 'internal_server_error';
+
+  /**
+   * Human-readable error message.
+   */
+  message: string;
+}
+
+export type SpeechSessionMessage =
+  | SpeechSessionAudio
+  | SpeechSessionReady
+  | SpeechSessionTimestamps
+  | SpeechSessionFlushComplete
+  | SpeechSessionResetComplete
+  | SpeechSessionError;
 
 /**
- * Audio message containing synthesized speech data
+ * Binary audio data returned from the server
  */
-export interface AudioMessage {
+export interface SpeechSessionAudio {
   type: 'audio';
   audio: ArrayBuffer | Buffer;
 }
 
 /**
- * Extras message containing metadata about the synthesis
+ * Carries the `request_id` (echoed in the `request-id` HTTP header on the WS upgrade response) and the unique `session_id`. Surfaced on the SDK session object as `request_id` for log correlation.
  */
-export interface ExtrasMessage {
-  type: 'extras';
+export interface SpeechSessionReady {
+  type: 'ready';
+  request_id: string;
+}
+
+/**
+ * <Warning>
+ *   Note that the timestamps frame is sent __after__ the audio chunk that it corresponds to. Take care to interpret incoming data correctly. Audio is sent as `bytes` and timestamps are sent as a JSON `string`.
+ * </Warning>
+ */
+export interface SpeechSessionTimestamps {
+  type: 'timestamps';
   timestamps?: Array<Timestamp>;
-  buffer_empty?: boolean;
-  warning?: string;
 }
 
 /**
- * Error message containing error information
+ * Sent in response to a `flush` (after the flushed audio has finished streaming). The `nonce` matches the one carried by the original command, allowing the client to correlate replies.
  */
-export interface ErrorMessage {
-  type: 'error';
-  error: string;
-}
-
-/**
- * Complete message for commands (reset/flush)
- */
-export interface CompleteMessage {
-  type: 'complete';
-  complete: 'reset' | 'flush';
+export interface SpeechSessionFlushComplete {
+  type: 'flush_complete';
   nonce: number;
+}
+
+/**
+ * Sent in response to a `reset` (once the server's buffer has been cleared). The `nonce` matches the one carried by the original command, allowing the client to correlate replies.
+ */
+export interface SpeechSessionResetComplete {
+  type: 'reset_complete';
+  nonce: number;
+}
+
+/**
+ * Error envelope returned by the server. Connection closes immediately afterward.
+ */
+export interface SpeechSessionError {
+  type: 'error';
+  error: ErrorBody;
+  request_id: string;
 }
 
 export class SpeechSession {
   private socket: WebSocket;
   private outMessages: any[] = [];
   private inMessages: MessageQueue;
-  private returnExtras: boolean;
   private nextNonce: number = 1;
 
-  /**
-   * Creates a new streaming speech connection.
-   * @param apiKey The API key to use for the connection. Obtain a key
-   *     from the [LMNT account page](https://app.lmnt.com/account).
-   * @param options Configuration options including voice, format, language,
-   *     sample rate, and other synthesis parameters.
-   */
-  constructor(apiKey: string, options: SpeechSessionParams) {
+  /** Per-session request id, populated when the server emits its `ready` frame. */
+  request_id: string | null = null;
+
+  constructor(apiKey: string, options: SpeechSessionParams, baseURL: string = DEFAULT_BASE_URL) {
     this.outMessages = [];
     this.inMessages = new MessageQueue();
-    this.returnExtras = options.return_extras || false;
 
-    this.socket = new WebSocket(URL_STREAMING);
+    this.socket = new WebSocket(wsUrlFromBase(baseURL));
     this.setupWebSocket();
 
     this.sendMessage({
@@ -95,7 +146,7 @@ export class SpeechSession {
       voice: options.voice,
       format: options.format,
       language: options.language,
-      return_extras: options.return_extras,
+      return_timestamps: options.return_timestamps,
       sample_rate: options.sample_rate,
     });
   }
@@ -133,15 +184,7 @@ export class SpeechSession {
   }
 
   /**
-   * Appends text to the overall text to be synthesized.
-   * @param text The additional text to synthesize.
-   */
-  appendText(text: string) {
-    this.sendMessage({ text: text });
-  }
-
-  /**
-   * Releases resources associated with this instance and closes the WebSocket connection.
+   * Close the SpeechSession.
    */
   close() {
     if (this.socket) {
@@ -151,42 +194,47 @@ export class SpeechSession {
   }
 
   /**
-   * Triggers the server to synthesize all currently queued text and return the audio data.
-   * Use sparingly as it may affect the natural flow of speech synthesis.
+   * The text you send can be split at any point.
+   */
+  sendText(text: string) {
+    this.sendMessage({ type: 'text', text });
+  }
+
+  /**
+   * Each `flush` carries a client-chosen `nonce`. The server replies with a `flush_complete` carrying the matching nonce once it has finished streaming the flushed audio.
    *
    * @returns The nonce used for this flush command
    */
-  flush(): number {
+  sendFlush(): number {
     const nonce = this.nextNonce++;
-    this.sendMessage({ command: 'flush', nonce });
+    this.sendMessage({ type: 'flush', nonce });
     return nonce;
   }
 
   /**
-   * Resets the speech session, discarding all queued text and stopping current synthesis.
+   * Each `reset` carries a client-chosen `nonce`. The server replies with a `reset_complete` carrying the matching nonce once the buffer has been cleared.
    *
    * @returns The nonce used for this reset command
    */
-  reset(): number {
+  sendReset(): number {
     const nonce = this.nextNonce++;
-    this.sendMessage({ command: 'reset', nonce });
+    this.sendMessage({ type: 'reset', nonce });
     return nonce;
   }
 
   /**
-   * Finishes the streaming session after writing all text. This will flush remaining data
-   * and close the connection after all audio has been received.
+   * Inform the server you're done appending text to this session and want it to close when the server has finished dispatching speech.
    */
-  finish() {
-    this.sendMessage({ command: 'eof' });
+  sendFinish() {
+    this.sendMessage({ type: 'finish' });
   }
 
   /**
    * Iterate over messages from the server.
    *
-   * @returns AsyncIterator<SpeechStreamMessage>
+   * @returns AsyncIterator<SpeechSessionMessage>
    */
-  async *[Symbol.asyncIterator](): AsyncIterator<SpeechStreamMessage> {
+  async *[Symbol.asyncIterator](): AsyncIterator<SpeechSessionMessage> {
     while (true) {
       const message = await this.inMessages.next();
       if (message === null) {
@@ -194,37 +242,57 @@ export class SpeechSession {
       }
 
       if (message.type === 'text') {
-        yield this.parseTextMessage(message.data);
-      } else {
-        try {
-          const audio = await processAudioData(message.data);
-          yield { type: 'audio', audio };
-        } catch (error) {
-          yield { type: 'error', error: error instanceof Error ? error.message : String(error) };
+        const parsed = this.parseTextMessage(message.data);
+        if (parsed !== null) {
+          yield parsed;
         }
+      } else {
+        const payload = await processBinaryFrame(message.data);
+        yield { type: 'audio', audio: payload };
       }
     }
   }
 
-  private parseTextMessage(textData: string): SpeechStreamMessage {
+  async streamAudioToFile(path: string): Promise<void> {
+    const fs = await import('fs');
+    const stream = fs.createWriteStream(path);
+    for await (const message of this) {
+      if (message.type === 'audio') {
+        const chunk = Buffer.isBuffer(message.audio) ? message.audio : Buffer.from(message.audio);
+        stream.write(chunk);
+      }
+    }
+    await new Promise<void>((resolve, reject) => {
+      stream.end((err: Error | null) => (err ? reject(err) : resolve()));
+    });
+  }
+
+  private parseTextMessage(textData: string): SpeechSessionMessage | null {
     const messageJson = JSON.parse(textData);
+    const messageType = messageJson?.type;
 
-    if ('error' in messageJson) {
-      return { type: 'error', ...messageJson };
+    if (messageType === 'ready') {
+      this.request_id = messageJson.request_id ?? null;
+      return messageJson as SpeechSessionReady;
     }
 
-    if ('complete' in messageJson) {
-      return { type: 'complete', ...messageJson };
+    if (messageType === 'timestamps') {
+      return messageJson as SpeechSessionTimestamps;
     }
 
-    if (
-      this.returnExtras &&
-      (messageJson.timestamps || messageJson.warning || messageJson.buffer_empty !== undefined)
-    ) {
-      return { type: 'extras', ...messageJson };
+    if (messageType === 'flush_complete') {
+      return messageJson as SpeechSessionFlushComplete;
     }
 
-    return { type: 'error', ...messageJson };
+    if (messageType === 'reset_complete') {
+      return messageJson as SpeechSessionResetComplete;
+    }
+
+    if (messageType === 'error') {
+      return messageJson as SpeechSessionError;
+    }
+
+    return null;
   }
 
   private sendMessage(message: any) {
@@ -247,7 +315,7 @@ export class Sessions extends APIResource {
    * Stream text to our servers and receive generated speech in real-time. Great for latency-sensitive applications and situations where you don't have all the text upfront.
    */
   create(body: SpeechSessionParams) {
-    return new SpeechSession(this._client.apiKey, body);
+    return new SpeechSession(this._client.apiKey, body, this._client.baseURL);
   }
 }
 
@@ -267,9 +335,6 @@ export interface SpeechSessionParams {
    */
   format?: 'mp3' | 'pcm_s16le' | 'pcm_f32le' | 'ulaw' | 'webm';
 
-  /**
-   * The desired language. Two letter ISO 639-1 code. Defaults to auto language detection.
-   */
   language?:
     | 'auto'
     | 'ar'
@@ -305,9 +370,9 @@ export interface SpeechSessionParams {
     | 'zh';
 
   /**
-   * Controls whether the server will return extra information about the generated speech
+   * Controls whether the server will return timestamps for the generated speech
    */
-  return_extras?: boolean;
+  return_timestamps?: boolean;
 
   /**
    * The desired output audio sample rate

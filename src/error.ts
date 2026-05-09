@@ -17,7 +17,7 @@ export class APIError<
   readonly error: TError;
 
   /** The unique identifier of the request that caused this error, matching the `request-id` response header. */
-  readonly requestID: string | null | undefined;
+  readonly request_id: string | null | undefined;
 
   /** The `error.type` from the API response body, e.g. `"rate_limit_error"`. */
   readonly type: string | null;
@@ -32,7 +32,7 @@ export class APIError<
     super(`${APIError.makeMessage(status, error, message)}`);
     this.status = status;
     this.headers = headers;
-    this.requestID = headers?.['request-id'] ?? undefined;
+    this.request_id = headers?.['request-id'] ?? undefined;
     this.error = error;
     this.type = type ?? null;
   }
