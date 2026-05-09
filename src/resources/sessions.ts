@@ -82,7 +82,7 @@ export interface SpeechSessionAudio {
 }
 
 /**
- * Carries the `request_id` (echoed in the `request-id` HTTP header on the WS upgrade response) and the unique `session_id`. Surfaced on the SDK session object as `request_id` for log correlation.
+ * First message sent by the server, confirming the session is established.
  */
 export interface SpeechSessionReady {
   type: 'ready';
@@ -90,9 +90,7 @@ export interface SpeechSessionReady {
 }
 
 /**
- * <Warning>
- *   Note that the timestamps frame is sent __after__ the audio chunk that it corresponds to. Take care to interpret incoming data correctly. Audio is sent as `bytes` and timestamps are sent as a JSON `string`.
- * </Warning>
+ * Timestamps for the audio chunk that was just streamed, if requested in `init`.
  */
 export interface SpeechSessionTimestamps {
   type: 'timestamps';
@@ -100,7 +98,9 @@ export interface SpeechSessionTimestamps {
 }
 
 /**
- * Sent in response to a `flush` (after the flushed audio has finished streaming). The `nonce` matches the one carried by the original command, allowing the client to correlate replies.
+ * Acknowledgement that a flush command has been completed.
+ *
+ * The `nonce` matches the one carried by the original flush, allowing you to determine when it has completed.
  */
 export interface SpeechSessionFlushComplete {
   type: 'flush_complete';
@@ -108,7 +108,9 @@ export interface SpeechSessionFlushComplete {
 }
 
 /**
- * Sent in response to a `reset` (once the server's buffer has been cleared). The `nonce` matches the one carried by the original command, allowing the client to correlate replies.
+ * Acknowledgement that a reset command has been completed.
+ *
+ * The `nonce` matches the one carried by the original reset, allowing you to discard any remaining in-flight speech before the reset.
  */
 export interface SpeechSessionResetComplete {
   type: 'reset_complete';
@@ -194,14 +196,14 @@ export class SpeechSession {
   }
 
   /**
-   * The text you send can be split at any point.
+   * Send text to the server to append into the text stream.
    */
   sendText(text: string) {
     this.sendMessage({ type: 'text', text });
   }
 
   /**
-   * Each `flush` carries a client-chosen `nonce`. The server replies with a `flush_complete` carrying the matching nonce once it has finished streaming the flushed audio.
+   * Force the server to generate speech for all buffered text in the stream.
    *
    * @returns The nonce used for this flush command
    */
@@ -212,7 +214,7 @@ export class SpeechSession {
   }
 
   /**
-   * Each `reset` carries a client-chosen `nonce`. The server replies with a `reset_complete` carrying the matching nonce once the buffer has been cleared.
+   * Drop the server's buffered text without generating speech for it.
    *
    * @returns The nonce used for this reset command
    */
