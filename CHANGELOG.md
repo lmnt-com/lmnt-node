@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.1](https://github.com/lmnt-com/lmnt-node/compare/v2.12.0...v2.12.1) (2026-05-19)
+
+
+### Chores
+
+* replace X-Stainless-* request headers with X-Lmnt-* ([c6121cf](https://github.com/lmnt-com/lmnt-node/commit/c6121cf16e18868ff6b35df4380869669232a7eb))
+
 ## [2.12.0](https://github.com/lmnt-com/lmnt-node/compare/v2.11.2...v2.12.0) (2026-05-09)
 
 
