@@ -48,9 +48,9 @@ describe('resource voices', () => {
 
   test('retrieve: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.voices.retrieve('9c4a8f2b3e1d7c40', { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Lmnt.NotFoundError);
+    await expect(client.voices.retrieve('9c4a8f2b3e1d7c40', { path: '/_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 
   test('update', async () => {
@@ -66,9 +66,9 @@ describe('resource voices', () => {
 
   test('update: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.voices.update('9c4a8f2b3e1d7c40', { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Lmnt.NotFoundError);
+    await expect(client.voices.update('9c4a8f2b3e1d7c40', { path: '/_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 
   test('update: request options and params are passed correctly', async () => {
@@ -77,7 +77,7 @@ describe('resource voices', () => {
       client.voices.update(
         '9c4a8f2b3e1d7c40',
         { description: 'description', gender: 'gender', name: 'name', starred: true, tags: ['tags'] },
-        { path: '/_stainless_unknown_path' },
+        { path: '/_unknown_path' },
       ),
     ).rejects.toThrow(Lmnt.NotFoundError);
   });
@@ -95,9 +95,9 @@ describe('resource voices', () => {
 
   test('delete: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.voices.delete('9c4a8f2b3e1d7c40', { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Lmnt.NotFoundError);
+    await expect(client.voices.delete('9c4a8f2b3e1d7c40', { path: '/_unknown_path' })).rejects.toThrow(
+      Lmnt.NotFoundError,
+    );
   });
 
   test('list', async () => {
@@ -113,15 +113,13 @@ describe('resource voices', () => {
 
   test('list: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.voices.list({ path: '/_stainless_unknown_path' })).rejects.toThrow(
-      Lmnt.NotFoundError,
-    );
+    await expect(client.voices.list({ path: '/_unknown_path' })).rejects.toThrow(Lmnt.NotFoundError);
   });
 
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.voices.list({ owner: 'owner', starred: 'starred' }, { path: '/_stainless_unknown_path' }),
+      client.voices.list({ owner: 'owner', starred: 'starred' }, { path: '/_unknown_path' }),
     ).rejects.toThrow(Lmnt.NotFoundError);
   });
 });

@@ -253,7 +253,7 @@ export abstract class APIClient {
   protected validateHeaders(headers: Headers, customHeaders: Headers) {}
 
   protected defaultIdempotencyKey(): string {
-    return `stainless-node-retry-${uuid4()}`;
+    return `lmnt-node-retry-${uuid4()}`;
   }
 
   get<Req, Rsp>(path: string, opts?: PromiseOrValue<RequestOptions<Req>>): APIPromise<Rsp> {
@@ -400,17 +400,17 @@ export abstract class APIClient {
     // We check `defaultHeaders` and `headers`, which can contain nulls, instead of `reqHeaders` to account
     // for the removal case.
     if (
-      getHeader(defaultHeaders, 'x-stainless-retry-count') === undefined &&
-      getHeader(headers, 'x-stainless-retry-count') === undefined
+      getHeader(defaultHeaders, 'x-lmnt-retry-count') === undefined &&
+      getHeader(headers, 'x-lmnt-retry-count') === undefined
     ) {
-      reqHeaders['x-stainless-retry-count'] = String(retryCount);
+      reqHeaders['x-lmnt-retry-count'] = String(retryCount);
     }
     if (
-      getHeader(defaultHeaders, 'x-stainless-timeout') === undefined &&
-      getHeader(headers, 'x-stainless-timeout') === undefined &&
+      getHeader(defaultHeaders, 'x-lmnt-timeout') === undefined &&
+      getHeader(headers, 'x-lmnt-timeout') === undefined &&
       options.timeout
     ) {
-      reqHeaders['x-stainless-timeout'] = String(Math.trunc(options.timeout / 1000));
+      reqHeaders['x-lmnt-timeout'] = String(Math.trunc(options.timeout / 1000));
     }
 
     this.validateHeaders(reqHeaders, headers);
@@ -885,67 +885,67 @@ type PlatformName =
   | 'Unknown';
 type Browser = 'ie' | 'edge' | 'chrome' | 'firefox' | 'safari';
 type PlatformProperties = {
-  'X-Stainless-Lang': 'js';
-  'X-Stainless-Package-Version': string;
-  'X-Stainless-OS': PlatformName;
-  'X-Stainless-Arch': Arch;
-  'X-Stainless-Runtime': 'node' | 'deno' | 'edge' | `browser:${Browser}` | 'unknown';
-  'X-Stainless-Runtime-Version': string;
+  'X-Lmnt-Lang': 'js';
+  'X-Lmnt-Package-Version': string;
+  'X-Lmnt-OS': PlatformName;
+  'X-Lmnt-Arch': Arch;
+  'X-Lmnt-Runtime': 'node' | 'deno' | 'edge' | `browser:${Browser}` | 'unknown';
+  'X-Lmnt-Runtime-Version': string;
 };
 const getPlatformProperties = (): PlatformProperties => {
   if (typeof Deno !== 'undefined' && Deno.build != null) {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': normalizePlatform(Deno.build.os),
-      'X-Stainless-Arch': normalizeArch(Deno.build.arch),
-      'X-Stainless-Runtime': 'deno',
-      'X-Stainless-Runtime-Version':
+      'X-Lmnt-Lang': 'js',
+      'X-Lmnt-Package-Version': VERSION,
+      'X-Lmnt-OS': normalizePlatform(Deno.build.os),
+      'X-Lmnt-Arch': normalizeArch(Deno.build.arch),
+      'X-Lmnt-Runtime': 'deno',
+      'X-Lmnt-Runtime-Version':
         typeof Deno.version === 'string' ? Deno.version : (Deno.version?.deno ?? 'unknown'),
     };
   }
   if (typeof EdgeRuntime !== 'undefined') {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': 'Unknown',
-      'X-Stainless-Arch': `other:${EdgeRuntime}`,
-      'X-Stainless-Runtime': 'edge',
-      'X-Stainless-Runtime-Version': process.version,
+      'X-Lmnt-Lang': 'js',
+      'X-Lmnt-Package-Version': VERSION,
+      'X-Lmnt-OS': 'Unknown',
+      'X-Lmnt-Arch': `other:${EdgeRuntime}`,
+      'X-Lmnt-Runtime': 'edge',
+      'X-Lmnt-Runtime-Version': process.version,
     };
   }
   // Check if Node.js
   if (Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]') {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': normalizePlatform(process.platform),
-      'X-Stainless-Arch': normalizeArch(process.arch),
-      'X-Stainless-Runtime': 'node',
-      'X-Stainless-Runtime-Version': process.version,
+      'X-Lmnt-Lang': 'js',
+      'X-Lmnt-Package-Version': VERSION,
+      'X-Lmnt-OS': normalizePlatform(process.platform),
+      'X-Lmnt-Arch': normalizeArch(process.arch),
+      'X-Lmnt-Runtime': 'node',
+      'X-Lmnt-Runtime-Version': process.version,
     };
   }
 
   const browserInfo = getBrowserInfo();
   if (browserInfo) {
     return {
-      'X-Stainless-Lang': 'js',
-      'X-Stainless-Package-Version': VERSION,
-      'X-Stainless-OS': 'Unknown',
-      'X-Stainless-Arch': 'unknown',
-      'X-Stainless-Runtime': `browser:${browserInfo.browser}`,
-      'X-Stainless-Runtime-Version': browserInfo.version,
+      'X-Lmnt-Lang': 'js',
+      'X-Lmnt-Package-Version': VERSION,
+      'X-Lmnt-OS': 'Unknown',
+      'X-Lmnt-Arch': 'unknown',
+      'X-Lmnt-Runtime': `browser:${browserInfo.browser}`,
+      'X-Lmnt-Runtime-Version': browserInfo.version,
     };
   }
 
   // TODO add support for Cloudflare workers, etc.
   return {
-    'X-Stainless-Lang': 'js',
-    'X-Stainless-Package-Version': VERSION,
-    'X-Stainless-OS': 'Unknown',
-    'X-Stainless-Arch': 'unknown',
-    'X-Stainless-Runtime': 'unknown',
-    'X-Stainless-Runtime-Version': 'unknown',
+    'X-Lmnt-Lang': 'js',
+    'X-Lmnt-Package-Version': VERSION,
+    'X-Lmnt-OS': 'Unknown',
+    'X-Lmnt-Arch': 'unknown',
+    'X-Lmnt-Runtime': 'unknown',
+    'X-Lmnt-Runtime-Version': 'unknown',
   };
 };
 
@@ -1210,7 +1210,7 @@ export const getRequiredHeader = (headers: HeadersLike | Headers, header: string
 export const getHeader = (headers: HeadersLike | Headers, header: string): string | undefined => {
   const lowerCasedHeader = header.toLowerCase();
   if (isHeadersProtocol(headers)) {
-    // to deal with the case where the header looks like Stainless-Event-Id
+    // to deal with the case where the header looks like Lmnt-Event-Id
     const intercapsHeader =
       header[0]?.toUpperCase() +
       header.substring(1).replace(/([^\w])(\w)/g, (_m, g1, g2) => g1 + g2.toUpperCase());
