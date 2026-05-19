@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// Vendored runtime. See carbonsteel README for provenance.
 
 import Lmnt from 'lmnt-node';
 import { APIUserAbortError } from 'lmnt-node';
@@ -302,7 +302,7 @@ describe('retries', () => {
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
 
-    expect((capturedRequest!.headers as Headers)['x-stainless-retry-count']).toEqual('2');
+    expect((capturedRequest!.headers as Headers)['x-lmnt-retry-count']).toEqual('2');
     expect(count).toEqual(3);
   });
 
@@ -328,11 +328,11 @@ describe('retries', () => {
       await client.request({
         path: '/foo',
         method: 'get',
-        headers: { 'X-Stainless-Retry-Count': null },
+        headers: { 'X-Lmnt-Retry-Count': null },
       }),
     ).toEqual({ a: 1 });
 
-    expect(capturedRequest!.headers as Headers).not.toHaveProperty('x-stainless-retry-count');
+    expect(capturedRequest!.headers as Headers).not.toHaveProperty('x-lmnt-retry-count');
   });
 
   test('omit retry count header by default', async () => {
@@ -355,7 +355,7 @@ describe('retries', () => {
       apiKey: 'My API Key',
       fetch: testFetch,
       maxRetries: 4,
-      defaultHeaders: { 'X-Stainless-Retry-Count': null },
+      defaultHeaders: { 'X-Lmnt-Retry-Count': null },
     });
 
     expect(
@@ -365,7 +365,7 @@ describe('retries', () => {
       }),
     ).toEqual({ a: 1 });
 
-    expect(capturedRequest!.headers as Headers).not.toHaveProperty('x-stainless-retry-count');
+    expect(capturedRequest!.headers as Headers).not.toHaveProperty('x-lmnt-retry-count');
   });
 
   test('overwrite retry count header', async () => {
@@ -390,11 +390,11 @@ describe('retries', () => {
       await client.request({
         path: '/foo',
         method: 'get',
-        headers: { 'X-Stainless-Retry-Count': '42' },
+        headers: { 'X-Lmnt-Retry-Count': '42' },
       }),
     ).toEqual({ a: 1 });
 
-    expect((capturedRequest!.headers as Headers)['x-stainless-retry-count']).toBe('42');
+    expect((capturedRequest!.headers as Headers)['x-lmnt-retry-count']).toBe('42');
   });
 
   test('retry on 429 with retry-after', async () => {
