@@ -1,1 +1,2 @@
 brew "node"
+brew "pnpm"

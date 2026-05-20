@@ -20,17 +20,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm'
 
       - name: Upgrade npm to OIDC-capable version
         run: npm install -g npm@latest
 
       - name: Install dependencies
         run: |
-          yarn install
+          pnpm install
 
       - name: Publish to NPM
         run: |

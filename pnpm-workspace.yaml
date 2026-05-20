@@ -1,0 +1,10 @@
+# Supply-chain hardening: refuse to install any dependency version published
+# less than 9 days ago (9 * 24 * 60 = 12960 minutes). Overrides pnpm's 1-day
+# default. See https://pnpm.io/supply-chain-security
+minimumReleaseAge: 12960
+
+# Dependency lifecycle (postinstall/build) scripts are not run unless listed
+# here. @swc/core ships prebuilt native binaries via optional platform
+# packages, so its build script is not needed.
+allowBuilds:
+  '@swc/core': false
