@@ -4,6 +4,6 @@
 # The name of the containing directory that 'npm` uses, which looks like
 # $HOME/.npm/_cacache/git-cloneXXXXXX
 [ "$(basename "$(dirname "$PWD")")" = 'tmp' ] ||
-# The name of the containing directory that 'yarn` uses, which looks like
+# The name of the containing directory that 'pnpm`/`yarn` use, which looks like
 # $(yarn cache dir)/.tmp/XXXXX
 [ "$(basename "$(dirname "$PWD")")" = '.tmp' ]

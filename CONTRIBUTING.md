@@ -1,13 +1,16 @@
 ## Setting up the environment
 
-This repository uses [`yarn@v1`](https://classic.yarnpkg.com/lang/en/docs/install).
-Other package managers may work but are not officially supported for development.
+This repository uses [`pnpm`](https://pnpm.io/installation). The pinned version
+is declared in the `packageManager` field of `package.json`, so running pnpm
+via [Corepack](https://nodejs.org/api/corepack.html) (`corepack enable pnpm`)
+will use the correct version automatically. Other package managers may work but
+are not officially supported for development.
 
 To set up the repository, run:
 
 ```sh
-$ yarn
-$ yarn build
+$ pnpm install
+$ pnpm build
 ```
 
 This will install all the required dependencies and build output files to `dist/`.
@@ -32,7 +35,7 @@ All files in the `examples/` directory are not modified by the generator and can
 ```sh
 $ chmod +x examples/<your-example>.ts
 # run the example against your api
-$ yarn tsn -T examples/<your-example>.ts
+$ pnpm tsn -T examples/<your-example>.ts
 ```
 
 ## Using the repository from source
@@ -52,15 +55,9 @@ Alternatively, to link a local copy of the repo:
 $ git clone https://www.github.com/lmnt-com/lmnt-node
 $ cd lmnt-node
 
-# With yarn
-$ yarn link
-$ cd ../my-package
-$ yarn link lmnt-node
-
-# With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global lmnt-node
+$ pnpm link --global lmnt-node
 ```
 
 ## Running tests
@@ -72,7 +69,7 @@ $ npx prism mock path/to/your/openapi.yml
 ```
 
 ```sh
-$ yarn run test
+$ pnpm test
 ```
 
 ## Linting and formatting
@@ -83,13 +80,13 @@ This repository uses [prettier](https://www.npmjs.com/package/prettier) and
 To lint:
 
 ```sh
-$ yarn lint
+$ pnpm lint
 ```
 
 To format and fix all lint issues automatically:
 
 ```sh
-$ yarn fix
+$ pnpm fix
 ```
 
 ## Publishing and releases
