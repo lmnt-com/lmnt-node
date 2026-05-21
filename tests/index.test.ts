@@ -1,5 +1,3 @@
-// Vendored runtime. See carbonsteel README for provenance.
-
 import Lmnt from 'lmnt-node';
 import { APIUserAbortError } from 'lmnt-node';
 import { Headers } from 'lmnt-node/core';

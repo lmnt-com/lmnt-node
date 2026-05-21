@@ -1,5 +1,3 @@
-// Vendored runtime. See carbonsteel README for provenance.
-
 import { Lmnt } from 'lmnt-node';
 
 const { stringifyQuery } = Lmnt.prototype as any;
