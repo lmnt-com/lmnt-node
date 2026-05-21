@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.12.2](https://github.com/lmnt-com/lmnt-node/compare/v2.12.1...v2.12.2) (2026-05-21)
+
+
+### Chores
+
+* regenerate sdk ([22dfffb](https://github.com/lmnt-com/lmnt-node/commit/22dfffba8835e0fca0425b32b537afee08a114ed))
+
+
+### Build System
+
+* switch from yarn to pnpm with a 9-day package-age gate ([ab61ed7](https://github.com/lmnt-com/lmnt-node/commit/ab61ed707f4e1cfcd87005f259e4e39bf94a2812))
+
 ## [2.12.1](https://github.com/lmnt-com/lmnt-node/compare/v2.12.0...v2.12.1) (2026-05-19)
 
 
