@@ -57,7 +57,7 @@ describe('resource sessions', () => {
     expect(fake.sent.length).toBe(1);
     const init = JSON.parse(fake.sent[0]);
     expect(init['X-API-Key']).toBe('test-api-key');
-    expect(init['lmnt-version']).toBe('1.1');
+    expect(init['lmnt-version']).toBe('1.2');
     expect(init.voice).toBe('voice-id');
     session.close();
   });
