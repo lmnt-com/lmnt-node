@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0](https://github.com/lmnt-com/lmnt-node/compare/v2.12.2...v2.13.0) (2026-06-04)
+
+
+### Features
+
+* **api:** target API version 1.2 ([2a1333e](https://github.com/lmnt-com/lmnt-node/commit/2a1333e60c6bb562030e2a7a16e59876a57b912d))
+
 ## [2.12.2](https://github.com/lmnt-com/lmnt-node/compare/v2.12.1...v2.12.2) (2026-05-21)
 
 
